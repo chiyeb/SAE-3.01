@@ -20,3 +20,15 @@ class ADEClass:
 
     def getTp(self):
         return self.tp
+
+    def setLibelle(self, libelle):
+        self.libelle = libelle
+
+    def setCm(self, cm):
+        self.cm = cm
+
+    def setTd(self, td):
+        self.td = td
+
+    def setTp(self, tp):
+        self.tp = tp

@@ -9,22 +9,6 @@ import BUT3
 # importer le fichier excel
 planning = pd.ExcelFile('./Planning 2023-2024.xlsx')
 
-# S2
-
-# lire l'onglet du S2
-S2 = pd.read_excel(planning, 'S2')
-
-# récupérer la maquette des heures de chaque ressource
-heures_S2_1 = S2.iloc[26:32, [3, 6, 8, 10]]
-heures_S2_2 = S2.iloc[26:34, [36, 39, 41, 43]]
-
-# remplacer les cases vides par des '0'
-heures_S2_1 = heures_S2_1.fillna(0)
-heures_S2_2 = heures_S2_2.fillna(0)
-
-#print(heures_S2_1)
-#print(heures_S2_2)
-
 # fonction qui crée une liste d'objets de classe ADEClass (chaque objet est une ressource avec ses heures respectives)
 def liste_heures(liste_heures, heures):
     for index, row in heures.iterrows():
@@ -33,11 +17,6 @@ def liste_heures(liste_heures, heures):
         # On crée un objet ADE et on rentre les valeurs pour chaque ligne
         ADE = ADEClass(None, row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3])
         liste_heures.append(ADE)
-
-# créer une liste avec la fonction "liste_heures" pour le S2
-liste_heures_S2 = []
-liste_heures(liste_heures_S2, heures_S2_1)
-liste_heures(liste_heures_S2, heures_S2_2)
 
 # fonction qui vérifie que la maquette du planning corresponde bien à celle originale
 def concordance(planning, maquette, semestre):
@@ -58,6 +37,49 @@ def concordance(planning, maquette, semestre):
                 cpt += 1
     return cpt == len(planning)
 
+# S1
 
-#print(concordance(liste_heures_S1, BUT1.liste_adeS1, "S1"))
-print(concordance(liste_heures_S2, BUT1.liste_adeS2, "S2"))
+# lire l'onglet du S1
+S1 = pd.read_excel(planning, 'S1')
+
+# récupérer la maquette des heures de chaque ressource
+heures_S1_1 = S1.iloc[25:30, [3, 6, 8, 10]]
+heures_S1_2 = S1.iloc[25:33, [35, 38, 40, 42]]
+
+# remplacer les cases vides par des '0'
+heures_S1_1 = heures_S1_1.fillna(0)
+heures_S1_2 = heures_S1_2.fillna(0)
+
+# créer une liste avec la fonction "liste_heures" pour le S1
+liste_heures_S1 = []
+liste_heures(liste_heures_S1, heures_S1_1)
+liste_heures(liste_heures_S1, heures_S1_2)
+
+# fusionner les lignes de R1.06-1 avec R1.06-2 en additionnant les heures des 2 lignes
+liste_heures_S1[5].setLibelle("R1.06")
+liste_heures_S1[5].setCm(liste_heures_S1[5].getCm() + liste_heures_S1[6].getCm())
+liste_heures_S1[5].setTd(liste_heures_S1[5].getTd() + liste_heures_S1[6].getTd())
+liste_heures_S1[5].setTp(liste_heures_S1[5].getTp() + liste_heures_S1[6].getTp())
+del liste_heures_S1[6]
+
+print(concordance(liste_heures_S1, BUT1.liste_adeS1, "S1"), "\n")
+
+# S2
+
+# lire l'onglet du S2
+S2 = pd.read_excel(planning, 'S2')
+
+# récupérer la maquette des heures de chaque ressource
+heures_S2_1 = S2.iloc[26:32, [3, 6, 8, 10]]
+heures_S2_2 = S2.iloc[26:34, [36, 39, 41, 43]]
+
+# remplacer les cases vides par des '0'
+heures_S2_1 = heures_S2_1.fillna(0)
+heures_S2_2 = heures_S2_2.fillna(0)
+
+# créer une liste avec la fonction "liste_heures" pour le S2
+liste_heures_S2 = []
+liste_heures(liste_heures_S2, heures_S2_1)
+liste_heures(liste_heures_S2, heures_S2_2)
+
+print(concordance(liste_heures_S2, BUT1.liste_adeS2, "S2"), "\n")
