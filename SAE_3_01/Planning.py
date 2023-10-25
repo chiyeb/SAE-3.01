@@ -27,13 +27,13 @@ def concordance(planning, maquette, semestre):
             print("La ressource numéro", i+1, "n'existe pas ou n'a pas été placé au bon endroit.")
         else:
             if planning[i].getCm() != maquette[i].getCm():
-                print("Les heures de C.M. de la ressource numéro", i+1, "ne correspondent pas entre le fichier de la maquette et celui du planning.")
+                print("Les heures de C.M. de la ressource", planning[i].getLibelle(), "ne correspondent pas entre le fichier de la maquette et celui du planning.")
             if planning[i].getTd() != maquette[i].getTd():
-                print("Les heures de T.D. de la ressource numéro", i+1, "ne correspondent pas entre le fichier de la maquette et celui du planning.")
+                print("Les heures de T.D. de la ressource", planning[i].getLibelle(), "ne correspondent pas entre le fichier de la maquette et celui du planning.")
             if planning[i].getTp() != maquette[i].getTp():
-                print("Les heures de T.P. de la ressource numéro", i+1, "ne correspondent pas entre le fichier de la maquette et celui du planning.")
+                print("Les heures de T.P. de la ressource", planning[i].getLibelle(), "ne correspondent pas entre le fichier de la maquette et celui du planning.")
             if planning[i].getCm() == maquette[i].getCm() and planning[i].getTd() == maquette[i].getTd() and planning[i].getTp() == maquette[i].getTp():
-                print("Tout concorde pour la ressource numéro", i+1)
+                print("Tout concorde pour la ressource", planning[i].getLibelle())
                 cpt += 1
     return cpt == len(planning)
 
@@ -83,3 +83,48 @@ liste_heures(liste_heures_S2, heures_S2_1)
 liste_heures(liste_heures_S2, heures_S2_2)
 
 print(concordance(liste_heures_S2, BUT1.liste_adeS2, "S2"), "\n")
+
+# S3
+
+# lire l'onglet du S3
+S3 = pd.read_excel(planning, 'S3')
+
+# Parcours A
+
+# récupérer la maquette des heures de chaque ressource
+heures_S3_A_1 = S3.iloc[29:36, [3, 6, 8, 10]]
+heures_S3_A_2 = S3.iloc[29:36, [38, 40, 42, 44]]
+heures_S3_A_3 = S3.iloc[37:38, [3, 6, 8, 10]]
+
+# remplacer les cases vides par des '0'
+heures_S3_A_1 = heures_S3_A_1.fillna(0)
+heures_S3_A_2 = heures_S3_A_2.fillna(0)
+heures_S3_A_3 = heures_S3_A_3.fillna(0)
+
+# créer une liste avec la fonction "liste_heures" pour le S3 Parcours A
+liste_heures_S3_A = []
+liste_heures(liste_heures_S3_A, heures_S3_A_1)
+liste_heures(liste_heures_S3_A, heures_S3_A_2)
+liste_heures(liste_heures_S3_A, heures_S3_A_3)
+
+print(concordance(liste_heures_S3_A, BUT2.liste_heures_S3_A, "S3 Parcours A"), "\n")
+
+# Parcours B
+
+# récupérer la maquette des heures de chaque ressource
+heures_S3_B_1 = S3.iloc[29:36, [3, 6, 8, 10]]
+heures_S3_B_2 = S3.iloc[29:36, [38, 40, 42, 44]]
+heures_S3_B_3 = S3.iloc[36:37, [38, 40, 42, 44]]
+
+# remplacer les cases vides par des '0'
+heures_S3_B_1 = heures_S3_B_1.fillna(0)
+heures_S3_B_2 = heures_S3_B_2.fillna(0)
+heures_S3_B_3 = heures_S3_B_3.fillna(0)
+
+# créer une liste avec la fonction "liste_heures" pour le S3 Parcours B
+liste_heures_S3_B = []
+liste_heures(liste_heures_S3_B, heures_S3_B_1)
+liste_heures(liste_heures_S3_B, heures_S3_B_2)
+liste_heures(liste_heures_S3_B, heures_S3_B_3)
+
+print(concordance(liste_heures_S3_B, BUT2.liste_heures_S3_B, "S3 Parcours B"), "\n")
