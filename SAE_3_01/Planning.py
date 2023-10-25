@@ -24,7 +24,7 @@ def concordance(planning, maquette, semestre):
     cpt = 0
     for i in range(len(planning)):
         if not(planning[i].getLibelle() in maquette[i].getLibelle()):
-            print("La ressource numéro", i+1, "n'existe pas ou n'a pas été placé au bon endroit.")
+            print("La ressource numéro", planning[i].getLibelle(), "n'existe pas ou n'a pas été placé au bon endroit.")
         else:
             if planning[i].getCm() != maquette[i].getCm():
                 print("Les heures de C.M. de la ressource", planning[i].getLibelle(), "ne correspondent pas entre le fichier de la maquette et celui du planning.")
@@ -128,3 +128,67 @@ liste_heures(liste_heures_S3_B, heures_S3_B_2)
 liste_heures(liste_heures_S3_B, heures_S3_B_3)
 
 print(concordance(liste_heures_S3_B, BUT2.liste_heures_S3_B, "S3 Parcours B"), "\n")
+
+# S4 Parcours A
+
+# lire l'onglet du S4 Parcours A
+S4_A = pd.read_excel(planning, 'S4.A')
+
+# récupérer la maquette des heures de chaque ressource
+heures_S4_A_1 = S4_A.iloc[18:21, [3, 6, 8, 10]]
+heures_S4_A_2 = S4_A.iloc[18:22, [40, 43, 45, 47]]
+heures_S4_A_3 = S4_A.iloc[22:23, [3, 6, 8, 10]]
+heures_S4_A_4 = S4_A.iloc[23:24, [40, 43, 45, 47]]
+heures_S4_A_5 = S4_A.iloc[23:25, [3, 6, 8, 10]]
+heures_S4_A_6 = S4_A.iloc[24:25, [40, 43, 45, 47]]
+heures_S4_A_7 = S4_A.iloc[25:26, [3, 6, 8, 10]]
+
+# remplacer les cases vides par des '0'
+heures_S4_A_1 = heures_S4_A_1.fillna(0)
+heures_S4_A_2 = heures_S4_A_2.fillna(0)
+heures_S4_A_3 = heures_S4_A_3.fillna(0)
+heures_S4_A_4 = heures_S4_A_4.fillna(0)
+heures_S4_A_5 = heures_S4_A_5.fillna(0)
+heures_S4_A_6 = heures_S4_A_6.fillna(0)
+heures_S4_A_7 = heures_S4_A_7.fillna(0)
+
+# créer une liste avec la fonction "liste_heures" pour le S4 Parcours A
+liste_heures_S4_A = []
+liste_heures(liste_heures_S4_A, heures_S4_A_1)
+liste_heures(liste_heures_S4_A, heures_S4_A_2)
+liste_heures(liste_heures_S4_A, heures_S4_A_3)
+liste_heures(liste_heures_S4_A, heures_S4_A_4)
+liste_heures(liste_heures_S4_A, heures_S4_A_5)
+liste_heures(liste_heures_S4_A, heures_S4_A_6)
+liste_heures(liste_heures_S4_A, heures_S4_A_7)
+
+print(concordance(liste_heures_S4_A, BUT2.liste_heures_S4_A, "S4 Parcours A"), "\n")
+
+# Parcours B
+
+# lire l'onglet du S4 Parcours B
+S4_B = pd.read_excel(planning, 'S4.B')
+
+# récupérer la maquette des heures de chaque ressource
+heures_S4_B_1 = S4_B.iloc[18:21, [3, 6, 8, 10]]
+heures_S4_B_2 = S4_B.iloc[18:22, [40, 43, 45, 47]]
+heures_S4_B_3 = S4_B.iloc[22:23, [3, 6, 8, 10]]
+heures_S4_B_4 = S4_B.iloc[23:25, [40, 43, 45, 47]]
+heures_S4_B_5 = S4_B.iloc[23:26, [3, 6, 8, 10]]
+
+# remplacer les cases vides par des '0'
+heures_S4_B_1 = heures_S4_B_1.fillna(0)
+heures_S4_B_2 = heures_S4_B_2.fillna(0)
+heures_S4_B_3 = heures_S4_B_3.fillna(0)
+heures_S4_B_4 = heures_S4_B_4.fillna(0)
+heures_S4_B_5 = heures_S4_B_5.fillna(0)
+
+# créer une liste avec la fonction "liste_heures" pour le S4 Parcours B
+liste_heures_S4_B = []
+liste_heures(liste_heures_S4_B, heures_S4_B_1)
+liste_heures(liste_heures_S4_B, heures_S4_B_2)
+liste_heures(liste_heures_S4_B, heures_S4_B_3)
+liste_heures(liste_heures_S4_B, heures_S4_B_4)
+liste_heures(liste_heures_S4_B, heures_S4_B_5)
+
+print(concordance(liste_heures_S4_B, BUT2.liste_heures_S4_B, "S4 Parcours B"), "\n")

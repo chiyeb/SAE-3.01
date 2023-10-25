@@ -10,9 +10,10 @@ def insert(Semestre, Code_ressource, Libelle, H_CM, H_TD, H_TP):
     existing_row = cursor.fetchone()
     if existing_row:
         cursor.execute(
-            "UPDATE Maquette SET Libelle = ?, H_CM = ?, H_TD = ?, H_TP = ? WHERE Code_ressource = ?",
-            (Libelle, H_CM, H_TD, H_TP, Code_ressource)
+            "UPDATE Maquette SET Semestre = ?, Libelle = ?, H_CM = ?, H_TD = ?, H_TP = ? WHERE Code_ressource = ?",
+            (Semestre, Libelle, H_CM, H_TD, H_TP, Code_ressource)
         )
+        conn.commit()
     else:
         cursor.execute(
             "INSERT INTO Maquette (id_res_formation, Semestre, Code_ressource, Libelle, H_CM, H_TD, H_TP) VALUES (?, ?, ?, ?, ?, ?, ?)",
