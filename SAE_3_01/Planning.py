@@ -164,7 +164,7 @@ liste_heures(liste_heures_S4_A, heures_S4_A_7)
 
 print(concordance(liste_heures_S4_A, BUT2.liste_heures_S4_A, "S4 Parcours A"), "\n")
 
-# Parcours B
+# S4 Parcours B
 
 # lire l'onglet du S4 Parcours B
 S4_B = pd.read_excel(planning, 'S4.B')
