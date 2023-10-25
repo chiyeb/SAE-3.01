@@ -17,6 +17,7 @@ for index, row in select_colonne_BUT1_S1.iterrows():
     #on insère chaque ligne dans la base de donnée
     insert("S1",row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
     liste_adeS1.append(ADE)
+    print(ADE)
 
 
 
