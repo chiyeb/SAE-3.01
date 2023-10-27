@@ -5,7 +5,6 @@ class ADEClass:
         self.cm = cm
         self.td = td
         self.tp = tp
-
     def getId(self):
         return self.id
 
