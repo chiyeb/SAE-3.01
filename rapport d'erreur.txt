@@ -1,2 +1,0 @@
-Les heures de T.P de la ressource R1.11 Bases de la communication ne correspondent pas entre le fichier de la maquette et celui du planning. Il y a 0 heures de TP sur le fichier planning et 1 heures de TP sur le fichier maquette national
-
