@@ -1,18 +1,9 @@
 import sqlite3
 
-import pandas as pd
-
-from PlanningClass import *
-
-import BUT1
-import BUT2
-import BUT3
-from database_handler import insert_planning
-
-conn = sqlite3.connect('database/database.db')
+conn = sqlite3.connect('../database/database.db')
 cursor = conn.cursor()
 def concordance(semestre):
-    with open(f"rapport d'erreur.txt", "w") as rapport_erreur:
+    with open(f"../rapport d'erreur.txt", "w") as rapport_erreur:
         rapport_erreur.write("Erreur pour le semestre" + semestre)
         rapport_erreur.write("\n")
     print("Concordance pour le", semestre, ":")
@@ -39,7 +30,7 @@ def concordance(semestre):
 
                 if rapport:
                     # Écriture de l'erreur dans un fichier de rapport
-                    with open(f"rapport d'erreur.txt", "w") as rapport_erreur:
+                    with open(f"../rapport d'erreur.txt", "w") as rapport_erreur:
                         rapport_erreur.write(rapport)
                         rapport_erreur.write("\n")
 

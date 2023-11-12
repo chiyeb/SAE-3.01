@@ -1,12 +1,9 @@
-import math
-
 import pandas as pd
-import sqlite3
-from database_handler import *
+from SAE_3_01.old.database_handler import *
 
-conn = sqlite3.connect('database/database.db')
+conn = sqlite3.connect('../database/database.db')
 cursor = conn.cursor()
-planning = pd.ExcelFile('./Planning 2023-2024.xlsx')
+planning = pd.ExcelFile('../Documents/Planning 2023-2024.xlsx')
 
 def trouverVal(semestre, semestre_onglet):
     cursor.execute("SELECT Libelle, Num_Res FROM Maquette WHERE Semestre = ?", (semestre,))

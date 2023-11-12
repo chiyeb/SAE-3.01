@@ -17,7 +17,7 @@ try:
 
         # Charger un classeur Excel existant s'il existe, sinon créer un nouveau
         try:
-            workbook = openpyxl.load_workbook("S2.xlsx")
+            workbook = openpyxl.load_workbook("Documents/S2.xlsx")
         except FileNotFoundError:
             workbook = openpyxl.Workbook()
 

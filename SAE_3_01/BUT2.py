@@ -1,10 +1,9 @@
-import numpy as np
 import pandas as pd
 from ADEClass import ADEClass
-from database_handler import insert_maquette
+from SAE_3_01.old.database_handler import insert_maquette
 
 # On importe la bible BUT2
-BUT2 = pd.ExcelFile('./BUT2_INFO_AIX.xlsx')
+BUT2 = pd.ExcelFile('Documents/BUT2_INFO_AIX.xlsx')
 
 
 # On affiche le parcours A FA pour ensuite prendre les données 
