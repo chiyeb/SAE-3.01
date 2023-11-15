@@ -4,4 +4,4 @@ import BUT3
 from recupData import *
 
 
-print(BUT1, BUT2, BUT3)
+print(BUT1)

@@ -2,7 +2,7 @@ import sqlite3
 import math
 import pandas as pd
 class verifData:
-    def __init__(self, db_file):
+    def __init__(self):
         # Initialise la connexion à la base de données
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()

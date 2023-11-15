@@ -1,16 +1,16 @@
 import sqlite3
 import openpyxl
 
-# Demander à l'utilisateur la ressource à rechercher
-resource = input("Entrez la ressource que vous souhaitez écrire dans le fichier Excel : ")
+resource = "R1.01"
 
 # Connexion à la base de données SQLite
 try:
     with sqlite3.connect("database/database.db") as conn:
         cursor = conn.cursor()
 
-        # Exécutez une requête SQL pour récupérer les données depuis la base de données en utilisant la ressource fournie par l'utilisateur
-        cursor.execute("SELECT Ressource, H_CM, H_TD, H_TP, Resp FROM Planning WHERE Ressource LIKE ?", ('%' + resource + '%',))
+        # Exécute une requête SQL pour récupérer les données depuis la base de données en utilisant la ressource fournie
+        cursor.execute("SELECT Ressource, H_CM, H_TD, H_TP, Resp FROM Planning WHERE Ressource LIKE ?", ('%' + resource
+                                                                                                         + '%',))
 
         # Récupérez les données dans une liste de tuples
         data_from_database = cursor.fetchall()

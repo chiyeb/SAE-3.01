@@ -2,14 +2,17 @@ import sqlite3
 import math
 import pandas as pd
 
+from SAE_3_01.insertData import insertData
+
 
 class recupData:
-    def __init__(self, db_file):
+    def __init__(self):
         # Initialise la connexion à la base de données
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
 
     def trouverVal(self, semestre, semestre_onglet):
+        print("trouver val appelé")
         planning = pd.ExcelFile('Documents/Planning 2023-2024.xlsx')
         self.cursor.execute("SELECT Libelle, Num_Res FROM Maquette WHERE Semestre = ?", (semestre,))
         resultats = self.cursor.fetchall()  # Récupérer toutes les valeurs de "Num_Res" pour le semestre donné
@@ -41,7 +44,8 @@ class recupData:
                         print(f"5e case: {valeur_case_5}")
                         print(f"7e case: {valeur_case_7}")
                         print(f"12e case: {valeur_case_12}")
-                        insert_planning(semestre, libelle, valeur_case_3, valeur_case_5, valeur_case_7, valeur_case_12)
+                        insertdata = insertData()
+                        insertdata.insert_planning(semestre, libelle, valeur_case_3, valeur_case_5, valeur_case_7, valeur_case_12)
     def recupNomProf(self):
         # Ouvre le fichier en mode lecture
         with open("Documents/NomProf.txt", "r") as fichier:
@@ -70,49 +74,9 @@ class recupData:
                 else:
                     print(f"Erreur de format sur la ligne : {ligne}")
 
-    def insert_maquette(self ,Semestre, Code_ressource, Libelle, H_CM, H_TD, H_TP):
-        # création d'un id unique pour chaque semestre par ressource
-        id_res_formation = Semestre + Code_ressource
-        espace = Libelle.index(" ")
-        # récupération de seulement le numéro de la ressource sans le nom de la ressource
-        num_ressource = Libelle[:espace]
-        # éxécution de la requête SQL pour vérifier si il existe déjà dans la BD la ressource pour un semestre précis
-        self.conn.execute("SELECT id_res_formation FROM Maquette WHERE id_res_formation = ?", (id_res_formation,))
-        existing_row = self.cursor.fetchone()
-        # si la requête renvoie quelque chose on update au lieu d'insérer
-        if existing_row:
-            self.cursor.execute(
-                "UPDATE Maquette SET Semestre = ?, Libelle = ?, H_CM = ?, H_TD = ?, H_TP = ?, Num_Res = ? WHERE Code_ressource = ?",
-                (Semestre, Libelle, H_CM, H_TD, H_TP, num_ressource, Code_ressource)
-            )
-            self.conn.commit()
-        # sinon on insère au lieu d'update
-        else:
-            self.cursor.execute(
-                "INSERT INTO Maquette (id_res_formation, Semestre, Code_ressource, Libelle, H_CM, H_TD, H_TP, Num_Res) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                (id_res_formation, Semestre, Code_ressource, Libelle, H_CM, H_TD, H_TP, num_ressource))
-            # commit les changements pour les sauvegarder dans la base de données
-            self.conn.commit()
-
-    def insert_planning(self, Semestre, Ressource, H_CM, H_TD, H_TP, Resp):
-        # éxécution de la requête SQL pour vérifier si il existe déjà dans la BD la ressource pour un semestre précis
-        self.cursor.execute("SELECT Semestre FROM Planning WHERE Semestre = ? AND Ressource = ?", (Semestre, Ressource,))
-        existing_row = self.cursor.fetchone()
-        # si la requête renvoie quelque chose on update au lieu d'insérer
-        if existing_row:
-            self.cursor.execute(
-                "UPDATE Planning SET H_CM = ?, H_TD = ?, H_TP = ?, Resp = ? WHERE Semestre = ? AND Ressource = ?",
-                (H_CM, H_TD, H_TP, Resp, Semestre, Ressource)
-            )
-        # sinon on insère au lieu d'update
-        else:
-            self.cursor.execute(
-                "INSERT INTO Planning (Semestre, Ressource, H_CM, H_TD, H_TP, Resp) VALUES (?, ?, ?, ?, ?, ?)",
-                (Semestre, Ressource, H_CM, H_TD, H_TP, Resp))
-            # commit les changements pour les sauvegarder dans la base de données
-        self.conn.commit()
     def __del__(self):
         # Ferme la connexion à la base de données lorsque l'objet est détruit
         self.conn.close()
 
-
+recupdata = recupData()
+recupdata.recupNomProf()
