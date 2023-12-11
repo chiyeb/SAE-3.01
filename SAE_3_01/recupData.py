@@ -2,7 +2,7 @@ import sqlite3
 import math
 import pandas as pd
 
-from SAE_3_01.insertData import insertData
+from insertData import insertData
 
 
 class recupData:

@@ -3,10 +3,20 @@ import math
 import pandas as pd
 
 class insertData:
-    def __init__(self):
+    instance = None
+
+    def __new__(cls):
+        if cls.instance is None:
+            cls.instance = super(insertData, cls).__new__(cls)
+            cls.instance._setup()
+        return cls.instance
+
+    def _setup(self):
         # Initialise la connexion à la base de données
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
+
+
     def insert_maquette(self, Semestre, Code_ressource, Libelle, H_CM, H_TD, H_TP):
         # création d'un id unique pour chaque semestre par ressource
         id_res_formation = Semestre + Code_ressource

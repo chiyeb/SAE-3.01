@@ -5,7 +5,15 @@ import pandas as pd
 
 
 class scribeData:
-    def __init__(self):
+    instance = None
+
+    def __new__(cls):
+        if cls.instance is None:
+            cls.instance = super(scribeData, cls).__new__(cls)
+            cls.instance._setup()
+        return cls.instance
+
+    def _setup(self):
         # Initialise la connexion à la base de données
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
