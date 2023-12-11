@@ -52,3 +52,29 @@ class insertData:
                 (Semestre, Ressource, H_CM, H_TD, H_TP, Resp, num_ressource))
             # commit les changements pour les sauvegarder dans la base de données
         self.conn.commit()
+
+    def insert_horaires(self, Semestre, Num_Res, Dates, Types_de_cours):
+        # éxécution de la requête SQL pour vérifier si il existe déjà dans la BD la ressource pour un semestre précis
+        self.cursor.execute("SELECT Semestre FROM Horaires WHERE Semestre = ? AND Num_Res = ?",
+                            (Semestre, Num_Res,))
+        existing_row = self.cursor.fetchone()
+        # si la requête renvoie quelque chose on update au lieu d'insérer
+        if existing_row:
+            self.cursor.execute(
+                "UPDATE Horaires SET Dates = ?, Types_de_cours = ? WHERE Semestre = ? AND Num_Res = ?",
+                (Dates, Types_de_cours, Semestre, Num_Res)
+            )
+        # sinon on insère au lieu d'update
+        else:
+            self.cursor.execute(
+                "INSERT INTO Horaires (Semestre, Num_Res, Dates, Types_de_cours) VALUES (?, ?, ?, ?)",
+                (Semestre, Num_Res, Dates, Types_de_cours))
+            # commit les changements pour les sauvegarder dans la base de données
+        self.conn.commit()
+
+
+
+
+
+
+
