@@ -98,24 +98,26 @@ class recupData:
                     # Vérifie si la date existe dans la colonne
                     if date in S[col].values:
                         index_date = S[S[col] == date].index[0]
-                        start_col_index = max(0, S.columns.get_loc(col) - 23)
+                        start_col_index = max(0, S.columns.get_loc(col) - 29)
                         row_data = S.iloc[index_date, start_col_index: S.columns.get_loc(col) + 1].tolist()
+                        # Supprime les valeurs NaN
+                        row_data = [x for x in row_data if pd.notna(x)]
+                        # Supprime les valeurs vides
+                        row_data = [x for x in row_data if x != ""]
+                        # Filtrer seulement les valeurs "X" et "Y"
+                        row_data = [x for x in row_data if 'X' in str(x) or 'Y' in str(x)]
+
                         print(f"Date: {date}, Ligne à gauche: {row_data}")
+
+                        # Appliquer le style pour afficher la couleur de fond
+                        styled_row_data = S.iloc[index_date, start_col_index: S.columns.get_loc(col) + 1].apply(
+                            lambda x: f'background-color: {x}')
+
+                        # Afficher le DataFrame stylisé
+                        print(styled_row_data)
+
                     else:
                         print(f"La date {date} n'a pas été trouvée dans la colonne {col}")
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     def __del__(self):
