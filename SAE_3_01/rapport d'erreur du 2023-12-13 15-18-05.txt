@@ -1,6 +1,0 @@
-erreur pour le semestre S3AFI
-Les heures de T.D de la ressource R3.04 Qualité de développement ne correspondent pas entre le fichier de la maquette et celui du planning. Il y a 13 heures de TD sur le fichier planning et 14 heures de TD sur le fichier maquette national
-
-erreur pour le semestre S3AFI
-Les heures de T.P de la ressource R3.09 Cryptographie et sécurité ne correspondent pas entre le fichier de la maquette et celui du planning. Il y a 8 heures de TP sur le fichier planning et 7 heures de TP sur le fichier maquette national
-
