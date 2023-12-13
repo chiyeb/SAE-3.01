@@ -110,8 +110,12 @@ class recupData:
                         print(f"Date: {date}, Ligne à gauche: {row_data}")
 
                         # Appliquer le style pour afficher la couleur de fond
-                        styled_row_data = S.iloc[index_date, start_col_index: S.columns.get_loc(col) + 1].apply(
-                            lambda x: f'background-color: {x}')
+                        styled_row_data = S.iloc[index_date, start_col_index: S.columns.get_loc(col) + 1].apply(lambda x: f'background-color: {x}')
+                        # Appliquer le style pour afficher la couleur de fond que pour les valeurs "X" et "Y"
+                        styled_row_data = styled_row_data.apply(lambda x: f'background-color: {x}' if 'X' in str(x) or 'Y' in str(x) else '')
+                        # Supprimer les lignes ou il n'y a pas de background-color
+                        styled_row_data = styled_row_data[styled_row_data != '']
+
 
                         # Afficher le DataFrame stylisé
                         print(styled_row_data)
