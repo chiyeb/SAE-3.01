@@ -30,7 +30,7 @@ try:
 
             # Exécutez une requête SQL pour récupérer les données de la ressource actuelle
             cursor.execute(
-                "SELECT Ressource, H_CM, H_TD, H_TP, Resp FROM Planning WHERE Ressource = ?",(resource,))
+                "SELECT Ressource, H_CM, H_TD, H_TP, Resp FROM Planning WHERE Ressource = ?", (resource,))
 
             # Récupérez les données dans une liste de tuples
             data_from_database = cursor.fetchall()

@@ -7,15 +7,15 @@ try:
         cursor = conn.cursor()
 
         # Exécutez une requête SQL pour récupérer toutes les ressources depuis la base de données
-        cursor.execute("SELECT DISTINCT Ressource FROM Planning WHERE Semestre = 'S3AFA'")
+        cursor.execute("SELECT DISTINCT Ressource FROM Planning WHERE Semestre = 'S3AFI'")
         # Récupérez toutes les ressources dans une liste
         resources = [row[0] for row in cursor.fetchall()]
 
-        # Charger un classeur Excel existant s'il existe
+        # Charger un classeur Excel existant s'il existe, sinon créer un nouveau
         try:
-            workbook = openpyxl.load_workbook("S3AFA.xlsx")
+            workbook = openpyxl.load_workbook("S3AFI.xlsx")
         except FileNotFoundError:
-            print("Le fichier S3AFA.xlsx n'a pas été trouvé.")
+            print("Le fichier S3AFI.xlsx n'a pas été trouvé.")
             exit()
 
         for resource in resources:
@@ -35,23 +35,23 @@ try:
             # Récupérez les données dans une liste de tuples
             data_from_database = cursor.fetchall()
 
-
             # Écrire les données spécifiques dans la nouvelle feuille
             for data_row in data_from_database:
                 worksheet.append(data_row)
 
-            # Écrire les données spécifiques dans la nouvelle feuille
-            worksheet.cell(row=5, column=2, value=data_from_database[0][1])
-            worksheet.cell(row=5, column=3, value=data_from_database[0][2])
-            worksheet.cell(row=5, column=4, value=data_from_database[0][3])
-            worksheet.cell(row=2, column=2, value=resource)
-            worksheet.cell(row=2, column=7, value=data_from_database[0][4])
+                # Écrire les données spécifiques dans la nouvelle feuille
+                worksheet.cell(row=5, column=2, value=data_from_database[0][1])
+                worksheet.cell(row=5, column=3, value=data_from_database[0][2])
+                worksheet.cell(row=5, column=4, value=data_from_database[0][3])
+                worksheet.cell(row=2, column=2, value=resource)
+                worksheet.cell(row=2, column=7, value=data_from_database[0][4])
+
 
         # Sauvegarder le classeur Excel
-        workbook.save("S3AFA.xlsx")
+        workbook.save("S3AFI.xlsx")
 
         # Message pour confirmer les ajouts dans le fichier Excel
-        print("Les données ont été ajoutées à S3AFA.xlsx")
+        print("Les données ont été ajoutées à S3AFI.xlsx")
 
 # Si une erreur survient lors de la connexion à la base de données, affichez un message d'erreur
 except sqlite3.Error as e:
