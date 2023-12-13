@@ -98,31 +98,58 @@ class recupData:
                     # Vérifie si la date existe dans la colonne
                     if date in S[col].values:
                         index_date = S[S[col] == date].index[0]
-                        start_col_index = max(0, S.columns.get_loc(col) - 29)
-                        row_data = S.iloc[index_date, start_col_index: S.columns.get_loc(col) + 1].tolist()
+
+                        # Utilise la méthode iloc pour accéder à la ligne complète
+                        row_data = S.iloc[index_date, :].tolist()
+
                         # Supprime les valeurs NaN
                         row_data = [x for x in row_data if pd.notna(x)]
+
                         # Supprime les valeurs vides
                         row_data = [x for x in row_data if x != ""]
+
                         # Filtrer seulement les valeurs "X" et "Y"
                         row_data = [x for x in row_data if 'X' in str(x) or 'Y' in str(x)]
 
-                        print(f"Date: {date}, Ligne à gauche: {row_data}")
+                        #Afficher un message d'erreur si la ligne est vide
+                        if not row_data:
+                            print(f"Dans la colonne 'Date', la ligne {index_date} est vide")
+                            continue
+
+
+                        # Créer une fonction de mapping pour attribuer les labels "TD" ou "TP"
+                        def map_label(value):
+                            if 'X' in str(value):
+                                return 'TD'
+                            elif 'Y' in str(value):
+                                return 'TP'
+                            else:
+                                return value
+
+                        # Appliquer la fonction de mapping à la colonne
+                        row_data = list(map(map_label, row_data))
+
+                        print(f"Date: {date}, Ligne complète: {row_data}")
 
                         # Appliquer le style pour afficher la couleur de fond
-                        styled_row_data = S.iloc[index_date, start_col_index: S.columns.get_loc(col) + 1].apply(lambda x: f'background-color: {x}')
+                        styled_row_data = S.iloc[index_date, :].apply(
+                            lambda x: f'background-color: {x}')
+
                         # Appliquer le style pour afficher la couleur de fond que pour les valeurs "X" et "Y"
-                        styled_row_data = styled_row_data.apply(lambda x: f'background-color: {x}' if 'X' in str(x) or 'Y' in str(x) else '')
-                        # Supprimer les lignes ou il n'y a pas de background-color
+                        styled_row_data = styled_row_data.apply(
+                            lambda x: f'background-color: {x}' if 'X' in str(x) or 'Y' in str(x) else '')
+
+                        # Supprimer les lignes où il n'y a pas de background-color
                         styled_row_data = styled_row_data[styled_row_data != '']
 
+                        # Appliquer la fonction de mapping à la colonne
+                        styled_row_data = styled_row_data.apply(map_label)
 
-                        # Afficher le DataFrame stylisé
+                        # Afficher la ligne avec le style de couleur de fond de la cellule
                         print(styled_row_data)
 
                     else:
                         print(f"La date {date} n'a pas été trouvée dans la colonne {col}")
-
 
     def __del__(self):
         # Ferme la connexion à la base de données lorsque l'objet est détruit
