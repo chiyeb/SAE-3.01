@@ -24,12 +24,11 @@ for index, row in select_colonne_BUT1_S1.iterrows():
     # on insère chaque ligne dans la base de donnée
     insertData.insert_maquette("S1", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
 
+# fonction pour récupérer les valeurs du premier semestre dans le fichier planning
+recupData.trouverVal("S1", "S1")
 # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette national à partir de
 # la base de données pour le premier semestre
 verifData.concordance("S1")
-# fonction pour récupérer les valeurs du premier semestre dans le fichier planning
-recupData.trouverVal("S1", "S1")
-
 # Sélection des heures du deuxième semestre
 select_colonne_BUT1_S2 = BUT1_1.iloc[36:58, [0, 2, 17, 18, 19]]
 for index, row in select_colonne_BUT1_S2.iterrows():
@@ -37,9 +36,9 @@ for index, row in select_colonne_BUT1_S2.iterrows():
         continue
     # on insère chaque ligne dans la base de donnée
     insertData.insert_maquette("S2", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
-
+# fonction pour récupérer les valeurs du deuxième semestre dans le fichier planning
+recupData.trouverVal("S2", "S2")
 # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
 # la base de données pour le deuxième semestre
 verifData.concordance("S2")
-# fonction pour récupérer les valeurs du deuxième semestre dans le fichier planning
-recupData.trouverVal("S2", "S2")
+

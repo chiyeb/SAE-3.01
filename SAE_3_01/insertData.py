@@ -58,7 +58,7 @@ class insertData:
         # sinon on insère au lieu d'update
         else:
             self.cursor.execute(
-                "INSERT INTO Planning (Semestre, Ressource, H_CM, H_TD, H_TP, Resp, Num_res) VALUES (?, ?, ?, ?, ?, ?)",
+                "INSERT INTO Planning (Semestre, Ressource, H_CM, H_TD, H_TP, Resp, Num_res) VALUES (?, ?, ?, ?, ?, ?, ?)",
                 (Semestre, Ressource, H_CM, H_TD, H_TP, Resp, num_ressource))
             # commit les changements pour les sauvegarder dans la base de données
         self.conn.commit()

@@ -21,7 +21,6 @@ class recupData:
             num_res = row[1]
             libelle = row[0]
             S = pd.read_excel(planning, semestre_onglet)
-
             for index, row in S.iterrows():
                 if num_res in row.values:
                     index_num_res = row.values.tolist().index(num_res)
