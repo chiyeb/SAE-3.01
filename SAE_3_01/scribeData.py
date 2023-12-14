@@ -60,6 +60,9 @@ class scribeData:
         else:
             print(f"Aucune donnée pour la ressource '{ressource}'")
 
+    def __del__(self):
+        # Ferme la connexion à la base de données lorsque l'objet est détruit
+        self.conn.close()
 # Crée une instance de la classe scribeData
 scribe_instance = scribeData()
 

@@ -6,7 +6,15 @@ from insertData import insertData
 
 
 class recupData:
-    def __init__(self):
+    instance = None
+
+    def __new__(cls):
+        if cls.instance is None:
+            cls.instance = super(recupData, cls).__new__(cls)
+            cls.instance._setup()
+        return cls.instance
+
+    def _setup(self):
         # Initialise la connexion à la base de données
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
@@ -44,7 +52,9 @@ class recupData:
                         print(f"7e case: {valeur_case_7}")
                         print(f"12e case: {valeur_case_12}")
                         insertdata = insertData()
-                        insertdata.insert_planning(semestre, libelle, valeur_case_3, valeur_case_5, valeur_case_7, valeur_case_12)
+                        insertdata.insert_planning(semestre, libelle, valeur_case_3, valeur_case_5, valeur_case_7,
+                                                   valeur_case_12)
+
     def recupNomProf(self):
         # Ouvre le fichier en mode lecture
         with open("Documents/NomProf.txt", "r") as fichier:
@@ -76,6 +86,7 @@ class recupData:
     def __del__(self):
         # Ferme la connexion à la base de données lorsque l'objet est détruit
         self.conn.close()
+
 
 recupdata = recupData()
 recupdata.recupNomProf()
