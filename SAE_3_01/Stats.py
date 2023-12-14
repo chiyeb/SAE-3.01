@@ -21,15 +21,16 @@ class Stats:
     def execAllStats(self):
         self.genereGraph()
         self.generePie()
+
     def genereGraph(self):
         # Récupération des heures par ressources et par semestre
-        query = """
+        requete = """
         SELECT Semestre, Num_res, SUM(H_CM + H_TD + H_TP) as HTotal
         FROM Planning
         GROUP BY Semestre, Ressource
         ORDER BY Semestre, HTotal DESC;
         """
-        data = pd.read_sql_query(query, self.conn)
+        data = pd.read_sql_query(requete, self.conn)
 
         # Génère le graphique
         plt.figure(figsize=(15, 10))
@@ -77,7 +78,3 @@ class Stats:
     def __del__(self):
         self.conn.close()
 
-
-# Utilisation de la classe
-data_analyzer = Stats()
-data_analyzer.GenerePie()
