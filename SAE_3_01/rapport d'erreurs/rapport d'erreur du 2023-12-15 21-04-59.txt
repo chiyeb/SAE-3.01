@@ -1,0 +1,21 @@
+erreur pour le semestre S1 et la ressource R1.11 Bases de la communication
+Les heures de T.P de la ressource R1.11 Bases de la communication ne correspondent pas entre le fichier de la maquette et celui du planning. Il y a 0 heures de TP sur le fichier planning et 1 heures de TP sur le fichier maquette national
+
+erreur pour le semestre S3AFI et la ressource R3.04 Qualité de développement
+Les heures de T.D de la ressource R3.04 Qualité de développement ne correspondent pas entre le fichier de la maquette et celui du planning. Il y a 13 heures de TD sur le fichier planning et 14 heures de TD sur le fichier maquette national
+
+erreur pour le semestre S3AFI et la ressource R3.09 Cryptographie et sécurité
+Les heures de T.P de la ressource R3.09 Cryptographie et sécurité ne correspondent pas entre le fichier de la maquette et celui du planning. Il y a 8 heures de TP sur le fichier planning et 7 heures de TP sur le fichier maquette national
+
+erreur pour le semestre S5AFA et la ressource R5.A.06 Sensibilisation à la programmation multimedia
+Les heures de CM de la ressource R5.A.06 Sensibilisation à la programmation multimedia ne correspondent pas entre le fichier de la maquette et celui du planning. Il y a 2 heures de CM sur le fichier planning et 0 heures de CM sur le fichier maquette national
+Les heures de T.D de la ressource R5.A.06 Sensibilisation à la programmation multimedia ne correspondent pas entre le fichier de la maquette et celui du planning. Il y a 10 heures de TD sur le fichier planning et 12 heures de TD sur le fichier maquette national
+
+erreur pour le semestre S5AFI et la ressource R5.A.06 Sensibilisation à la programmation multimedia
+Les heures de CM de la ressource R5.A.06 Sensibilisation à la programmation multimedia ne correspondent pas entre le fichier de la maquette et celui du planning. Il y a 2 heures de CM sur le fichier planning et 0 heures de CM sur le fichier maquette national
+Les heures de T.D de la ressource R5.A.06 Sensibilisation à la programmation multimedia ne correspondent pas entre le fichier de la maquette et celui du planning. Il y a 10 heures de TD sur le fichier planning et 12 heures de TD sur le fichier maquette national
+
+erreur pour le semestre S5AFI et la ressource R5.A.L1 Compléments IA
+Les heures de CM de la ressource R5.A.L1 Compléments IA ne correspondent pas entre le fichier de la maquette et celui du planning. Il y a 4 heures de CM sur le fichier planning et 8 heures de CM sur le fichier maquette national
+Les heures de T.D de la ressource R5.A.L1 Compléments IA ne correspondent pas entre le fichier de la maquette et celui du planning. Il y a 20 heures de TD sur le fichier planning et 24 heures de TD sur le fichier maquette national
+

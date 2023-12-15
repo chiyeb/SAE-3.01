@@ -2,6 +2,7 @@ import sqlite3
 import math
 import pandas as pd
 
+
 class insertData:
     instance = None
 
@@ -15,7 +16,6 @@ class insertData:
         # Initialise la connexion à la base de données
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
-
 
     def insert_maquette(self, Semestre, Code_ressource, Libelle, H_CM, H_TD, H_TP):
         # création d'un id unique pour chaque semestre par ressource
