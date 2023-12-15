@@ -1,34 +1,47 @@
-import numpy as np
+from scribeData import scribeData
+from verifData import *
+from recupData import *
+from insertData import *
 import pandas as pd
-from ADEClass import ADEClass
-from database_handler import insert
-BUT1 = pd.ExcelFile('./BUT1_INFO_AIX.xlsx')
 
+# from SAE_3_01.old.recupValPlanning import *
 
+# lire le fichier maquette
+BUT1 = pd.ExcelFile('Documents/BUT1_INFO_AIX.xlsx')
+# récupérer l'onglet BUT 1
 BUT1_1 = pd.read_excel(BUT1, 'BUT 1')
-
+# instance de recupData
+recupData = recupData()
+# instance insertData
+insertData = insertData()
+# instance verifData
+verifData = verifData()
+scribeData = scribeData()
+# Sélection des heures du premier semestre
 select_colonne_BUT1_S1 = BUT1_1.iloc[10:31, [0, 2, 17, 18, 19]]
-liste_adeS1 = []
 for index, row in select_colonne_BUT1_S1.iterrows():
     if row.isnull().iloc[0]:
         continue
-    #On crée un objet ADE et on rentre les valeurs pour chaque ligne
-    ADE = ADEClass(row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
-    #on insère chaque ligne dans la base de donnée
-    insert("S1",row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
-    liste_adeS1.append(ADE)
+    # on insère chaque ligne dans la base de donnée
+    insertData.insert_maquette("S1", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
 
-
-
-
+# fonction pour vérifier les concordances entre le fichier planning et le fichier maquette national à partir de
+# la base de données pour le premier semestre
+verifData.concordance("S1")
+# fonction pour récupérer les valeurs du premier semestre dans le fichier planning
+recupData.trouverVal("S1", "S1")
+scribeData.scribeRessource("S1")
+# Sélection des heures du deuxième semestre
 select_colonne_BUT1_S2 = BUT1_1.iloc[36:58, [0, 2, 17, 18, 19]]
-liste_adeS2 = []
 for index, row in select_colonne_BUT1_S2.iterrows():
     if row.isnull().iloc[0]:
         continue
     # on insère chaque ligne dans la base de donnée
-    insert("S2", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
-    # On crée un objet ADE et on rentre les valeurs pour chaque ligne
-    ADE = ADEClass(row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
+    insertData.insert_maquette("S2", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
 
-    liste_adeS2.append(ADE)
+# fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
+# la base de données pour le deuxième semestre
+verifData.concordance("S2")
+# fonction pour récupérer les valeurs du deuxième semestre dans le fichier planning
+recupData.trouverVal("S2", "S2")
+scribeData.scribeRessource("S2")
