@@ -16,6 +16,7 @@ recupData = recupData()
 insertData = insertData()
 # instance verifData
 verifData = verifData()
+scribeData = scribeData()
 # Sélection des heures du premier semestre
 select_colonne_BUT1_S1 = BUT1_1.iloc[10:31, [0, 2, 17, 18, 19]]
 for index, row in select_colonne_BUT1_S1.iterrows():
@@ -29,7 +30,7 @@ for index, row in select_colonne_BUT1_S1.iterrows():
 verifData.concordance("S1")
 # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
 recupData.trouverVal("S1", "S1")
-
+scribeData.scribeRessource("S1")
 # Sélection des heures du deuxième semestre
 select_colonne_BUT1_S2 = BUT1_1.iloc[36:58, [0, 2, 17, 18, 19]]
 for index, row in select_colonne_BUT1_S2.iterrows():
@@ -43,3 +44,4 @@ for index, row in select_colonne_BUT1_S2.iterrows():
 verifData.concordance("S2")
 # fonction pour récupérer les valeurs du deuxième semestre dans le fichier planning
 recupData.trouverVal("S2", "S2")
+scribeData.scribeRessource("S2")

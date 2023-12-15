@@ -9,7 +9,7 @@ try:
         cursor = conn.cursor()
 
         # Récupérer les noms uniques des semestres
-        cursor.execute("SELECT DISTINCT Semestre FROM Planning WHERE Semestre = 'S1'")
+        cursor.execute("SELECT DISTINCT Semestre FROM Planning WHERE Semestre = ?",(semestre))
         semesters = [row[0] for row in cursor.fetchall()]
 
         # Ouvrir le fichier "fichier_vierge.xlsx" pour obtenir les paramètres
