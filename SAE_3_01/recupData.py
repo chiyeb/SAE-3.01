@@ -81,16 +81,23 @@ class recupData:
         horaire = pd.ExcelFile('Documents/Planning 2023-2024.xlsx')
 
         # Récupère les données de la table Maquette
-        self.cursor.execute("SELECT Libelle, Num_Res FROM Maquette WHERE Semestre = ?", (semestre,))
+        self.cursor.execute("SELECT Num_Res FROM Maquette WHERE Semestre = ?", (semestre,))
         resultats = self.cursor.fetchall()
         print(resultats)
 
-        # Lecture du fichier Excel en dehors de la boucle pour éviter de le charger à chaque itération
         S = pd.read_excel(horaire, semestre_onglet)
-
         # Récupérer les couleurs des cellules
         sheet_name = semestre_onglet
         cell_colors = self.get_cell_colors(horaire, sheet_name)
+
+        # Lecture du fichier Excel en dehors de la boucle pour éviter de le charger à chaque itération
+        # Parcourir les résultats de la requête SQL
+
+
+
+
+
+
 
         # Recherche du mot "Date" dans les colonnes
         for col in S.columns:
@@ -117,6 +124,7 @@ class recupData:
 
 
 
+
                         # Afficher un message d'erreur si la ligne est vide
                         if not row_data:
                             print(f"Dans la colonne 'Date', la ligne {index_date} est vide")
@@ -132,7 +140,8 @@ class recupData:
                                 return value
 
                         # Appliquer la fonction de mapping à la colonne
-                        #row_data = list(map(map_label, row_data))
+                        # row_data = list(map(map_label, row_data))
+
 
                         print(f"Date: {date}, Ligne complète: {row_data}")
 
@@ -142,8 +151,13 @@ class recupData:
                             cell_color = cell_colors[cell_coord]
                             print(f"Coordonnées : {cell_coord} - Valeur : {cell_value}, Couleur : {cell_color}")
 
+
                     else:
                         print(f"La date {date} n'a pas été trouvée dans la colonne {col}")
+
+
+
+
 
     def get_cell_colors(self, horaire, sheet_name):
         # Chargement du classeur Excel
@@ -168,6 +182,16 @@ class recupData:
                 cell_colors[cell_coord] = cell_color
 
         return cell_colors
+
+    def get_exact_cell_color(self, workbook, sheet_name, row, column):
+        # Sélection de la feuille de calcul
+        sheet = workbook[sheet_name]
+
+        # Obtient la couleur de la cellule spécifiée
+        cell = sheet.cell(row=row, column=column)
+        cell_color = cell.fill.start_color.rgb  # Utilisation de .rgb pour obtenir le code couleur hexadécimal
+
+        return cell_color
 
 
 
