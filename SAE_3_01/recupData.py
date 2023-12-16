@@ -1,4 +1,7 @@
 import sqlite3
+from datetime import datetime
+
+import openpyxl
 import pandas as pd
 from openpyxl.reader.excel import load_workbook
 
@@ -45,7 +48,9 @@ class recupData:
                         print(f"7e case: {valeur_case_7}")
                         print(f"12e case: {valeur_case_12}")
                         insertdata = insertData()
-                        insertdata.insert_planning(semestre, libelle, valeur_case_3, valeur_case_5, valeur_case_7, valeur_case_12)
+                        insertdata.insert_planning(semestre, libelle, valeur_case_3, valeur_case_5, valeur_case_7,
+                                                   valeur_case_12)
+
     def recupNomProf(self):
         # Ouvre le fichier en mode lecture
         with open("Documents/NomProf.txt", "r") as fichier:
@@ -74,137 +79,71 @@ class recupData:
                 else:
                     print(f"Erreur de format sur la ligne : {ligne}")
 
-    def recupHoraire(self, semestre, semestre_onglet):
-        print("recupHoraire appelé")
-
-        # Chargement du fichier Excel
-        horaire = pd.ExcelFile('Documents/Planning 2023-2024.xlsx')
-
-        # Récupère les données de la table Maquette
+    def recupRCouleur(self, semestre, semestre_onglet):
+        ressourceCouleur = {}
         self.cursor.execute("SELECT Num_Res FROM Maquette WHERE Semestre = ?", (semestre,))
-        resultats = self.cursor.fetchall()
-        print(resultats)
+        resultats = [item[0] for item in self.cursor.fetchall()]
+        fichier = openpyxl.load_workbook('Documents/Planning 2023-2024.xlsx')
+        fichierOngletSemestre = fichier[semestre_onglet]
+        for row in fichierOngletSemestre.iter_rows():
+            for cell in row:
+                if cell.value in resultats:
+                    couleur = cell.fill.start_color.rgb
+                    print(couleur)
+                    if couleur != '00000000' and couleur:
+                        ressourceCouleur[cell.value] = couleur
+        print(ressourceCouleur)
+        return ressourceCouleur
 
-        S = pd.read_excel(horaire, semestre_onglet)
-        # Récupérer les couleurs des cellules
-        sheet_name = semestre_onglet
-        cell_colors = self.get_cell_colors(horaire, sheet_name)
-
-        # Lecture du fichier Excel en dehors de la boucle pour éviter de le charger à chaque itération
-        # Parcourir les résultats de la requête SQL
-
-
-
-
-
-
-
-        # Recherche du mot "Date" dans les colonnes
-        for col in S.columns:
-            if 'Date' in col:
-                # Récupère les dates à partir de la 2ème ligne
-                dates_list = S[col].head(23).iloc[1:].tolist()
-
-                for date in dates_list:
-                    # Vérifie si la date existe dans la colonne
-                    if date in S[col].values:
-                        index_date = S[S[col] == date].index[0]
-
-                        # Utilise la méthode iloc pour accéder à la ligne complète
-                        row_data = S.iloc[index_date, 2:].tolist()
-
-                        # Supprime les valeurs NaN
-                        #row_data = [x for x in row_data if pd.notna(x)]
-
-                        # Supprime les valeurs vides
-                        #row_data = [x for x in row_data if x != ""]
-
-                        # Filtrer seulement les valeurs "X" et "Y"
-                        #row_data = [x for x in row_data if 'X' in str(x) or 'Y' in str(x)]
-
-
-
-
-                        # Afficher un message d'erreur si la ligne est vide
-                        if not row_data:
-                            print(f"Dans la colonne 'Date', la ligne {index_date} est vide")
-                            continue
-
-                        # Créer une fonction de mapping pour attribuer les labels "TD" ou "TP"
-                        def map_label(value):
-                            if 'X' in str(value):
-                                return 'TD'
-                            elif 'Y' in str(value):
-                                return 'TP'
-                            else:
-                                return value
-
-                        # Appliquer la fonction de mapping à la colonne
-                        # row_data = list(map(map_label, row_data))
-
-
-                        print(f"Date: {date}, Ligne complète: {row_data}")
-
-                        # Afficher les noms des couleurs des cellules de chaque ligne
-                        for j, cell_value in enumerate(row_data):
-                            cell_coord = (index_date + 2, j + 3)
-                            cell_color = cell_colors[cell_coord]
-                            print(f"Coordonnées : {cell_coord} - Valeur : {cell_value}, Couleur : {cell_color}")
-
-
+    def recupXetY(self, semestre, semestre_onglet, ressourceCouleur):
+        fichier = openpyxl.load_workbook('Documents/Planning 2023-2024.xlsx', data_only=True)
+        fichierOngletSemestre = fichier[semestre_onglet]
+        for col in fichierOngletSemestre.iter_cols():
+            if col[0].value is not None and 'Date' in col[0].value:
+                # Parcourir les lignes pour cette colonne de date
+                for cell in col:
+                    cell_value = cell.value
+                    if isinstance(cell_value, datetime):
+                        date = cell_value.date()  # Récupérer seulement la partie date
                     else:
-                        print(f"La date {date} n'a pas été trouvée dans la colonne {col}")
-
-
-
-
-
-    def get_cell_colors(self, horaire, sheet_name):
-        # Chargement du classeur Excel
-        workbook = load_workbook(horaire, data_only=True)
-
-        # Sélection de la feuille de calcul
-        sheet = workbook[sheet_name]
-
-        # Dictionnaire pour stocker les couleurs des cellules
-        cell_colors = {}
-        # Parcours de toutes les lignes de row_data
-        for row_data in sheet.iter_rows():
-            # Parcours de toutes les cellules de la ligne
-            for cell in row_data:
-                # Récupère la couleur de la cellule
-                cell_color = cell.fill.start_color.index
-
-                # Récupère les coordonnées de la cellule
-                cell_coord = (cell.row, cell.column)
-
-                # Ajoute la couleur de la cellule au dictionnaire
-                cell_colors[cell_coord] = cell_color
-
-        return cell_colors
-
-    def get_exact_cell_color(self, workbook, sheet_name, row, column):
-        # Sélection de la feuille de calcul
-        sheet = workbook[sheet_name]
-
-        # Obtient la couleur de la cellule spécifiée
-        cell = sheet.cell(row=row, column=column)
-        cell_color = cell.fill.start_color.rgb  # Utilisation de .rgb pour obtenir le code couleur hexadécimal
-
-        return cell_color
-
-
-
-
-
+                        date = cell_value
+                    if date:
+                        row_index = cell.row
+                        for row_cell in fichierOngletSemestre[row_index]:
+                            # Récupérer la valeur et la couleur de chaque cellule de la ligne
+                            if row_cell.value == "X" or row_cell.value == "Y":
+                                if row_cell.value == "X":
+                                    tCours = "TD"
+                                else:
+                                    tCours = "TP"
+                                valeur = row_cell.value
+                                couleur = row_cell.fill.start_color.rgb
+                                for cle, valeur in ressourceCouleur.items():
+                                    if valeur == couleur:
+                                        self.cursor.execute("SELECT Ressource, Dates FROM Horaires WHERE Ressource "
+                                                            "= ? AND Dates = ? AND Type_Cours = ?",
+                                                            (cle, date, tCours))
+                                        result = self.cursor.fetchone()
+                                        if result:
+                                            print(date)
+                                            self.cursor.execute("UPDATE Horaires SET NbCours = NbCours+1 WHERE "
+                                                                "Ressource = ? AND Dates = ? AND Type_Cours = ? ",
+                                                                (cle, date, tCours))
+                                        else:
+                                            print("cacacaa")
+                                            self.cursor.execute("INSERT INTO Horaires (Semestre, Ressource, Dates, "
+                                                                "Type_Cours, nbCours) VALUES (?, ?, ?, ?,"
+                                                                " 1)", (semestre, cle, date, tCours))
+                                            self.cursor.connection.commit()
+                                        print(f"Cle: {cle} Valeur: {valeur}, Couleur: {couleur}")
 
     def __del__(self):
         # Ferme la connexion à la base de données lorsque l'objet est détruit
         self.conn.close()
 
 
-
 recupdata = recupData()
 recupdata.recupNomProf()
-recupdata.recupHoraire("S1", "S1")
-
+# recupdata.recupRCouleur("S1", "S1")
+# recupdata.recupHoraire("S1", "S1")
+recupdata.recupXetY("S1", "S1", recupdata.recupRCouleur("S1", "S1"))
