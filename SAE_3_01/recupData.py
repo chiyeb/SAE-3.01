@@ -120,15 +120,16 @@ class recupData:
                                 couleur = row_cell.fill.start_color.rgb
                                 for cle, valeur in ressourceCouleur.items():
                                     if valeur == couleur:
-                                        self.cursor.execute("SELECT Ressource, Dates FROM Horaires WHERE Ressource "
-                                                            "= ? AND Dates = ? AND Type_Cours = ?",
-                                                            (cle, date, tCours))
+                                        self.cursor.execute(
+                                            "SELECT Ressource, Type_Cours FROM Horaires WHERE Ressource "
+                                            "= ? AND Type_Cours = ?",
+                                            (cle, tCours))
                                         result = self.cursor.fetchone()
                                         if result:
                                             print(date)
                                             self.cursor.execute("UPDATE Horaires SET NbCours = NbCours+1 WHERE "
-                                                                "Ressource = ? AND Dates = ? AND Type_Cours = ? ",
-                                                                (cle, date, tCours))
+                                                                "Ressource = ? AND Type_Cours = ? ",
+                                                                (cle, tCours))
                                         else:
                                             print("cacacaa")
                                             self.cursor.execute("INSERT INTO Horaires (Semestre, Ressource, Dates, "
