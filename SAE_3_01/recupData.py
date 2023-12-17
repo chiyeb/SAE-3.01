@@ -118,24 +118,53 @@ class recupData:
                                     tCours = "TP"
                                 valeur = row_cell.value
                                 couleur = row_cell.fill.start_color.rgb
+                                idCours = row_cell.coordinate
+                                print(date)
                                 for cle, valeur in ressourceCouleur.items():
                                     if valeur == couleur:
+                                        self.cursor.execute("SELECT IdCours, Semestre FROM Cours WHERE IdCours = ? "
+                                                            "AND Semestre = ?", (idCours,semestre))
+                                        resultCours = self.cursor.fetchone()
                                         self.cursor.execute(
                                             "SELECT Ressource, Type_Cours FROM Horaires WHERE Ressource "
                                             "= ? AND Type_Cours = ?",
                                             (cle, tCours))
-                                        result = self.cursor.fetchone()
-                                        if result:
-                                            print(date)
+                                        resultHoraires = self.cursor.fetchone()
+                                        if not resultCours:
+                                            if row_cell.comment:
+                                                commentaire = row_cell.comment.text
+                                                self.cursor.execute("INSERT INTO Cours (IdCours, Semestre, Ressource, "
+                                                                    "Date, Commentaire, Type_Cours) VALUES (?, ?, "
+                                                                    "?, ?,"
+                                                                    " ?, ?)",
+                                                                    (idCours, semestre, cle, date, commentaire, tCours))
+                                            else:
+                                                self.cursor.execute("INSERT INTO Cours (IdCours, Semestre, Ressource, "
+                                                                    "Date, Type_Cours) VALUES (?, ?, "
+                                                                    "?, ?, ?)",
+                                                                    (idCours, semestre, cle, date, tCours))
+                                            self.conn.commit()
+                                        else:
+                                            if row_cell.comment:
+                                                commentaire = row_cell.comment.text
+                                                self.cursor.execute("UPDATE Cours SET Ressource = ?, Date = ?, "
+                                                                    "Commentaire = ?, Type_Cours = ? WHERE IdCours = ? ",
+                                                                    (cle, date, commentaire, tCours, idCours))
+                                            else:
+                                                self.cursor.execute("UPDATE Cours SET Ressource = ?, Date = ?, "
+                                                                    "Type_Cours = ? WHERE IdCours = ? ",
+                                                                    (cle, date, tCours, idCours))
+                                            self.conn.commit()
+                                        if resultHoraires:
                                             self.cursor.execute("UPDATE Horaires SET NbCours = NbCours+1 WHERE "
-                                                                "Ressource = ? AND Type_Cours = ? ",
+                                                                "Ressource = ? AND Type_Cours = ?",
                                                                 (cle, tCours))
                                         else:
-                                            print("cacacaa")
                                             self.cursor.execute("INSERT INTO Horaires (Semestre, Ressource, Dates, "
                                                                 "Type_Cours, nbCours) VALUES (?, ?, ?, ?,"
-                                                                " 1)", (semestre, cle, date, tCours))
-                                            self.cursor.connection.commit()
+                                                                " 1)",
+                                                                (semestre, cle, date, tCours))
+                                        self.cursor.connection.commit()
                                         print(f"Cle: {cle} Valeur: {valeur}, Couleur: {couleur}")
 
     def __del__(self):
