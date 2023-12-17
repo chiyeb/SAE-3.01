@@ -77,6 +77,7 @@ def extract_and_display_resource_info(df, conn):
                     conn.commit()
 
 
+
             else:
                 print("Aucune donnée pour cet intervenant pour le moment.")
 
