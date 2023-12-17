@@ -80,14 +80,6 @@ def extract_and_display_resource_info(df, conn):
             else:
                 print("Aucune donnée pour cet intervenant pour le moment.")
 
-            # Insert the resource without intervenant data into the database
-            cursor.execute(
-                "INSERT INTO RecupHProf (Ressource, CM, TD, TP_non_dedoubles, TP_dedoubles, Test) VALUES (?, ?, ?, ?, ?, ?)",
-                (resource, None, None, None, None, None))
-            conn.commit()
-
-            print("\n")
-
 
 # Load the Excel file
 file_path = 'QuiFaitQuoi_beta.xlsx'
