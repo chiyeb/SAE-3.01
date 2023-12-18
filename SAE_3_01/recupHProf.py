@@ -1,18 +1,18 @@
 import pandas as pd
 import sqlite3
 
-
 # Établir la connexion à la base de données (cela crée également le fichier de base de données s'il n'existe pas)
 conn = sqlite3.connect('database/database.db')
 
 # Créer un objet curseur pour exécuter des requêtes SQL
 cursor = conn.cursor()
+
 def extract_and_display_resource_info(df, conn):
     """
-    Extract, structure, and display the resource information from the DataFrame.
+    Extraire, structurer et afficher les informations sur la ressource à partir du DataFrame.
 
     Args:
-    df (DataFrame): The DataFrame containing the Excel sheet data.
+    df (DataFrame): Le DataFrame contenant les données de la feuille Excel.
     """
     structured_data = {}
     current_resource = None
@@ -26,20 +26,12 @@ def extract_and_display_resource_info(df, conn):
         tp_dedoubles = row['TP (dédoublés)']
         test = row['Test']
 
-        # Check if new resource starts
+        # Vérifier si une nouvelle ressource commence
         if pd.notna(resource):
             current_resource = resource
             structured_data[current_resource] = {}
 
-            cursor.execute('SELECT COUNT(*) FROM RecupHProf WHERE ressource = ?', (current_resource,))
-            resource_count = cursor.fetchone()[0]
-
-            if resource_count == 0:
-                # If the resource does not exist, insert it
-                cursor.execute('INSERT INTO RecupHProf (ressource) VALUES (?)', (current_resource,))
-                conn.commit()
-
-        # Check if row contains intervenant data
+        # Vérifier si la ligne contient des données d'intervenant
         if pd.notna(intervenant):
             if current_resource not in structured_data:
                 structured_data[current_resource] = {}
@@ -54,15 +46,39 @@ def extract_and_display_resource_info(df, conn):
                 'Test': test
             })
 
-    # Display the structured data
+
+    # Insérer ou mettre à jour les enregistrements dans la base de données
     for resource, intervenant_data in structured_data.items():
-        print(f"### Ressource : {resource} ###")
+        if resource not in structured_data:
+            structured_data[resource] = {None: [{}]}  # Insérer un enregistrement avec des valeurs nulles si la ressource n'est pas présente
+
 
         for intervenant, data_list in intervenant_data.items():
             print(f"Ressource: {resource} - Intervenant : {intervenant} ")
 
+
             if data_list:
                 for d in data_list:
+                    # Vérifier si l'enregistrement existe déjà dans la base de données
+                    cursor.execute("SELECT * FROM RecupHProf WHERE Ressource = ? AND Intervenant = ?",
+                                   (resource, intervenant))
+                    existing_record = cursor.fetchone()
+
+                    if existing_record:
+                        # Mettre à jour l'enregistrement existant
+                        cursor.execute(
+                            "UPDATE RecupHProf SET CM = ?, TD = ?, TP_non_dedoubles = ?, TP_dedoubles = ?, Test = ? WHERE Ressource = ? AND Intervenant = ?",
+                            (d['CM'], d['TD'], d['TP (non dédoublés)'], d['TP (dédoublés)'], d['Test'], resource,
+                             intervenant))
+                    else:
+                        # Insérer un nouvel enregistrement
+                        cursor.execute(
+                            "INSERT INTO RecupHProf (Ressource, Intervenant, CM, TD, TP_non_dedoubles, TP_dedoubles, Test) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                            (resource, intervenant, d['CM'], d['TD'], d['TP (non dédoublés)'], d['TP (dédoublés)'],
+                             d['Test']))
+
+                    conn.commit()
+
                     print(f"    - CM : {d['CM']} heure" if pd.notna(d['CM']) else "    - CM : Non spécifié")
                     print(f"    - TD : {d['TD']} heure" if pd.notna(d['TD']) else "    - TD : Non spécifié")
                     print(f"    - TP (non dédoublés) : {d['TP (non dédoublés)']} heure" if pd.notna(
@@ -70,30 +86,27 @@ def extract_and_display_resource_info(df, conn):
                     print(f"    - TP (dédoublés) : {d['TP (dédoublés)']} heure" if pd.notna(
                         d['TP (dédoublés)']) else "    - TP (dédoublés) : Non spécifié")
                     print(f"    - Test : {d['Test']} heure" if pd.notna(d['Test']) else "    - Test : Non spécifié")
-
-                    cursor.execute("INSERT INTO RecupHProf (Ressource, Intervenant, CM, TD, TP_non_dedoubles, TP_dedoubles, Test) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                        (resource, intervenant, d['CM'], d['TD'], d['TP (non dédoublés)'], d['TP (dédoublés)'],
-                         d['Test']))
-                    conn.commit()
-
-
-
             else:
-                print("Aucune donnée pour cet intervenant pour le moment.")
+                print("Aucune donnée")
+                print("\n")
 
 
-# Load the Excel file
-file_path = 'QuiFaitQuoi_beta.xlsx'
-excel_data = pd.ExcelFile(file_path)
 
-# Display the sheet names and the first few rows of each sheet to understand the structure
-sheet_names = excel_data.sheet_names
-sheets_preview = {}
 
-for sheet in sheet_names:
-    df = pd.read_excel(file_path, sheet_name=sheet)
-    sheets_preview[sheet] = df.head()
-df_s1 = pd.read_excel(file_path, sheet_name=sheet_names[0])
 
-# Extract and display the resource information
+
+# Charger le fichier Excel
+chemin_fichier = 'QuiFaitQuoi_beta.xlsx'
+donnees_excel = pd.ExcelFile(chemin_fichier)
+
+# Afficher les noms des feuilles et les premières lignes de chaque feuille pour comprendre la structure
+noms_feuilles = donnees_excel.sheet_names
+apercus_feuilles = {}
+
+for feuille in noms_feuilles:
+    df = pd.read_excel(chemin_fichier, sheet_name=feuille)
+    apercus_feuilles[feuille] = df.head()
+df_s1 = pd.read_excel(chemin_fichier, sheet_name=noms_feuilles[0])
+
+# Extraire et afficher les informations sur la ressource
 extract_and_display_resource_info(df_s1, conn)
