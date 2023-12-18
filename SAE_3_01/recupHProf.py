@@ -79,6 +79,7 @@ def extract_and_display_resource_info(df, conn):
 
                     conn.commit()
 
+
                     print(f"    - CM : {d['CM']} heure" if pd.notna(d['CM']) else "    - CM : Non spécifié")
                     print(f"    - TD : {d['TD']} heure" if pd.notna(d['TD']) else "    - TD : Non spécifié")
                     print(f"    - TP (non dédoublés) : {d['TP (non dédoublés)']} heure" if pd.notna(
@@ -89,6 +90,7 @@ def extract_and_display_resource_info(df, conn):
             else:
                 print("Aucune donnée")
                 print("\n")
+
 
 
 
