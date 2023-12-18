@@ -31,6 +31,7 @@ def extract_and_display_resource_info(df, conn):
             current_resource = resource
             structured_data[current_resource] = {}
 
+
         # Vérifier si la ligne contient des données d'intervenant
         if pd.notna(intervenant):
             if current_resource not in structured_data:
@@ -52,10 +53,8 @@ def extract_and_display_resource_info(df, conn):
         if resource not in structured_data:
             structured_data[resource] = {None: [{}]}  # Insérer un enregistrement avec des valeurs nulles si la ressource n'est pas présente
 
-
         for intervenant, data_list in intervenant_data.items():
             print(f"Ressource: {resource} - Intervenant : {intervenant} ")
-
 
             if data_list:
                 for d in data_list:
@@ -79,7 +78,6 @@ def extract_and_display_resource_info(df, conn):
 
                     conn.commit()
 
-
                     print(f"    - CM : {d['CM']} heure" if pd.notna(d['CM']) else "    - CM : Non spécifié")
                     print(f"    - TD : {d['TD']} heure" if pd.notna(d['TD']) else "    - TD : Non spécifié")
                     print(f"    - TP (non dédoublés) : {d['TP (non dédoublés)']} heure" if pd.notna(
@@ -87,15 +85,13 @@ def extract_and_display_resource_info(df, conn):
                     print(f"    - TP (dédoublés) : {d['TP (dédoublés)']} heure" if pd.notna(
                         d['TP (dédoublés)']) else "    - TP (dédoublés) : Non spécifié")
                     print(f"    - Test : {d['Test']} heure" if pd.notna(d['Test']) else "    - Test : Non spécifié")
+                    print("\n")
+
             else:
-                print("Aucune donnée")
+                print("Aucune données pour cette ressource.")
                 print("\n")
 
-
-
-
-
-
+    print("Extraction terminée !")
 
 # Charger le fichier Excel
 chemin_fichier = 'QuiFaitQuoi_beta.xlsx'
