@@ -95,9 +95,40 @@ class recupData:
         print(ressourceCouleur)
         return ressourceCouleur
 
+    def trouverTypeCours2eRange(self, semestre_onglet):
+        fichier = openpyxl.load_workbook('Documents/Planning 2023-2024.xlsx', data_only=True)
+        fichierOngletSemestre = fichier[semestre_onglet]
+        type_cours_dict = {}
+
+        for row in fichierOngletSemestre.iter_rows(min_row=1, max_row=2):
+            for cell in row:
+                if cell.value in ["Cours", "TD", "TP", "Test"]:  # Ajoutez tous les types de cours possibles ici
+                    type_cours_dict[cell.value] = cell.column  # Associe le type de cours à la colonne
+
+        print(type_cours_dict)
+        return type_cours_dict
+
+    def trouverTypeCours1erRange(self, semestre_onglet):
+        fichier = openpyxl.load_workbook('Documents/Planning 2023-2024.xlsx', data_only=True)
+        fichierOngletSemestre = fichier[semestre_onglet]
+        type_cours_dict = {}
+        valeurs_a_trouver = {"Cours", "TD", "TP", "Test"}
+        for row in fichierOngletSemestre.iter_rows(min_row=1, max_row=2):
+            for cell in row:
+                if cell.value in ["Cours", "TD", "TP", "Test"]:
+                    type_cours_dict[cell.value] = cell.column
+                    valeurs_a_trouver.remove(cell.value)
+                if not valeurs_a_trouver:
+                    print(type_cours_dict)
+                    return type_cours_dict
+        print(type_cours_dict)
+        return type_cours_dict
+
     def recupXetY(self, semestre, semestre_onglet, ressourceCouleur):
         fichier = openpyxl.load_workbook('Documents/Planning 2023-2024.xlsx', data_only=True)
         fichierOngletSemestre = fichier[semestre_onglet]
+        type_cours_dict1 = self.trouverTypeCours1erRange(semestre_onglet)
+        type_cours_dict2 = self.trouverTypeCours2eRange(semestre_onglet)
         for col in fichierOngletSemestre.iter_cols():
             if col[0].value is not None and 'Date' in col[0].value:
                 # Parcourir les lignes pour cette colonne de date
@@ -113,9 +144,10 @@ class recupData:
                             # Récupérer la valeur et la couleur de chaque cellule de la ligne
                             if row_cell.value == "X" or row_cell.value == "Y":
                                 if row_cell.value == "X":
-                                    tCours = "TD"
+                                    salle = "TD/Amphi"
                                 else:
-                                    tCours = "TP"
+                                    salle = "Machine"
+                                tCours = self.typeCours(type_cours_dict1, type_cours_dict2, row_cell.column)
                                 valeur = row_cell.value
                                 couleur = row_cell.fill.start_color.rgb
                                 idCours = row_cell.coordinate
@@ -123,7 +155,7 @@ class recupData:
                                 for cle, valeur in ressourceCouleur.items():
                                     if valeur == couleur:
                                         self.cursor.execute("SELECT IdCours, Semestre FROM Cours WHERE IdCours = ? "
-                                                            "AND Semestre = ?", (idCours,semestre))
+                                                            "AND Semestre = ?", (idCours, semestre))
                                         resultCours = self.cursor.fetchone()
                                         self.cursor.execute(
                                             "SELECT Ressource, Type_Cours FROM Horaires WHERE Ressource "
@@ -134,39 +166,57 @@ class recupData:
                                             if row_cell.comment:
                                                 commentaire = row_cell.comment.text
                                                 self.cursor.execute("INSERT INTO Cours (IdCours, Semestre, Ressource, "
-                                                                    "Date, Commentaire, Type_Cours) VALUES (?, ?, "
-                                                                    "?, ?,"
-                                                                    " ?, ?)",
-                                                                    (idCours, semestre, cle, date, commentaire, tCours))
+                                                                    "Date, Commentaire, Type_Cours, Salle) VALUES (?, "
+                                                                    "?, ?, ?, ?, ?, ?)",
+                                                                    (idCours, semestre, cle, date, commentaire, tCours,
+                                                                     salle))
                                             else:
                                                 self.cursor.execute("INSERT INTO Cours (IdCours, Semestre, Ressource, "
-                                                                    "Date, Type_Cours) VALUES (?, ?, "
-                                                                    "?, ?, ?)",
-                                                                    (idCours, semestre, cle, date, tCours))
+                                                                    "Date, Type_Cours, Salle) VALUES (?, ?, "
+                                                                    "?, ?, ?, ?)",
+                                                                    (idCours, semestre, cle, date, tCours, salle))
                                             self.conn.commit()
                                         else:
                                             if row_cell.comment:
                                                 commentaire = row_cell.comment.text
                                                 self.cursor.execute("UPDATE Cours SET Ressource = ?, Date = ?, "
-                                                                    "Commentaire = ?, Type_Cours = ? WHERE IdCours = ? ",
-                                                                    (cle, date, commentaire, tCours, idCours))
+                                                                    "Commentaire = ?, Type_Cours = ?, Salle = ? WHERE IdCours = ? ",
+                                                                    (cle, date, commentaire, tCours, salle, idCours,))
                                             else:
                                                 self.cursor.execute("UPDATE Cours SET Ressource = ?, Date = ?, "
-                                                                    "Type_Cours = ? WHERE IdCours = ? ",
-                                                                    (cle, date, tCours, idCours))
+                                                                    "Type_Cours = ?, Salle = ? WHERE IdCours = ? ",
+                                                                    (cle, date, tCours, salle, idCours))
                                             self.conn.commit()
                                         if resultHoraires:
-                                            self.cursor.execute("UPDATE Horaires SET NbCours = NbCours+1 WHERE "
+                                            self.cursor.execute("UPDATE Horaires SET NbCours = NbCours+2 WHERE "
                                                                 "Ressource = ? AND Type_Cours = ?",
                                                                 (cle, tCours))
                                         else:
-                                            self.cursor.execute("INSERT INTO Horaires (Semestre, Ressource, Dates, "
-                                                                "Type_Cours, nbCours) VALUES (?, ?, ?, ?,"
-                                                                " 1)",
-                                                                (semestre, cle, date, tCours))
+                                            self.cursor.execute("INSERT INTO Horaires (Semestre, Ressource, "
+                                                                "Type_Cours, nbCours, Salle) VALUES (?, ?, ?, 2, ?)",
+                                                                (semestre, cle, tCours, salle))
                                         self.cursor.connection.commit()
                                         print(f"Cle: {cle} Valeur: {valeur}, Couleur: {couleur}")
 
+    def typeCours(self, type_cours_dict1, type_cours_dict2, col):
+        tCours = None
+        if type_cours_dict1["Cours"] <= col <= type_cours_dict1["TD"]:
+            tCours = "Amphi"
+        if type_cours_dict1["TD"] <= col <= type_cours_dict1["TP"]:
+            tCours = "TD"
+        if type_cours_dict1["TP"] <= col <= type_cours_dict1["Test"]:
+            tCours = "TP"
+        if type_cours_dict1["Test"] <= col <= type_cours_dict2["Cours"]:
+            tCours = "Test"
+        if type_cours_dict2["Cours"] <= col <= type_cours_dict2["TD"]:
+            tCours = "Amphi"
+        if type_cours_dict2["TD"] <= col <= type_cours_dict2["TP"]:
+            tCours = "TD"
+        if type_cours_dict2["TP"] <= col <= type_cours_dict2["Test"]:
+            tCours = "TP"
+        if col >= type_cours_dict2["Test"]:
+            tCours = "Test"
+        return tCours
     def __del__(self):
         # Ferme la connexion à la base de données lorsque l'objet est détruit
         self.conn.close()
@@ -174,6 +224,4 @@ class recupData:
 
 recupdata = recupData()
 recupdata.recupNomProf()
-# recupdata.recupRCouleur("S1", "S1")
-# recupdata.recupHoraire("S1", "S1")
 recupdata.recupXetY("S1", "S1", recupdata.recupRCouleur("S1", "S1"))
