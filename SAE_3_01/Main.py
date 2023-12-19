@@ -4,6 +4,6 @@ import BUT3
 from recupData import *
 from Stats import Stats
 
-#print(BUT1, BUT2, BUT3)
+print(BUT1, BUT2, BUT3)
 stats = Stats()
 stats.execAllStats()

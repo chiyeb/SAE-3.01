@@ -1,5 +1,8 @@
 import sqlite3
 import math
+from datetime import datetime
+
+import openpyxl
 import pandas as pd
 
 from insertData import insertData
@@ -82,6 +85,7 @@ class recupData:
                         self.conn.commit()
                 else:
                     print(f"Erreur de format sur la ligne : {ligne}")
+
     def recupRCouleur(self, semestre, semestre_onglet):
         ressourceCouleur = {}
         self.cursor.execute("SELECT Num_Res FROM Maquette WHERE Semestre = ?", (semestre,))
@@ -127,7 +131,10 @@ class recupData:
         print(type_cours_dict)
         return type_cours_dict
 
-    def recupXetY(self, semestre, semestre_onglet, ressourceCouleur):
+    def recupXetY(self, semestre, semestre_onglet):
+        self.cursor.execute("UPDATE Horaires SET NbCours = 0 WHERE Semestre = ?",
+                            (semestre,))
+        ressourceCouleur = recupdata.recupRCouleur(semestre, semestre_onglet)
         fichier = openpyxl.load_workbook('Documents/Planning 2023-2024.xlsx', data_only=True)
         fichierOngletSemestre = fichier[semestre_onglet]
         type_cours_dict1 = self.trouverTypeCours1erRange(semestre_onglet)
@@ -138,7 +145,7 @@ class recupData:
                 for cell in col:
                     cell_value = cell.value
                     if isinstance(cell_value, datetime):
-                        date = cell_value.date()  # Récupérer seulement la partie date
+                        date = cell_value.date()
                     else:
                         date = cell_value
                     if date:
@@ -220,9 +227,7 @@ class recupData:
         if col >= type_cours_dict2["Test"]:
             tCours = "Test"
         return tCours
-    def __del__(self):
-        # Ferme la connexion à la base de données lorsque l'objet est détruit
-        self.conn.close()
+
     def __del__(self):
         # Ferme la connexion à la base de données lorsque l'objet est détruit
         self.conn.close()
@@ -230,3 +235,4 @@ class recupData:
 
 recupdata = recupData()
 recupdata.recupNomProf()
+recupdata.recupXetY("S1", "S1")

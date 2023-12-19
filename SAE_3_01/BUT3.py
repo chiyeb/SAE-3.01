@@ -1,5 +1,4 @@
 import pandas as pd
-from ADEClass import ADEClass
 from insertData import *
 from recupData import *
 from verifData import *
@@ -36,6 +35,10 @@ recupDataInstance.trouverVal("S5AFA", "S5.A")
 # la base de données pour le premier semestre
 verifDataInstance.concordance("S5AFA")
 scribeDataInstance.scribeRessource("S5AFA")
+# Récupérer les cours par date dans le fichier planning
+recupDataInstance.recupXetY("S5AFA", "S5.A")
+# Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+verifDataInstance.concordancePlanning("S5AFA")
 
 # On récupère les lignes et colonnes utiles
 select_colonne_BUT3_S6_A_FA = BUT3_A_FA.iloc[32:43, [0, 2, 17, 18, 19]]
@@ -49,6 +52,10 @@ recupDataInstance.trouverVal("S6AFA", "S6.A")
 # la base de données pour le premier semestre
 verifDataInstance.concordance("S6AFA")
 scribeDataInstance.scribeRessource("S6AFA")
+# Récupérer les cours par date dans le fichier planning
+recupDataInstance.recupXetY("S6AFA", "S6.A")
+# Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+verifDataInstance.concordancePlanning("S6AFA")
 
 # On affiche le parcours A FI pour ensuite prendre les données 
 BUT3_A_FI = pd.read_excel(BUT3, 'BUT 3 Parcours A FI')
@@ -64,6 +71,10 @@ recupDataInstance.trouverVal("S5AFI", "S5.A")
 # la base de données pour le premier semestre
 verifDataInstance.concordance("S5AFI")
 scribeDataInstance.scribeRessource("S5AFI")
+# Récupérer les cours par date dans le fichier planning
+recupDataInstance.recupXetY("S5AFI", "S5.A")
+# Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+verifDataInstance.concordancePlanning("S5AFI")
 
 # On récupère les lignes et colonnes utiles
 select_colonne_BUT3_S6_A_FI = BUT3_A_FI.iloc[32:42, [0, 2, 17, 18, 19]]
@@ -77,6 +88,10 @@ recupDataInstance.trouverVal("S6AFI", "S6.A")
 # la base de données pour le premier semestre
 verifDataInstance.concordance("S6AFI")
 scribeDataInstance.scribeRessource("S6AFI")
+# Récupérer les cours par date dans le fichier planning
+recupDataInstance.recupXetY("S6AFI", "S6.A")
+# Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+verifDataInstance.concordancePlanning("S6AFI")
 
 # On affiche le parcours B FA pour ensuite prendre les données 
 BUT3_B_FA = pd.read_excel(BUT3, 'BUT 3 Parcours B FA')
@@ -93,6 +108,10 @@ recupDataInstance.trouverVal("S5BFA", "S5.B")
 # la base de données pour le premier semestre
 verifDataInstance.concordance("S5BFA")
 scribeDataInstance.scribeRessource("S5BFA")
+# Récupérer les cours par date dans le fichier planning
+recupDataInstance.recupXetY("S5BFA", "S5.B")
+# Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+verifDataInstance.concordancePlanning("S5BFA")
 
 # On récupère les lignes et colonnes utiles
 select_colonne_BUT3_S6_B_FA = BUT3_B_FA.iloc[30:41, [0, 2, 17, 18, 19]]
@@ -106,6 +125,10 @@ recupDataInstance.trouverVal("S6BFA", "S6.B")
 # la base de données pour le premier semestre
 verifDataInstance.concordance("S6BFA")
 scribeDataInstance.scribeRessource("S6BFA")
+# Récupérer les cours par date dans le fichier planning
+recupDataInstance.recupXetY("S6BFA", "S6.B")
+# Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+verifDataInstance.concordancePlanning("S6BFA")
 
 # On affiche le parcours B FI pour ensuite prendre les données
 BUT3_B_FI = pd.read_excel(BUT3, 'BUT 3 Parcours B FI')
@@ -121,6 +144,10 @@ recupDataInstance.trouverVal("S5BFI", "S5.A")
 # la base de données pour le premier semestre
 verifDataInstance.concordance("S5BFI")
 scribeDataInstance.scribeRessource("S5BFI")
+# Récupérer les cours par date dans le fichier planning
+recupDataInstance.recupXetY("S5BFI", "S5.B")
+# Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+verifDataInstance.concordancePlanning("S5BFI")
 
 # On récupère les lignes et colonnes utiles
 select_colonne_BUT3_S6_B_FI = BUT3_B_FI.iloc[30:40, [0, 2, 17, 18, 19]]
@@ -134,3 +161,7 @@ recupDataInstance.trouverVal("S6BFI", "S6.B")
 # la base de données pour le premier semestre
 verifDataInstance.concordance("S6BFI")
 scribeDataInstance.scribeRessource("S6BFI")
+# Récupérer les cours par date dans le fichier planning
+recupDataInstance.recupXetY("S6BFI", "S6.B")
+# Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+verifDataInstance.concordancePlanning("S6BFI")
