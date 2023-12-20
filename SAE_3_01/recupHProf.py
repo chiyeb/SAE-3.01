@@ -59,20 +59,20 @@ def extract_and_display_resource_info(df, conn):
             if data_list:
                 for d in data_list:
                     # Vérifier si l'enregistrement existe déjà dans la base de données
-                    cursor.execute("SELECT * FROM RecupHProf WHERE Ressource = ? AND Intervenant = ?",
+                    cursor.execute("SELECT * FROM HoraireProf WHERE Ressource = ? AND Intervenant = ?",
                                    (resource, intervenant))
                     existing_record = cursor.fetchone()
 
                     if existing_record:
                         # Mettre à jour l'enregistrement existant
                         cursor.execute(
-                            "UPDATE RecupHProf SET CM = ?, TD = ?, TP_non_dedoubles = ?, TP_dedoubles = ?, Test = ? WHERE Ressource = ? AND Intervenant = ?",
+                            "UPDATE HoraireProf SET CM = ?, TD = ?, TP_non_dedoubles = ?, TP_dedoubles = ?, Test = ? WHERE Ressource = ? AND Intervenant = ?",
                             (d['CM'], d['TD'], d['TP (non dédoublés)'], d['TP (dédoublés)'], d['Test'], resource,
                              intervenant))
                     else:
                         # Insérer un nouvel enregistrement
                         cursor.execute(
-                            "INSERT INTO RecupHProf (Ressource, Intervenant, CM, TD, TP_non_dedoubles, TP_dedoubles, Test) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                            "INSERT INTO HoraireProf (Ressource, Intervenant, CM, TD, TP_non_dedoubles, TP_dedoubles, Test) VALUES (?, ?, ?, ?, ?, ?, ?)",
                             (resource, intervenant, d['CM'], d['TD'], d['TP (non dédoublés)'], d['TP (dédoublés)'],
                              d['Test']))
 
