@@ -51,7 +51,7 @@ class ScribeData:
                     worksheet = fichier_vierge.copy_worksheet(base_sheet)
                     worksheet.title = resource
 
-                    # On récupère des données de la première base de données (Planning)
+                    # On récupère des données de la base de données (Planning)
                     self.cursor.execute(
                         "SELECT Ressource, H_CM, H_TD, H_TP, COALESCE(Prof.NomProf, Planning.Resp) FROM Planning "
                         "LEFT JOIN Prof ON Planning.Resp = Prof.Acronyme "
@@ -59,106 +59,62 @@ class ScribeData:
                         (resource, semester))
                     data_from_database = self.cursor.fetchall()
 
-                    # On écrit les données de la première base de données dans la nouvelle feuille Excel
+                    # On écrit les données de la base de données dans la nouvelle feuille Excel
                     if data_from_database:
-                        print(f"Données de la première base de données ({resource}, {semester}): {data_from_database}")
+                        print(f"Données de la données ({resource}, {semester}): {data_from_database}")
                         worksheet.cell(row=5, column=2, value=data_from_database[0][1])
                         worksheet.cell(row=5, column=3, value=data_from_database[0][2])
                         worksheet.cell(row=5, column=4, value=data_from_database[0][3])
                         worksheet.cell(row=2, column=2, value=resource)
                         worksheet.cell(row=2, column=7, value=data_from_database[0][4])
 
-# select date from la base where semestre =? and ressource =?
 
+                    # On récupère les données de la base de données HoraireProf
                     self.cursor.execute(
-                        "SELECT * FROM RecupHProf WHERE Ressource = ?",
-                        (data_from_database[0][0],))
-                    data_from_second_db_resultat = self.cursor.fetchall()
+                        "SELECT Intervenant, TD, TP_Dedoubles,TP_Non_Dedoubles FROM HoraireProf WHERE ressource = ? AND TD IS NOT NULL AND TP_dedoubles IS NOT NULL AND TP_non_dedoubles IS NOT NULL",
+                        (resource,))
+                    data_from_database = self.cursor.fetchall()
 
-                    if data_from_second_db_resultat:
+                    # On écrit les données dans la feuille Excel
+                    if data_from_database:
+                        print(f"Données de la données ({resource}): {data_from_database}")
 
+                        row_index0 = 8
+                        row_index1 = 18
+                        row_index2 = 23
+                        row_index3 = 28
 
-                        # On récupère les données de la deuxième base de données pour écrire
-                        self.cursor.execute(
-                            "SELECT Intervenant FROM RecupHProf WHERE Ressource = ?",
-                            (resource,))
-                        data_from_database = self.cursor.fetchall()
-
-
-
-                         # On écrit les données intervenant de la deuxième base de données
-                        if data_from_database:
-                            print(f"Données de la deuxième base de données ({resource}): {data_from_database}")
-
-                            row_index = 8
-                            for intervenant in data_from_database:
-                                worksheet.cell(row=row_index, column=1, value=intervenant[0])
-                                row_index += 1
-
-                        # On récupère les noms des intervenants ayant un chiffre dans la colonne CM pour afficher les profs qui font les CM
-                        self.cursor.execute(
-                            "SELECT Intervenant,CM FROM RecupHProf WHERE Ressource = ? AND CM IS NOT NULL",
-                            (resource,))
-
-                        data_from_database = self.cursor.fetchall()
-
-                        # On écrit les données dans la feuille Excel
-                        if data_from_database:
-                            print(f"Données de la deuxième base de données ({resource}): {data_from_database}")
-                            row_index = 15
-                            for intervenant in data_from_database:
-                                worksheet.cell(row=row_index, column=1, value=intervenant[0])
-                                row_index += 1
-
-                        # On récupère les noms Intervenant ayant un chiffre dans la colonne TD pour afficher qui fait les TD et combien chaque personne a de groupe
-                        self.cursor.execute(
-                            "SELECT Intervenant, TD FROM RecupHProf WHERE ressource = ? AND Intervenant IS NOT NULL  AND TD IS NOT NULL ",
-                            (resource,))
-                        data_from_database = self.cursor.fetchall()
-
-                                # On écrit les données dans la feuille Excel
-                        if data_from_database:
-                            print(
-                                f"Données des TD de la deuxième base de données ({resource}): {data_from_database}")
-                            row_index = 18
-                            for intervenant in data_from_database:
-                                worksheet.cell(row=row_index, column=1, value=intervenant[0])
-                                worksheet.cell(row=row_index, column=2, value=intervenant[1])
-                                row_index += 1
-
-                        # On récupère les noms des intervenants ayant un chiffre dans la colonne Tp_dedoubles pour les afficher
-                        self.cursor.execute(
-                            "SELECT Intervenant, TP_dedoubles FROM RecupHProf WHERE ressource = ? AND Intervenant IS NOT NULL  AND TP_dedoubles IS NOT NULL ",
-                            (resource,))
-                        data_from_database = self.cursor.fetchall()
-
-                        # On écrit les données dans la feuille Excel
-                        if data_from_database:
-                            print(
-                                f"Données des TD de la deuxième base de données ({resource}): {data_from_database}")
-                            row_index = 23
-                            for intervenant in data_from_database:
-                                worksheet.cell(row=row_index, column=1, value=intervenant[0])
-                                worksheet.cell(row=row_index, column=2, value=intervenant[1])
-                                row_index += 1
-
-                        # On récupère les noms des intervenants ayant un chiffre dans la colonne Tp_non_dedoubles pour les afficher
-                        self.cursor.execute(
-                            "SELECT Intervenant, TP_non_dedoubles FROM RecupHProf WHERE ressource = ? AND Intervenant IS NOT NULL  AND TP_non_dedoubles IS NOT NULL ",
-                            (resource,))
-                        data_from_database = self.cursor.fetchall()
-
-                        # On écrit les données dans la feuille Excel
-                        if data_from_database:
-                            print(
-                                f"Données des TD de la deuxième base de données ({resource}): {data_from_database}")
-                            row_index = 28
-                            for intervenant in data_from_database:
-                                worksheet.cell(row=row_index, column=1, value=intervenant[0])
-                                worksheet.cell(row=row_index, column=2, value=intervenant[1])
-                                row_index += 1
+                        for intervenant in data_from_database:
+                            #ceci permet d'écrire les intervenant
+                            worksheet.cell(row=row_index0, column=1, value=intervenant[0])
+                            row_index0 += 1
+                            # ceci permet d'écrire les intervenant ainsi que leurs nombre de TD
+                            worksheet.cell(row=row_index1, column=1, value=intervenant[0])
+                            worksheet.cell(row=row_index1, column=2, value=intervenant[1])
+                            row_index1 += 1
+                            # ceci permet d'écrire les intervenant ainsi que leurs nombre de TD dédoublés
+                            worksheet.cell(row=row_index2, column=1, value=intervenant[0])
+                            worksheet.cell(row=row_index2, column=2, value=intervenant[2])
+                            row_index2 += 1
+                            # ceci permet d'écrire les intervenant ainsi que leurs nombre de TD non dédoublés
+                            worksheet.cell(row=row_index3, column=1, value=intervenant[0])
+                            worksheet.cell(row=row_index3, column=2, value=intervenant[3])
+                            row_index3 += 1
 
 
+                    # On récupère les noms des intervenants ayant un chiffre dans la colonne CM pour afficher les profs qui font les CM
+                    self.cursor.execute(
+                        "SELECT Intervenant,CM FROM HoraireProf WHERE Ressource = ? AND CM IS NOT NULL",
+                        (resource,))
+                    data_from_database = self.cursor.fetchall()
+
+                    # On écrit les données dans la feuille Excel
+                    if data_from_database:
+                        print(f"Données de la données ({resource}): {data_from_database}")
+                        row_index = 15
+                        for intervenant in data_from_database:
+                            worksheet.cell(row=row_index, column=1, value=intervenant[0])
+                            row_index += 1
 
 
             filename = f"{semestre}.xlsx"
