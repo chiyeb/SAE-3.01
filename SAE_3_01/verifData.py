@@ -143,7 +143,3 @@ class verifData:
 def __del__(self):
     # Ferme la connexion à la base de données lorsque l'objet est détruit
     self.conn.close()
-
-
-v = verifData()
-v.concordancePlanning("S1")
