@@ -61,7 +61,7 @@ class ScribeData:
 
                     # On écrit les données de la base de données dans la nouvelle feuille Excel
                     if data_from_database:
-                        print(f"Données de la données ({resource}, {semester}): {data_from_database}")
+                        print(f"Traitement des données ({resource}, {semester}): {data_from_database}")
                         worksheet.cell(row=5, column=2, value=data_from_database[0][1])
                         worksheet.cell(row=5, column=3, value=data_from_database[0][2])
                         worksheet.cell(row=5, column=4, value=data_from_database[0][3])
@@ -77,7 +77,7 @@ class ScribeData:
 
                     # On écrit les données dans la feuille Excel
                     if data_from_database:
-                        print(f"Données de la données ({resource}): {data_from_database}")
+                        print(f"Traitement des données ({resource}): {data_from_database}")
 
                         row_index0 = 8
                         row_index1 = 18
@@ -110,11 +110,57 @@ class ScribeData:
 
                     # On écrit les données dans la feuille Excel
                     if data_from_database:
-                        print(f"Données de la données ({resource}): {data_from_database}")
+                        print(f"Traitement des données ({resource}): {data_from_database}")
                         row_index = 15
                         for intervenant in data_from_database:
                             worksheet.cell(row=row_index, column=1, value=intervenant[0])
                             row_index += 1
+
+
+
+                    self.cursor.execute(
+                        "SELECT Date_cours, Type_Cours FROM Cours WHERE Semestre = ? AND Ressource = ?",
+                        (semester, resource))
+                    data_from_database_date = self.cursor.fetchall()
+
+                    if data_from_database_date:
+                        print(
+                            f"Données de la base de données Cours ({resource}, {semester}): {data_from_database_cours}")
+
+                        date_type_rows = {}
+
+                        for cours_data in data_from_database_cours:
+                            date_cours = cours_data[0]
+                            type_cours = cours_data[1]
+
+                            if type_cours == 'Amphi':
+                                column_index = 2
+                            elif type_cours == 'TD':
+                                column_index = 3
+                            elif type_cours == 'TP':
+                                column_index = 4
+                            else:
+                                column_index = None
+
+                            print(f"Valeurs de date_cours : {date_cours}")
+                            print(f"Valeurs de type_cours : {type_cours}")
+
+                            # Vérifier si la date et le type de cours existent déjà dans le dictionnaire
+                            if (date_cours, type_cours) in date_type_rows:
+                                # Utiliser la ligne existante pour la date et le type de cours
+                                row_index5 = date_type_rows[(date_cours, type_cours)]
+                            else:
+                                # Ajouter une nouvelle ligne pour la nouvelle date et le type de cours
+                                row_index5 = max(date_type_rows.values(), default=34) + 1
+                                date_type_rows[(date_cours, type_cours)] = row_index5
+
+                                # Écrire les données dans la feuille Excel
+                                worksheet.cell(row=row_index5, column=1, value=date_cours)
+                                worksheet.cell(row=row_index5, column=column_index, value=type_cours)
+
+                            date_type_rows[(date_cours, type_cours)] += 1
+
+
 
 
             filename = f"{semestre}.xlsx"
