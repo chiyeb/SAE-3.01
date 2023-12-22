@@ -121,15 +121,15 @@ class ScribeData:
                     self.cursor.execute(
                         "SELECT Date_cours, Type_Cours FROM Cours WHERE Semestre = ? AND Ressource = ?",
                         (semester, resource))
-                    data_from_database_date = self.cursor.fetchall()
+                    data_from_database = self.cursor.fetchall()
 
-                    if data_from_database_date:
+                    if data_from_database:
                         print(
-                            f"Données de la base de données Cours ({resource}, {semester}): {data_from_database_cours}")
+                            f"Données de la base de données Cours ({resource}, {semester}): {data_from_database}")
 
                         date_type_rows = {}
 
-                        for cours_data in data_from_database_cours:
+                        for cours_data in data_from_database:
                             date_cours = cours_data[0]
                             type_cours = cours_data[1]
 
