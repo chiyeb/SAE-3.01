@@ -13,11 +13,25 @@ class insertData:
         return cls.instance
 
     def _setup(self):
+        """
+        "Setup" l'objet : initialise la connexion à la BD
+        :return:
+        """
         # Initialise la connexion à la base de données
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
 
     def insert_maquette(self, Semestre, Code_ressource, Libelle, H_CM, H_TD, H_TP):
+        """
+        Fonction qui insère les données dans la base de données "Maquette"
+        :param Semestre:
+        :param Code_ressource:
+        :param Libelle:
+        :param H_CM:
+        :param H_TD:
+        :param H_TP:
+        :return:
+        """
         # création d'un id unique pour chaque semestre par ressource
         id_res_formation = Semestre + Code_ressource
         espace = Libelle.index(" ")
@@ -42,6 +56,16 @@ class insertData:
             self.conn.commit()
 
     def insert_planning(self, Semestre, Ressource, H_CM, H_TD, H_TP, Resp):
+        """
+        Fonction qui insère les données dans la base de données "Planning"
+        :param Semestre:
+        :param Ressource:
+        :param H_CM:
+        :param H_TD:
+        :param H_TP:
+        :param Resp:
+        :return:
+        """
         # éxécution de la requête SQL pour vérifier si il existe déjà dans la BD la ressource pour un semestre précis
         self.cursor.execute("SELECT Semestre FROM Planning WHERE Semestre = ? AND Ressource = ?",
                             (Semestre, Ressource,))

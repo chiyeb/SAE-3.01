@@ -18,11 +18,21 @@ class recupData:
         return cls.instance
 
     def _setup(self):
+        """
+        "Setup" l'objet : initialise la connexion à la BD
+        :return:
+        """
         # Initialise la connexion à la base de données
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
 
     def trouverVal(self, semestre, semestre_onglet):
+        """
+        Fonction qui trouve les ressources dans le fichier planning, récupère les valeurs des heures de CM,TD et TP.
+        :param semestre:
+        :param semestre_onglet:
+        :return:
+        """
         planning = pd.ExcelFile('Documents/Planning 2023-2024.xlsx')
         self.cursor.execute("SELECT Libelle, Num_Res FROM Maquette WHERE Semestre = ?", (semestre,))
         resultats = self.cursor.fetchall()
@@ -58,6 +68,12 @@ class recupData:
                                                    valeur_case_12)
 
     def recupHProf(self, semestre, semestre_onglet):
+        """
+        Récupère les heures de chaque professeurs
+        :param semestre:
+        :param semestre_onglet:
+        :return:
+        """
         # Charge le fichier Excel
         fichier = 'Documents/QuiFaitQuoi_beta.xlsx'
         df = pd.read_excel(fichier, semestre_onglet)
@@ -140,6 +156,10 @@ class recupData:
         print(f"Extraction terminée !")
 
     def recupNomProf(self):
+        """
+        Récupère les noms des professeurs dans le fichier texte, ainsi que leur acronymes
+        :return:
+        """
         # Ouvre le fichier en mode lecture
         with open("Documents/NomProf.txt", "r") as fichier:
             # Lire chaque ligne du fichier
@@ -167,8 +187,13 @@ class recupData:
                 else:
                     print(f"Erreur de format sur la ligne : {ligne}")
 
-    # Fonction pour récupérer les couleurs lié à chaque ressources pour un semestre précis
     def recupRCouleur(self, semestre, semestre_onglet):
+        """
+        Fonction pour récupérer les couleurs lié à chaque ressources pour un semestre précis
+        :param semestre:
+        :param semestre_onglet:
+        :return:
+        """
         ressourceCouleur = {}
         self.cursor.execute("SELECT Num_Res FROM Maquette WHERE Semestre = ?", (semestre,))
         resultats = [item[0] for item in self.cursor.fetchall()]
@@ -185,8 +210,12 @@ class recupData:
                         # On récupère la couleur de la cellule
                         ressourceCouleur[cell.value] = couleur
         return ressourceCouleur
-    # Récupère la premiere occurence de chaque type de cours dans le fichier planning
     def trouverTypeCours2eRange(self, semestre_onglet):
+        """
+        Récupère la premiere occurence de chaque type de cours dans le fichier planning
+        :param semestre_onglet:
+        :return:
+        """
         fichier = openpyxl.load_workbook('Documents/Planning 2023-2024.xlsx', data_only=True)
         fichierOngletSemestre = fichier[semestre_onglet]
         type_cours_dict = {}
@@ -201,8 +230,12 @@ class recupData:
         print(type_cours_dict)
         return type_cours_dict
 
-    # Récupère la deuxième occurence de chaque type de cours dans le fichier planning
     def trouverTypeCours1erRange(self, semestre_onglet):
+        """
+        Récupère la deuxième occurence de chaque type de cours dans le fichier planning
+        :param semestre_onglet:
+        :return:
+        """
         fichier = openpyxl.load_workbook('Documents/Planning 2023-2024.xlsx', data_only=True)
         fichierOngletSemestre = fichier[semestre_onglet]
         type_cours_dict = {}
@@ -223,8 +256,13 @@ class recupData:
         print(type_cours_dict)
         return type_cours_dict
 
-    # Récupère chaque cours dans le fichier planning
     def recupXetY(self, semestre, semestre_onglet):
+        """
+        Récupère chaque cours dans le fichier planning
+        :param semestre:
+        :param semestre_onglet:
+        :return:
+        """
         # On réinitialise les valeurs de la base de donnée
         self.cursor.execute("UPDATE Horaires SET NbCours = 0 WHERE Semestre = ?",
                             (semestre,))
@@ -318,8 +356,14 @@ class recupData:
                                         self.cursor.connection.commit()
                                         print(f"Cle: {cle} Valeur: {valeur}, Couleur: {couleur}")
 
-    # Fonction qui vérifie pour une case précise, quel type de cours c'est
     def typeCours(self, type_cours_dict1, type_cours_dict2, col):
+        """
+        Fonction qui vérifie pour une case précise, quel type de cours c'est
+        :param type_cours_dict1:
+        :param type_cours_dict2:
+        :param col:
+        :return:
+        """
         tCours = None
         if type_cours_dict1["Cours"] <= col <= type_cours_dict1["TD"]:
             tCours = "Amphi"
@@ -340,6 +384,11 @@ class recupData:
         return tCours
 
     def __del__(self):
+        """
+            Fonction qui ferme la connexion à la BD
+            :param self:
+            :return:
+            """
         # Ferme la connexion à la base de données lorsque l'objet est détruit
         self.conn.close()
 

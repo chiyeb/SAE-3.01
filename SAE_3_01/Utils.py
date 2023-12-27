@@ -15,13 +15,20 @@ class Utils:
         return cls.instance
 
     def _setup(self):
+        """
+                "Setup" l'objet : initialise la connexion à la BD
+                :return:
+                """
         # Initialise la connexion à la base de données
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
 
 
-    # supprimer toutes la BD
     def clearBD(self):
+        """
+        Fonction pour supprimer toutes les données la BD
+        :return:
+        """
         confirmation = self.confirm_deletion()
         # si l'utilisateur à confirmer la suppression de la BD
         if confirmation:
@@ -39,8 +46,11 @@ class Utils:
             self.display_result(False)
 
 
-    # confirmer la suppresion ou l'annuler
     def confirm_deletion(self):
+        """
+        Fonction pour confirmer la suppresion ou l'annuler
+        :return:
+        """
         root = tk.Tk()
         root.withdraw()  # masquer la fenêtre principale de tkinter
 
@@ -51,8 +61,11 @@ class Utils:
 
         return response
 
-    # supprimer tout les fichiers genere par le programme
     def clearAllFiles(self):
+        """
+        Fonction pour supprimer tout les fichiers généré par le programme
+        :return:
+        """
         confirmation = self.confirm_deletion()
         # si l'utilisateur a confirmé la suppression des fichiers
         if confirmation:
@@ -79,8 +92,12 @@ class Utils:
         else:
             self.display_result(False)
 
-    # afficher la confirmation de suppression ou d'annulation
     def display_result(self, is_deleted):
+        """
+        Fonction qui affiche la confirmation de suppression ou d'annulation
+        :param is_deleted:
+        :return:
+        """
         root = tk.Tk()
         root.withdraw()
 
@@ -91,8 +108,11 @@ class Utils:
 
         root.destroy()
 
-    # recréer les dossiers importants
     def recreate_file(self):
+        """
+        Fonction qui recrée les dossiers importants
+        :return:
+        """
         # Définition des chemins des dossiers et fichiers à supprimer
         dossierRapErr = 'rapport d\'erreurs'
         dossierFichGenere = 'fichiers genere'

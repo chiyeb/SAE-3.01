@@ -14,10 +14,19 @@ class ScribeData:
         return cls.instance
 
     def _setup(self):
+        """
+                "Setup" l'objet : initialise la connexion à la BD
+                :return:
+                """
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
 
     def scribeRessource(self, semestre):
+        """
+        Fonction qui écrit les informations de chaque ressources, dans le fichier final
+        :param semestre:
+        :return:
+        """
         try:
             print("Début de la méthode scribeRessource")
 

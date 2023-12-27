@@ -14,15 +14,27 @@ class Stats:
         return cls.instance
 
     def _setup(self):
+        """
+                "Setup" l'objet : initialise la connexion à la BD
+                :return:
+                """
         # Initialise la connexion à la base de données
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
 
     def execAllStats(self):
+        """
+        Exécute chaque fonction pour les statistiques
+        :return:
+        """
         self.genereGraph()
         self.generePie()
 
     def genereGraph(self):
+        """
+        Fonction qui génère un graphique
+        :return:
+        """
         # Récupération des heures par ressources et par semestre
         requete = """
         SELECT Semestre, Num_res, SUM(H_CM + H_TD + H_TP) as HTotal
@@ -53,6 +65,10 @@ class Stats:
         plt.close()
 
     def generePie(self):
+        """
+        Fonction qui génère un camembert
+        :return:
+        """
         # Récupération des heures pour chaque enseignant
         requete = """
         SELECT Resp, SUM(H_CM + H_TD + H_TP) as HTotal
@@ -76,5 +92,10 @@ class Stats:
         plt.close()
 
     def __del__(self):
+        """
+            Fonction qui ferme la connexion à la BD
+            :param self:
+            :return:
+            """
         self.conn.close()
 

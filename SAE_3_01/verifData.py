@@ -17,6 +17,11 @@ class verifData:
         return cls.instance
 
     def _setup(self):
+        """
+        "Setup" l'objet : initialise la connexion à la BD, initialise le chemin du dossier "rapport d'erreurs"
+        et créer le fichier rapports d'erreurs avec la date et l'heure exact de génération.
+        :return:
+        """
         # Initialise la connexion à la base de données
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
@@ -29,6 +34,11 @@ class verifData:
         )
 
     def concordance(self, semestre):
+        """
+        Fonction pour vérifier la concordance entre les données du fichier planning et maquette
+        :param semestre:
+        :return:
+        """
         print("Concordance pour le", semestre, ":")
         self.cursor.execute("SELECT * FROM Maquette WHERE Semestre = ?", (semestre,))
         rslt_maquette = self.cursor.fetchall()
@@ -71,6 +81,11 @@ class verifData:
                         print(f"pas d'erreur pour le semestre {semestre}")
 
     def concordancePlanning(self, semestre):
+        """
+        Fonction qui vérifie la concordance entre les cours écrit(les heures) et posé dans le fichier planning
+        :param semestre:
+        :return:
+        """
         print("Concordance pour le", semestre, ":")
         self.cursor.execute("SELECT * FROM Horaires WHERE Semestre = ?", (semestre,))
         rslt_horaires = self.cursor.fetchall()
@@ -141,5 +156,10 @@ class verifData:
 
 
 def __del__(self):
+    """
+    Fonction qui ferme la connexion à la BD
+    :param self:
+    :return:
+    """
     # Ferme la connexion à la base de données lorsque l'objet est détruit
     self.conn.close()
