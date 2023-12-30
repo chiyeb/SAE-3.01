@@ -1,0 +1,382 @@
+Erreur: heures ne correspondent pas entre la maquette et le planning
+  -semestre: S5AFA 
+  -ressource: R5.A.06 Sensibilisation à la programmation multimedia
+Erreur CM: 
+  -ressource: R5.A.06 Sensibilisation à la programmation multimedia
+   -heure planning: 2
+  -heure maquette: 0
+Erreur TD: 
+  -ressource: R5.A.06 Sensibilisation à la programmation multimedia
+  -heure planning: 10
+  -heure maquette12
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S5AFA 
+  -ressource: R5.A.05
+Erreur TD:
+   -ressource: R5.A.05
+  -heure écrites: 16
+  -heure posé: 8
+  -Commentaire(s) : 
+      Salle avec vidéo
+	-A C
+non dédoublé
+	-A C
+Attention : Ressource mutualisée entièrement avec R5.B.04
+	-Frédéric FlouvatErreur TP
+   -ressource: R5.A.05   -heures écrites: 8 
+   -heures posés: 6 
+  -Commentaire(s) : 
+      non dédoublé
+	-A C
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S5AFA 
+  -ressource: R5.A.07
+Erreur TD:
+   -ressource: R5.A.07
+  -heure écrites: 3
+  -heure posé: 4
+  -Commentaire(s) : 
+      3h
+	-Frédéric FlouvatErreur TP
+   -ressource: R5.A.07   -heures écrites: 6 
+   -heures posés: 8 
+  -Commentaire(s) : 
+      3h
+	-Frédéric Flouvat
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S5AFA 
+  -ressource: R5.A.08
+Erreur TD:
+   -ressource: R5.A.08
+  -heure écrites: 10
+  -heure posé: 8
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S5AFA 
+  -ressource: R5.A.09
+Erreur TD:
+   -ressource: R5.A.09
+  -heure écrites: 11
+  -heure posé: 12
+Erreur TP
+   -ressource: R5.A.09   -heures écrites: 3 
+   -heures posés: 4 
+  -Commentaire(s) : 
+      3h
+	-Morgan M
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S5AFA 
+  -ressource: R5.A.10
+Erreur TP
+   -ressource: R5.A.10   -heures écrites: 8 
+   -heures posés: 6 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S5AFA 
+  -ressource: R5.A.12
+Erreur TD:
+   -ressource: R5.A.12
+  -heure écrites: 26
+  -heure posé: 28
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S6AFA 
+  -ressource: R6.A.05
+Erreur TD:
+   -ressource: R6.A.05
+  -heure écrites: 8
+  -heure posé: 12
+
+Erreur: heures ne correspondent pas entre la maquette et le planning
+  -semestre: S5AFI 
+  -ressource: R5.A.06 Sensibilisation à la programmation multimedia
+Erreur CM: 
+  -ressource: R5.A.06 Sensibilisation à la programmation multimedia
+   -heure planning: 2
+  -heure maquette: 0
+Erreur TD: 
+  -ressource: R5.A.06 Sensibilisation à la programmation multimedia
+  -heure planning: 10
+  -heure maquette12
+
+Erreur: heures ne correspondent pas entre la maquette et le planning
+  -semestre: S5AFI 
+  -ressource: R5.A.L1 Compléments IA
+Erreur CM: 
+  -ressource: R5.A.L1 Compléments IA
+   -heure planning: 4
+  -heure maquette: 8
+Erreur TD: 
+  -ressource: R5.A.L1 Compléments IA
+  -heure planning: 20
+  -heure maquette24
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S5BFA 
+  -ressource: R5.B.04
+Erreur TD:
+   -ressource: R5.B.04
+  -heure écrites: 16
+  -heure posé: 10
+  -Commentaire(s) : 
+      Non dédoublé
+	-A C
+Attention : Ressource mutualisée entièrement avec R5.A.05
+	-Frédéric FlouvatErreur TP
+   -ressource: R5.B.04   -heures écrites: 8 
+   -heures posés: 4 
+  -Commentaire(s) : 
+      Non dédoublé
+	-A C
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S5BFA 
+  -ressource: R5.B.06
+Erreur TD:
+   -ressource: R5.B.06
+  -heure écrites: 16
+  -heure posé: 20
+  -Commentaire(s) : 
+      TD5
+	-A C
+Seéance avec video proj + TBI
+	-A CErreur TP
+   -ressource: R5.B.06   -heures écrites: 16 
+   -heures posés: 12 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S5BFA 
+  -ressource: R5.B.07
+Erreur TP
+   -ressource: R5.B.07   -heures écrites: 3 
+   -heures posés: 4 
+  -Commentaire(s) : 
+      3h
+	-Morgan M
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S5BFA 
+  -ressource: R5.B.09
+Erreur TD:
+   -ressource: R5.B.09
+  -heure écrites: 10
+  -heure posé: 8
+
+Erreur: heures ne correspondent pas entre la maquette et le planning
+  -semestre: S1 
+  -ressource: R1.11 Bases de la communication
+Erreur TP: 
+  -ressource: R1.11 Bases de la communication 
+  -heure planning: 0 
+  -heure maquette: 1
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.01
+Erreur CM: 
+   -ressource: R1.01  -heures écrite: 18,   -heure posé: 24
+- Commentaire(s) : 
+      Séance 1h30
+	-A C
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.03
+Erreur TD:
+   -ressource: R1.03
+  -heure écrites: 8
+  -heure posé: 4
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.05
+Erreur TP
+   -ressource: R1.05   -heures écrites: 20 
+   -heures posés: 16 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.07
+Erreur TP
+   -ressource: R1.07   -heures écrites: 9 
+   -heures posés: 8 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.08
+Erreur TP
+   -ressource: R1.08   -heures écrites: 3 
+   -heures posés: 4 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.09
+Erreur TP
+   -ressource: R1.09   -heures écrites: 0 
+   -heures posés: 2 
+  -Commentaire(s) : 
+      Test sur heures TP R1.08
+	-Morgan M
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.10
+Erreur TP
+   -ressource: R1.10   -heures écrites: 25 
+   -heures posés: 26 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.12
+Erreur TP
+   -ressource: R1.12   -heures écrites: 3 
+   -heures posés: 2 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.01
+Erreur TD:
+   -ressource: R2.01
+  -heure écrites: 21
+  -heure posé: 20
+Erreur TP
+   -ressource: R2.01   -heures écrites: 21 
+   -heures posés: 20 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.02
+Erreur CM: 
+   -ressource: R2.02  -heures écrite: 6,   -heure posé: 8
+- Commentaire(s) : 
+      1h30
+	-Frédéric FlouvatErreur TD:
+   -ressource: R2.02
+  -heure écrites: 22
+  -heure posé: 20
+Erreur TP
+   -ressource: R2.02   -heures écrites: 10 
+   -heures posés: 8 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.03
+Erreur TD:
+   -ressource: R2.03
+  -heure écrites: 5
+  -heure posé: 4
+Erreur TP
+   -ressource: R2.03   -heures écrites: 13 
+   -heures posés: 12 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.06
+Erreur CM: 
+   -ressource: R2.06  -heures écrite: 7,   -heure posé: 6
+Erreur TP
+   -ressource: R2.06   -heures écrites: 21 
+   -heures posés: 20 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.07
+Erreur CM: 
+   -ressource: R2.07  -heures écrite: 9,   -heure posé: 12
+- Commentaire(s) : 
+      1h30
+	-Morgan MErreur TP
+   -ressource: R2.07   -heures écrites: 6 
+   -heures posés: 8 
+  -Commentaire(s) : 
+      3h
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.08
+Erreur TP
+   -ressource: R2.08   -heures écrites: 6 
+   -heures posés: 8 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.09
+Erreur CM: 
+   -ressource: R2.09  -heures écrite: 3,   -heure posé: 4
+- Commentaire(s) : 
+      1h30
+	-Morgan M
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.10
+Erreur TD:
+   -ressource: R2.10
+  -heure écrites: 13
+  -heure posé: 12
+Erreur TP
+   -ressource: R2.10   -heures écrites: 11 
+   -heures posés: 12 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.14
+Erreur TD:
+   -ressource: R2.14
+  -heure écrites: 11
+  -heure posé: 12
+Erreur TP
+   -ressource: R2.14   -heures écrites: 3 
+   -heures posés: 2 
+

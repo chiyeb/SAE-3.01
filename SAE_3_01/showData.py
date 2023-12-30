@@ -3,12 +3,12 @@ from tkinter import ttk
 import sqlite3
 
 
-class ShowData:
+class showData:
     instance = None
 
     def __new__(cls):
         if cls.instance is None:
-            cls.instance = super(ShowData, cls).__new__(cls)
+            cls.instance = super(showData, cls).__new__(cls)
             cls.instance._setup()
         return cls.instance
 

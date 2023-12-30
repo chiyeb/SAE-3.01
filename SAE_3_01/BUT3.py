@@ -3,165 +3,181 @@ from insertData import *
 from recupData import *
 from verifData import *
 from scribeData import *
-# from SAE_3_01.old.database_handler import insert_maquette
-# On importe la bible BUT3
-BUT3 = pd.ExcelFile('Documents/BUT3 _INFO_AIX.xlsx')
 
-# On affiche le parcours A FA pour ensuite prendre les données 
-BUT3_A_FA = pd.read_excel(BUT3, 'BUT 3 Parcours A FA')
 
-# instance de recupData
-recupDataInstance = recupData()
+class BUT3:
+    instance = None
+    insertDataInstance = None
+    recupDataInstance = None
+    scribeDataInstance = None
+    verifDataInstance = None
+    BUT3_file = None
 
-# instance insertData
-insertDataInstance = insertData()
+    def __new__(cls):
+        if cls.instance is None:
+            cls.instance = super(BUT3, cls).__new__(cls)
+            cls.instance.setup()
+        return cls.instance
 
-# instance verifData
-verifDataInstance = verifData()
+    def setup(self):
+        # On importe la maquette du BUT3
+        self.BUT3_file = pd.ExcelFile('Documents/BUT3 _INFO_AIX.xlsx')
 
-# instance scribeData
-scribeDataInstance = scribeData()
+        # instance de recupData
+        self.recupDataInstance = recupData()
 
-# On récupère les lignes et colonnes utiles
-select_colonne_BUT3_S5_A_FA = BUT3_A_FA.iloc[9:27, [0, 2, 17, 18, 19]]
-for index, row in select_colonne_BUT3_S5_A_FA.iterrows():
-    if row.isnull().iloc[0]:
-        continue
-    # on insère chaque ligne dans la base de donnée
-    insertDataInstance.insert_maquette("S5AFA", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
-# fonction pour récupérer les valeurs du premier semestre dans le fichier planning
-recupDataInstance.trouverVal("S5AFA", "S5.A")
-# fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
-# la base de données pour le premier semestre
-verifDataInstance.concordance("S5AFA")
-scribeDataInstance.scribeRessource("S5AFA")
-# Récupérer les cours par date dans le fichier planning
-recupDataInstance.recupXetY("S5AFA", "S5.A")
-# Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
-verifDataInstance.concordancePlanning("S5AFA")
+        # instance insertData
+        self.insertDataInstance = insertData()
 
-# On récupère les lignes et colonnes utiles
-select_colonne_BUT3_S6_A_FA = BUT3_A_FA.iloc[32:43, [0, 2, 17, 18, 19]]
-for index, row in select_colonne_BUT3_S6_A_FA.iterrows():
-    if row.isnull().iloc[0]:
-        continue
-    insertDataInstance.insert_maquette("S6AFA", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
-# fonction pour récupérer les valeurs du premier semestre dans le fichier planning
-recupDataInstance.trouverVal("S6AFA", "S6.A")
-# fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
-# la base de données pour le premier semestre
-verifDataInstance.concordance("S6AFA")
-scribeDataInstance.scribeRessource("S6AFA")
-# Récupérer les cours par date dans le fichier planning
-recupDataInstance.recupXetY("S6AFA", "S6.A")
-# Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
-verifDataInstance.concordancePlanning("S6AFA")
+        # instance verifData
+        self.verifDataInstance = verifData()
 
-# On affiche le parcours A FI pour ensuite prendre les données 
-BUT3_A_FI = pd.read_excel(BUT3, 'BUT 3 Parcours A FI')
-# On récupère les lignes et colonnes utiles
-select_colonne_BUT3_S5_A_FI = BUT3_A_FI.iloc[9:27, [0, 2, 17, 18, 19]]
-for index, row in select_colonne_BUT3_S5_A_FI.iterrows():
-    if row.isnull().iloc[0]:
-        continue
-    insertDataInstance.insert_maquette("S5AFI", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
-# fonction pour récupérer les valeurs du premier semestre dans le fichier planning
-recupDataInstance.trouverVal("S5AFI", "S5.A")
-# fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
-# la base de données pour le premier semestre
-verifDataInstance.concordance("S5AFI")
-scribeDataInstance.scribeRessource("S5AFI")
-# Récupérer les cours par date dans le fichier planning
-recupDataInstance.recupXetY("S5AFI", "S5.A")
-# Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
-verifDataInstance.concordancePlanning("S5AFI")
+        # instance scribeData
+        self.scribeDataInstance = scribeData()
 
-# On récupère les lignes et colonnes utiles
-select_colonne_BUT3_S6_A_FI = BUT3_A_FI.iloc[32:42, [0, 2, 17, 18, 19]]
-for index, row in select_colonne_BUT3_S6_A_FI.iterrows():
-    if row.isnull().iloc[0]:
-        continue
-    insertDataInstance.insert_maquette("S6AFI", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
-# fonction pour récupérer les valeurs du premier semestre dans le fichier planning
-recupDataInstance.trouverVal("S6AFI", "S6.A")
-# fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
-# la base de données pour le premier semestre
-verifDataInstance.concordance("S6AFI")
-scribeDataInstance.scribeRessource("S6AFI")
-# Récupérer les cours par date dans le fichier planning
-recupDataInstance.recupXetY("S6AFI", "S6.A")
-# Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
-verifDataInstance.concordancePlanning("S6AFI")
+    def run(self):
+        # On affiche le parcours A FA pour ensuite prendre les données
+        BUT3_A_FA_file = pd.read_excel(self.BUT3_file, 'BUT 3 Parcours A FA')
+        # On récupère les lignes et colonnes utiles
+        select_colonne_BUT3_S5_A_FA = BUT3_A_FA_file.iloc[9:27, [0, 2, 17, 18, 19]]
+        for index, row in select_colonne_BUT3_S5_A_FA.iterrows():
+            if row.isnull().iloc[0]:
+                continue
+            # on insère chaque ligne dans la base de donnée
+            self.insertDataInstance.insert_maquette("S5AFA", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
+        # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
+        self.recupDataInstance.trouverVal("S5AFA", "S5.A")
+        # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
+        # la base de données pour le premier semestre
+        self.verifDataInstance.concordance("S5AFA")
+        self.scribeDataInstance.scribeRessource("S5AFA")
+        # Récupérer les cours par date dans le fichier planning
+        self.recupDataInstance.recupXetY("S5AFA", "S5.A")
+        # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+        self.verifDataInstance.concordancePlanning("S5AFA")
 
-# On affiche le parcours B FA pour ensuite prendre les données 
-BUT3_B_FA = pd.read_excel(BUT3, 'BUT 3 Parcours B FA')
-# On récupère les lignes et colonnes utiles
-select_colonne_BUT3_S5_B_FA = BUT3_B_FA.iloc[9:25, [0, 2, 17, 18, 19]]
-for index, row in select_colonne_BUT3_S5_B_FA.iterrows():
-    if row.isnull().iloc[0]:
-        continue
-    insertDataInstance.insert_maquette("S5BFA", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
+        # On récupère les lignes et colonnes utiles
+        select_colonne_BUT3_S6_A_FA = BUT3_A_FA_file.iloc[32:43, [0, 2, 17, 18, 19]]
+        for index, row in select_colonne_BUT3_S6_A_FA.iterrows():
+            if row.isnull().iloc[0]:
+                continue
+            self.insertDataInstance.insert_maquette("S6AFA", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
+        # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
+        self.recupDataInstance.trouverVal("S6AFA", "S6.A")
+        # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
+        # la base de données pour le premier semestre
+        self.verifDataInstance.concordance("S6AFA")
+        self.scribeDataInstance.scribeRessource("S6AFA")
+        # Récupérer les cours par date dans le fichier planning
+        self.recupDataInstance.recupXetY("S6AFA", "S6.A")
+        # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+        self.verifDataInstance.concordancePlanning("S6AFA")
 
-# fonction pour récupérer les valeurs du premier semestre dans le fichier planning
-recupDataInstance.trouverVal("S5BFA", "S5.B")
-# fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
-# la base de données pour le premier semestre
-verifDataInstance.concordance("S5BFA")
-scribeDataInstance.scribeRessource("S5BFA")
-# Récupérer les cours par date dans le fichier planning
-recupDataInstance.recupXetY("S5BFA", "S5.B")
-# Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
-verifDataInstance.concordancePlanning("S5BFA")
+        # On affiche le parcours A FI pour ensuite prendre les données 
+        BUT3_A_FI = pd.read_excel(self.BUT3_file, 'BUT 3 Parcours A FI')
+        # On récupère les lignes et colonnes utiles
+        select_colonne_BUT3_S5_A_FI = BUT3_A_FI.iloc[9:27, [0, 2, 17, 18, 19]]
+        for index, row in select_colonne_BUT3_S5_A_FI.iterrows():
+            if row.isnull().iloc[0]:
+                continue
+            self.insertDataInstance.insert_maquette("S5AFI", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
+        # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
+        self.recupDataInstance.trouverVal("S5AFI", "S5.A")
+        # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
+        # la base de données pour le premier semestre
+        self.verifDataInstance.concordance("S5AFI")
+        self.scribeDataInstance.scribeRessource("S5AFI")
+        # Récupérer les cours par date dans le fichier planning
+        self.recupDataInstance.recupXetY("S5AFI", "S5.A")
+        # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+        self.verifDataInstance.concordancePlanning("S5AFI")
 
-# On récupère les lignes et colonnes utiles
-select_colonne_BUT3_S6_B_FA = BUT3_B_FA.iloc[30:41, [0, 2, 17, 18, 19]]
-for index, row in select_colonne_BUT3_S6_B_FA.iterrows():
-    if row.isnull().iloc[0]:
-        continue
-    insertDataInstance.insert_maquette("S6BFA", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
-# fonction pour récupérer les valeurs du premier semestre dans le fichier planning
-recupDataInstance.trouverVal("S6BFA", "S6.B")
-# fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
-# la base de données pour le premier semestre
-verifDataInstance.concordance("S6BFA")
-scribeDataInstance.scribeRessource("S6BFA")
-# Récupérer les cours par date dans le fichier planning
-recupDataInstance.recupXetY("S6BFA", "S6.B")
-# Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
-verifDataInstance.concordancePlanning("S6BFA")
+        # On récupère les lignes et colonnes utiles
+        select_colonne_BUT3_S6_A_FI = BUT3_A_FI.iloc[32:42, [0, 2, 17, 18, 19]]
+        for index, row in select_colonne_BUT3_S6_A_FI.iterrows():
+            if row.isnull().iloc[0]:
+                continue
+            self.insertDataInstance.insert_maquette("S6AFI", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
+        # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
+        self.recupDataInstance.trouverVal("S6AFI", "S6.A")
+        # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
+        # la base de données pour le premier semestre
+        self.verifDataInstance.concordance("S6AFI")
+        self.scribeDataInstance.scribeRessource("S6AFI")
+        # Récupérer les cours par date dans le fichier planning
+        self.recupDataInstance.recupXetY("S6AFI", "S6.A")
+        # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+        self.verifDataInstance.concordancePlanning("S6AFI")
 
-# On affiche le parcours B FI pour ensuite prendre les données
-BUT3_B_FI = pd.read_excel(BUT3, 'BUT 3 Parcours B FI')
-# On récupère les lignes et colonnes utiles
-select_colonne_BUT3_S5_B_FI = BUT3_B_FI.iloc[9:25, [0, 2, 17, 18, 19]]
-for index, row in select_colonne_BUT3_S5_B_FI.iterrows():
-    if row.isnull().iloc[0]:
-        continue
-    insertDataInstance.insert_maquette("S5BFI", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
-# fonction pour récupérer les valeurs du premier semestre dans le fichier planning
-recupDataInstance.trouverVal("S5BFI", "S5.A")
-# fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
-# la base de données pour le premier semestre
-verifDataInstance.concordance("S5BFI")
-scribeDataInstance.scribeRessource("S5BFI")
-# Récupérer les cours par date dans le fichier planning
-recupDataInstance.recupXetY("S5BFI", "S5.B")
-# Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
-verifDataInstance.concordancePlanning("S5BFI")
+        # On affiche le parcours B FA pour ensuite prendre les données 
+        BUT3_B_FA = pd.read_excel(self.BUT3_file, 'BUT 3 Parcours B FA')
+        # On récupère les lignes et colonnes utiles
+        select_colonne_BUT3_S5_B_FA = BUT3_B_FA.iloc[9:25, [0, 2, 17, 18, 19]]
+        for index, row in select_colonne_BUT3_S5_B_FA.iterrows():
+            if row.isnull().iloc[0]:
+                continue
+            self.insertDataInstance.insert_maquette("S5BFA", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
 
-# On récupère les lignes et colonnes utiles
-select_colonne_BUT3_S6_B_FI = BUT3_B_FI.iloc[30:40, [0, 2, 17, 18, 19]]
-for index, row in select_colonne_BUT3_S6_B_FI.iterrows():
-    if row.isnull().iloc[0]:
-        continue
-    insertDataInstance.insert_maquette("S6BFI", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
-# fonction pour récupérer les valeurs du premier semestre dans le fichier planning
-recupDataInstance.trouverVal("S6BFI", "S6.B")
-# fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
-# la base de données pour le premier semestre
-verifDataInstance.concordance("S6BFI")
-scribeDataInstance.scribeRessource("S6BFI")
-# Récupérer les cours par date dans le fichier planning
-recupDataInstance.recupXetY("S6BFI", "S6.B")
-# Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
-verifDataInstance.concordancePlanning("S6BFI")
+        # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
+        self.recupDataInstance.trouverVal("S5BFA", "S5.B")
+        # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
+        # la base de données pour le premier semestre
+        self.verifDataInstance.concordance("S5BFA")
+        self.scribeDataInstance.scribeRessource("S5BFA")
+        # Récupérer les cours par date dans le fichier planning
+        self.recupDataInstance.recupXetY("S5BFA", "S5.B")
+        # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+        self.verifDataInstance.concordancePlanning("S5BFA")
+
+        # On récupère les lignes et colonnes utiles
+        select_colonne_BUT3_S6_B_FA = BUT3_B_FA.iloc[30:41, [0, 2, 17, 18, 19]]
+        for index, row in select_colonne_BUT3_S6_B_FA.iterrows():
+            if row.isnull().iloc[0]:
+                continue
+            self.insertDataInstance.insert_maquette("S6BFA", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
+        # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
+        self.recupDataInstance.trouverVal("S6BFA", "S6.B")
+        # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
+        # la base de données pour le premier semestre
+        self.verifDataInstance.concordance("S6BFA")
+        self.scribeDataInstance.scribeRessource("S6BFA")
+        # Récupérer les cours par date dans le fichier planning
+        self.recupDataInstance.recupXetY("S6BFA", "S6.B")
+        # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+        self.verifDataInstance.concordancePlanning("S6BFA")
+
+        # On affiche le parcours B FI pour ensuite prendre les données
+        BUT3_B_FI = pd.read_excel(self.BUT3_file, 'BUT 3 Parcours B FI')
+        # On récupère les lignes et colonnes utiles
+        select_colonne_BUT3_S5_B_FI = BUT3_B_FI.iloc[9:25, [0, 2, 17, 18, 19]]
+        for index, row in select_colonne_BUT3_S5_B_FI.iterrows():
+            if row.isnull().iloc[0]:
+                continue
+            self.insertDataInstance.insert_maquette("S5BFI", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
+        # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
+        self.recupDataInstance.trouverVal("S5BFI", "S5.A")
+        # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
+        # la base de données pour le premier semestre
+        self.verifDataInstance.concordance("S5BFI")
+        self.scribeDataInstance.scribeRessource("S5BFI")
+        # Récupérer les cours par date dans le fichier planning
+        self.recupDataInstance.recupXetY("S5BFI", "S5.B")
+        # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+        self.verifDataInstance.concordancePlanning("S5BFI")
+
+        # On récupère les lignes et colonnes utiles
+        select_colonne_BUT3_S6_B_FI = BUT3_B_FI.iloc[30:40, [0, 2, 17, 18, 19]]
+        for index, row in select_colonne_BUT3_S6_B_FI.iterrows():
+            if row.isnull().iloc[0]:
+                continue
+            self.insertDataInstance.insert_maquette("S6BFI", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
+        # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
+        self.recupDataInstance.trouverVal("S6BFI", "S6.B")
+        # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
+        # la base de données pour le premier semestre
+        self.verifDataInstance.concordance("S6BFI")
+        self.scribeDataInstance.scribeRessource("S6BFI")
+        # Récupérer les cours par date dans le fichier planning
+        self.recupDataInstance.recupXetY("S6BFI", "S6.B")
+        # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+        self.verifDataInstance.concordancePlanning("S6BFI")

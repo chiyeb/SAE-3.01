@@ -1,9 +1,16 @@
-import BUT1
-import BUT2
-import BUT3
-from recupData import *
+from BUT1 import *
+from BUT2 import *
+from BUT3 import *
 from Stats import Stats
 
-print(BUT1, BUT2, BUT3)
+BUT1_instance = BUT1()
+BUT1_instance.run()
+
+BUT2_instance = BUT2()
+BUT2_instance.run()
+
+BUT3_instance = BUT3()
+BUT3_instance.run()
+
 stats = Stats()
 stats.execAllStats()
