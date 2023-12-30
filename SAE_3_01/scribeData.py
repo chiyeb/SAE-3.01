@@ -4,12 +4,12 @@ import os
 from datetime import datetime
 
 
-class ScribeData:
+class scribeData:
     instance = None
 
     def __new__(cls):
         if cls.instance is None:
-            cls.instance = super(ScribeData, cls).__new__(cls)
+            cls.instance = super(scribeData, cls).__new__(cls)
             cls.instance._setup()
         return cls.instance
 
@@ -190,8 +190,3 @@ class ScribeData:
 
         except sqlite3.Error as e:
             print(f"Erreur lors de la connexion à la base de données : {e}")
-
-
-# appel de la méthode
-scribeData = ScribeData()
-scribeData.scribeRessource("S1")

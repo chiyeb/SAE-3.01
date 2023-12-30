@@ -1,0 +1,5 @@
+Erreur: heures ne correspondent pas entre la maquette et le planning
+ semestre: S1 
+ ressource: R1.11 Bases de la communication
+Erreur TP, ressource: R1.11 Bases de la communication, heure planning: 0, heure maquette: 1
+

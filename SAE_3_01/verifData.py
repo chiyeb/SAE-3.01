@@ -111,8 +111,8 @@ class verifData:
                         (semestre, ressource[0], "Amphi"))
                     commentaire = self.cursor.fetchone()
                     if commentaire is not None and commentaire[0] not in [None, "", "None"]:
-                        rapport += (f"\n Commentaire(s) : \n"
-                                    f"{commentaire[0].replace("\n", "")}")
+                        rapport += (f"Commentaire(s) : \n"
+                                    f"{commentaire[0]}")
 
                 self.cursor.execute("SELECT nbCours FROM Horaires WHERE Semestre = ? AND Type_Cours = ? AND Ressource "
                                     "= ?", (semestre, "TD", ressource[0]))
@@ -126,8 +126,8 @@ class verifData:
                         (semestre, ressource[0], "TD"))
                     commentaire = self.cursor.fetchone()
                     if commentaire is not None and commentaire[0] not in [None, "", "None"]:
-                        rapport += (f"\n Commentaire(s) : \n"
-                                    f"{commentaire[0].replace("\n", "")}")
+                        rapport += (f"Commentaire(s) : \n"
+                                    f"{commentaire[0]}")
 
                 self.cursor.execute("SELECT nbCours FROM Horaires WHERE Semestre = ? AND Type_Cours = ? AND Ressource "
                                     "= ?", (semestre, "TP", ressource[0]))
@@ -142,12 +142,12 @@ class verifData:
                     commentaire = self.cursor.fetchone()
                     if commentaire is not None and commentaire[0] not in [None, "", "None"]:
                         print(commentaire)
-                        rapport += (f"\n Commentaire(s) : \n"
-                                    f"{commentaire[0].replace("\n", "")}")
+                        rapport += (f"Commentaire(s) : \n"
+                                    f"{commentaire[0]}")
                 if rapport:
                     # Écriture de l'erreur dans un fichier de rapport
                     with open(self.fichierErreur, "a") as rapport_erreur:
-                        rapport_erreur.write(f"Erreur: heure posé et écrites différentes dans le planning"
+                        rapport_erreur.write(f"\n \n Erreur: heure posé et écrites différentes dans le planning"
                                              f"\n "
                                              f"semestre: {semestre} \n "
                                              f"ressource: {ressource[0]}\n")

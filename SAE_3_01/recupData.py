@@ -321,14 +321,14 @@ class recupData:
                                                 # On récupère le commentaire et l'insère
                                                 commentaire = row_cell.comment.text
                                                 self.cursor.execute("INSERT INTO Cours (IdCours, Semestre, Ressource, "
-                                                                    "Date, Commentaire, Type_Cours, Salle) VALUES (?, "
+                                                                    "Date_Cours, Commentaire, Type_Cours, Salle) VALUES (?, "
                                                                     "?, ?, ?, ?, ?, ?)",
                                                                     (idCours, semestre, cle, date, commentaire, tCours,
                                                                      salle))
                                             # Si pas de commentaires dans la cellule
                                             else:
                                                 self.cursor.execute("INSERT INTO Cours (IdCours, Semestre, Ressource, "
-                                                                    "Date, Type_Cours, Salle) VALUES (?, ?, "
+                                                                    "Date_Cours, Type_Cours, Salle) VALUES (?, ?, "
                                                                     "?, ?, ?, ?)",
                                                                     (idCours, semestre, cle, date, tCours, salle))
                                             self.conn.commit()
@@ -336,11 +336,11 @@ class recupData:
                                         else:
                                             if row_cell.comment:
                                                 commentaire = row_cell.comment.text
-                                                self.cursor.execute("UPDATE Cours SET Ressource = ?, Date = ?, "
+                                                self.cursor.execute("UPDATE Cours SET Ressource = ?, Date_Cours = ?, "
                                                                     "Commentaire = ?, Type_Cours = ?, Salle = ? WHERE IdCours = ? ",
                                                                     (cle, date, commentaire, tCours, salle, idCours,))
                                             else:
-                                                self.cursor.execute("UPDATE Cours SET Ressource = ?, Date = ?, "
+                                                self.cursor.execute("UPDATE Cours SET Ressource = ?, Date_Cours = ?, "
                                                                     "Type_Cours = ?, Salle = ? WHERE IdCours = ? ",
                                                                     (cle, date, tCours, salle, idCours))
                                             self.conn.commit()
