@@ -1,4 +1,4 @@
-from scribeData import scribeData
+from scribeData import *
 from verifData import *
 from recupData import *
 from insertData import *
