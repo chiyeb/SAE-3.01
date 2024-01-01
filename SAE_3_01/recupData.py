@@ -69,7 +69,7 @@ class recupData:
 
     def recupHProf(self, semestre, semestre_onglet):
         """
-        Récupère les heures de chaque professeurs
+        Récupère les heures de chaque professeur
         :param semestre:
         :param semestre_onglet:
         :return:

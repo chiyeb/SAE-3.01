@@ -190,3 +190,56 @@ class scribeData:
 
         except sqlite3.Error as e:
             print(f"Erreur lors de la connexion à la base de données : {e}")
+
+    def scribeActivitiesProf(self):
+        '''
+        Écrire dans un fichier, le nombre d'heures totales de chaque professeur
+        :return:
+        '''
+        # réinitialiser le nombre d'heure à 0
+        self.cursor.execute("UPDATE HoraireTotalProf SET H_CM = 0, H_TD = 0, H_TP_D = 0, H_TP_ND = 0, H_TEST = 0")
+        self.conn.commit()
+        dictProf = {}
+        hCMPActuel = hTDPActuel = hTPDPActuel = hTPNDPActuel = hTestPActuel = 0
+        # récupération des données utiles
+        self.cursor.execute(
+            "SELECT HoraireProf.Ressource, Intervenant, CM, TD, TP_Non_Dedoubles, NbCours, Type_Cours, Test, "
+            "TP_Dedoubles FROM HoraireProf "
+            "JOIN Horaires "
+            "ON SUBSTR(HoraireProf.Ressource, 1, INSTR(HoraireProf.Ressource, ' ') - 1) = Horaires.Ressource")
+        profs = self.cursor.fetchall()
+        for pr in profs:
+            # ajout des heures total pour chaque type de cours (sur chaque ressources)
+            hCMPActuel = hTDPActuel = hTPDPActuel = hTPNDPActuel = hTestPActuel = 0
+            if pr[2] is not None and pr[6] == 'Amphi':
+                hCMPActuel = pr[2] * pr[5]
+            if pr[3] is not None and pr[6] == 'TD':
+                hTDPActuel = pr[3] * pr[5]
+            if pr[4] is not None and pr[6] == 'TP':
+                hTPDPActuel = pr[4] * pr[5]
+            if pr[8] is not None and pr[6] == 'TP':
+                hTPNDPActuel = pr[8] * pr[5]
+            if pr[7] is not None and pr[6] == 'Test':
+                hTestPActuel = pr[7] * pr[5]
+            # éxécution d'une requete pour savoir si le prof existe déjà dans la BD
+            self.cursor.execute("SELECT Prof FROM HoraireTotalProf WHERE Prof = ?", (pr[1],))
+            alreadyExist = self.cursor.fetchall()
+            # si il existe on insère
+            if alreadyExist:
+                self.cursor.execute(
+                    "UPDATE HoraireTotalProf "
+                    "SET H_CM = H_CM + ?, H_TD = H_TD + ?, H_TP_D = H_TP_D + ?, H_TP_ND = H_TP_ND + ?, "
+                    "H_TEST = H_TEST + ? WHERE Prof = ?",
+                    (hCMPActuel, hTDPActuel, hTPDPActuel, hTPNDPActuel, hTestPActuel, pr[1]))
+                self.conn.commit()
+            # sinon, on update
+            else:
+                self.cursor.execute(
+                    "INSERT INTO HoraireTotalProf (H_CM, H_TD, H_TP_D, H_TP_ND, H_TEST, Prof) VALUES (?, ?, ?,"
+                    " ?, ?, ?)", (hCMPActuel, hTDPActuel, hTPDPActuel, hTPNDPActuel, hTestPActuel,
+                                  pr[1]))
+                self.conn.commit()
+
+
+sc = scribeData()
+sc.scribeActivitiesProf()
