@@ -119,5 +119,5 @@ class showData:
 
 
 # Utilisation de la classe
-visualizer = ShowData()
+visualizer = showData()
 visualizer.run()
