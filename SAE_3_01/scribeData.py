@@ -230,6 +230,3 @@ class scribeData:
 
         except sqlite3.Error as e:
             print(f"Erreur lors de la récupération des données : {e}")
-
-iii = scribeData()
-iii.scribeHoraireTotalProf()

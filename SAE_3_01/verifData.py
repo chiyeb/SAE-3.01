@@ -173,6 +173,28 @@ class verifData:
                         rapport_erreur.write(rapport)
                         rapport_erreur.write("\n")
 
+    def getNbErreur(self):
+        '''
+        Fonction pour récupérer le nombre d'erreurs
+        :return:
+        '''
+        return self.nbErreur
+
+    def renomFichierAvecNbErreur(self):
+        '''
+        Fonction pour renommer le fichier avec le nombre d'erreurs
+        :return:
+        '''
+        nb_erreurs = self.getNbErreur()
+        nom_fichier_base = os.path.splitext(self.fichierErreur)[0]
+        date_modification = datetime.fromtimestamp(os.path.getmtime(self.fichierErreur)).strftime('%Y-%m-%d %H-%M')
+        nouveau_nom_fichier = f"{nb_erreurs} erreurs -- {date_modification} -- rapport d'erreur.txt"
+        nouveau_chemin_fichier = os.path.join(os.path.dirname(self.fichierErreur), nouveau_nom_fichier)
+        os.rename(self.fichierErreur, nouveau_chemin_fichier)
+        self.fichierErreur = nouveau_chemin_fichier
+
+        print(f"Le fichier a été renommé {nouveau_nom_fichier}")
+
 
 def __del__(self):
     """

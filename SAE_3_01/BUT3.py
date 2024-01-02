@@ -181,3 +181,5 @@ class BUT3:
         self.recupDataInstance.recupXetY("S6BFI", "S6.B")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S6BFI")
+
+        print(self.verifDataInstance.getNbErreur())
