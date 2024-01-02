@@ -1,7 +1,10 @@
 import sqlite3
 import openpyxl as openpyxl
 import os
+import pandas as pd
 from datetime import datetime
+
+from insertData import insertData
 
 
 class scribeData:
@@ -191,55 +194,42 @@ class scribeData:
         except sqlite3.Error as e:
             print(f"Erreur lors de la connexion à la base de données : {e}")
 
-    def scribeActivitiesProf(self):
-        '''
-        Écrire dans un fichier, le nombre d'heures totales de chaque professeur
+    def scribeHoraireTotalProf(self):
+        """
+        Fonction qui écrit les heures de chaque professeurs pour chaque type de cours dans un fichier Excel.
         :return:
-        '''
-        # réinitialiser le nombre d'heure à 0
-        self.cursor.execute("UPDATE HoraireTotalProf SET H_CM = 0, H_TD = 0, H_TP_D = 0, H_TP_ND = 0, H_TEST = 0")
-        self.conn.commit()
-        dictProf = {}
-        hCMPActuel = hTDPActuel = hTPDPActuel = hTPNDPActuel = hTestPActuel = 0
-        # récupération des données utiles
-        self.cursor.execute(
-            "SELECT HoraireProf.Ressource, Intervenant, CM, TD, TP_Non_Dedoubles, NbCours, Type_Cours, Test, "
-            "TP_Dedoubles FROM HoraireProf "
-            "JOIN Horaires "
-            "ON SUBSTR(HoraireProf.Ressource, 1, INSTR(HoraireProf.Ressource, ' ') - 1) = Horaires.Ressource")
-        profs = self.cursor.fetchall()
-        for pr in profs:
-            # ajout des heures total pour chaque type de cours (sur chaque ressources)
-            hCMPActuel = hTDPActuel = hTPDPActuel = hTPNDPActuel = hTestPActuel = 0
-            if pr[2] is not None and pr[6] == 'Amphi':
-                hCMPActuel = pr[2] * pr[5]
-            if pr[3] is not None and pr[6] == 'TD':
-                hTDPActuel = pr[3] * pr[5]
-            if pr[4] is not None and pr[6] == 'TP':
-                hTPDPActuel = pr[4] * pr[5]
-            if pr[8] is not None and pr[6] == 'TP':
-                hTPNDPActuel = pr[8] * pr[5]
-            if pr[7] is not None and pr[6] == 'Test':
-                hTestPActuel = pr[7] * pr[5]
-            # éxécution d'une requete pour savoir si le prof existe déjà dans la BD
-            self.cursor.execute("SELECT Prof FROM HoraireTotalProf WHERE Prof = ?", (pr[1],))
-            alreadyExist = self.cursor.fetchall()
-            # si il existe on insère
-            if alreadyExist:
-                self.cursor.execute(
-                    "UPDATE HoraireTotalProf "
-                    "SET H_CM = H_CM + ?, H_TD = H_TD + ?, H_TP_D = H_TP_D + ?, H_TP_ND = H_TP_ND + ?, "
-                    "H_TEST = H_TEST + ? WHERE Prof = ?",
-                    (hCMPActuel, hTDPActuel, hTPDPActuel, hTPNDPActuel, hTestPActuel, pr[1]))
-                self.conn.commit()
-            # sinon, on update
-            else:
-                self.cursor.execute(
-                    "INSERT INTO HoraireTotalProf (H_CM, H_TD, H_TP_D, H_TP_ND, H_TEST, Prof) VALUES (?, ?, ?,"
-                    " ?, ?, ?)", (hCMPActuel, hTDPActuel, hTPDPActuel, hTPNDPActuel, hTestPActuel,
-                                  pr[1]))
-                self.conn.commit()
+        """
+        try:
+            insertdata_instance = insertData()
+            insertdata_instance.insertNombreHeureProf()
+            # récupération du nombres d'heures de chaque profs
+            self.cursor.execute("SELECT * FROM HoraireTotalProf")
+            heures = self.cursor.fetchall()
+            colones = [description[0] for description in self.cursor.description]
+            excel = pd.DataFrame(heures, columns=colones)
+            # calcul du nombre total d'heure pour chaque prof (somme de toutes les heures)
+            excel['Total_Hours'] = excel[['H_CM', 'H_TD', 'H_TP_D', 'H_TP_ND', 'H_TEST']].sum(axis=1)
+            # on renomme les colonnes du fichier excel
+            excel.rename(columns={
+                'Prof': 'Nom du prof',
+                'H_CM': 'Nombre d\'heure de CM',
+                'H_TD': 'Nombre d\'heure de TD',
+                'H_TP_D': 'Nombre d\'heure de TP Dedoubles',
+                'H_TP_ND': 'Nombre d\'heure de TP Non Dedoubles',
+                'H_TEST': 'Nombre d\'heure de test',
+                'Total_Hours': 'Nombre d\'heure total'
+            }, inplace=True)
 
+            dossier = 'fichiers genere'
+            if not os.path.exists(dossier):
+                os.makedirs(dossier)
+            fichier = "Professeurs_Horaires.xlsx"
+            lieu_enregistrement = os.path.join(dossier, fichier)
+            excel.to_excel(lieu_enregistrement, index=False)
+            print(f"Les données ont été écrites dans le fichier {lieu_enregistrement}")
 
-sc = scribeData()
-sc.scribeActivitiesProf()
+        except sqlite3.Error as e:
+            print(f"Erreur lors de la récupération des données : {e}")
+
+iii = scribeData()
+iii.scribeHoraireTotalProf()
