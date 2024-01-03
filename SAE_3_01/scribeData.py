@@ -177,7 +177,7 @@ class scribeData:
                                 elif type_cours == 'TP':
                                     column_index = 4
                                 else:
-                                    continue  # Si le type de cours n'est pas reconnu, passer au suivant
+                                    continue  # Si le type de cours n'est pas reconnu on passe au suivant
 
                                 # Écrire les données dans la feuille Excel
                                 worksheet.cell(row=row_index5, column=column_index, value=type_cours_et_nombre)
