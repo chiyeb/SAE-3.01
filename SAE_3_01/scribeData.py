@@ -182,6 +182,64 @@ class scribeData:
                                 # Écrire les données dans la feuille Excel
                                 worksheet.cell(row=row_index5, column=column_index, value=type_cours_et_nombre)
 
+                     # On récupère les données de la base de données Planning pour multiplier les valeurs de HorraireProf
+                    self.cursor.execute(
+                    "SELECT H_CM, H_TD, H_TP FROM Planning WHERE ressource = ?",
+                    (resource,))
+                    multiplication_values = self.cursor.fetchone()
+
+                    if multiplication_values:
+                        print(f"Traitement des données Planning ({resource}): {multiplication_values}")
+
+                     # On récupère les données de la base de données HoraireProf
+                    self.cursor.execute(
+                        "SELECT Intervenant, CM, TD, TP_Dedoubles, TP_Non_Dedoubles, Test FROM HoraireProf WHERE ressource = ?",
+                        (resource, ))
+                    data_from_database = self.cursor.fetchall()
+
+                    # On écrit les données dans la feuille Excel
+                    if data_from_database:
+                        print(f"Traitement des données GroupeProf ({resource}): {data_from_database}")
+
+                    row_index0 = 56
+                    row_index1 = 56
+                    row_index2 = 56
+                    row_index3 = 56
+                    row_index4 = 56
+                    row_index5 = 56
+
+                    for intervenant in data_from_database:
+
+                        # ceci permet d'écrire les intervenant
+                        worksheet.cell(row=row_index0, column=1, value=intervenant[0])
+                        row_index0 += 1
+                        if intervenant[1] is not None:
+                            worksheet.cell(row=row_index1, column=12, value=intervenant[1] * multiplication_values[0])
+                        row_index1 += 1
+
+                        # ceci permet d'écrire le nombre de TD
+                        if intervenant[2] is not None:
+                            worksheet.cell(row=row_index2, column=13, value=intervenant[2] * multiplication_values[1])
+                        row_index2 += 1
+
+                        # ceci permet d'écrire le nombre de TP dédoublés
+                        if intervenant[3] is not None:
+                            worksheet.cell(row=row_index3, column=14, value=intervenant[3] * multiplication_values[2])
+                        row_index3 += 1
+
+                        # ceci permet d'écrire le nombre de TP non dédoublés
+                        if intervenant[4] is not None:
+                            worksheet.cell(row=row_index4, column=15, value=intervenant[4] * multiplication_values[2])
+                        row_index4 += 1
+
+                        # ceci permet d'écrire le nombre de test
+                        worksheet.cell(row=row_index5, column=16, value=intervenant[5])
+                        row_index5 += 1
+
+
+
+
+
                 filename = f"{semestre}.xlsx"
                 save_directory = 'fichiers genere'
                 if not os.path.exists(save_directory):
@@ -230,3 +288,8 @@ class scribeData:
 
         except sqlite3.Error as e:
             print(f"Erreur lors de la récupération des données : {e}")
+
+
+
+test = scribeData()
+test.scribeRessource("S1")
