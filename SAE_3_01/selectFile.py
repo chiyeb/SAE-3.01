@@ -118,6 +118,6 @@ class selectFile:
         :param destination:
         :return:
         """
-        fichier_destination = "file_destination.txt"
+        fichier_destination = "fichiers necessaires/file_destination.txt"
         with open(fichier_destination, "a") as file:
             file.write(f'{nom_fichier} = {destination}\n')

@@ -175,7 +175,7 @@ class recupData:
                     # Exécute la requête SQL
                     resultat_requete = self.cursor.execute("SELECT Acronyme, NomProf FROM PROF WHERE Acronyme = ?",
                                                            (parties[0],)).fetchall()
-                    # Vérifie si la requête a renvoyé des résultats
+                    # Vérifie si la requête a renvoyé des résultats, pour savoir si le prof existe déjà
                     if resultat_requete:
                         # On update le nom du prof
                         self.cursor.execute("UPDATE PROF SET NomProf = ? WHERE Acronyme = ?", (parties[1], parties[0]))
@@ -213,6 +213,7 @@ class recupData:
                         # On récupère la couleur de la cellule
                         ressourceCouleur[cell.value] = couleur
         return ressourceCouleur
+
     def trouverTypeCours2eRange(self, semestre_onglet):
         """
         Récupère la premiere occurence de chaque type de cours dans le fichier planning
@@ -271,8 +272,8 @@ class recupData:
                             (semestre,))
         # Récupération du fichier planning
         fichier = openpyxl.load_workbook('Documents/Planning 2023-2024.xlsx', data_only=True)
-        # Appel des fonction nécéssaire
-        ressourceCouleur = recupdata.recupRCouleur(semestre, semestre_onglet)
+        # Appel des fonctions nécéssaire
+        ressourceCouleur = self.recupRCouleur(semestre, semestre_onglet)
         fichierOngletSemestre = fichier[semestre_onglet]
         type_cours_dict1 = self.trouverTypeCours1erRange(semestre_onglet)
         type_cours_dict2 = self.trouverTypeCours2eRange(semestre_onglet)
@@ -388,16 +389,9 @@ class recupData:
 
     def __del__(self):
         """
-            Fonction qui ferme la connexion à la BD
-            :param self:
-            :return:
-            """
+        Fonction qui ferme la connexion à la BD
+        :param self:
+        :return:
+        """
         # Ferme la connexion à la base de données lorsque l'objet est détruit
         self.conn.close()
-
-
-recupdata = recupData()
-recupdata.recupNomProf()
-# recupdata.recupXetY("S1", "S1")
-# recupdata.recupHProf("S1", "S1")
-recupdata.recupRCouleur("S1", "S1")

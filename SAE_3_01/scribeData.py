@@ -21,9 +21,9 @@ class scribeData:
 
     def _setup(self):
         """
-                "Setup" l'objet : initialise la connexion à la BD
-                :return:
-                """
+        "Setup" l'objet : initialise la connexion à la BD
+        :return:
+        """
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
 
@@ -294,5 +294,3 @@ class scribeData:
 
 
 
-test = scribeData()
-test.scribeRessource("S1")

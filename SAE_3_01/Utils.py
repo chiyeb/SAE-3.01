@@ -132,5 +132,36 @@ class Utils:
         if not os.path.exists(DossierStats):
             os.makedirs(DossierStats) # recrée le dossier
 
+    def recup_destination_file(self):
+        """
+        Récupère la destination de chaque fichier dans le fichier.
+        :return:
+        """
+        # Ouvre le fichier en mode lecture
+        with open("fichiers necessaires/file_destination.txt", "r") as fichier:
+            # Lire chaque ligne du fichier
+            for ligne in fichier:
+                # Divise la ligne en utilisant le signe "=" comme séparateur
+                parties = ligne.strip().split("=")
+
+                # Vérifie si la ligne a été correctement divisée en deux parties
+                if len(parties) == 2:
+                    # Exécute la requête SQL
+                    resultat_requete = self.cursor.execute("SELECT Acronyme, NomProf FROM PROF WHERE Acronyme = ?",
+                                                           (parties[0],)).fetchall()
+                    # Vérifie si la requête a renvoyé des résultats
+                    if resultat_requete:
+                        # On update le nom du prof
+                        self.cursor.execute("UPDATE PROF SET NomProf = ? WHERE Acronyme = ?", (parties[1], parties[0]))
+                        self.conn.commit()
+                    else:
+                        # On insère le nouveau prof
+                        self.cursor.execute(
+                            "INSERT INTO Prof (Acronyme, NomProf) VALUES (?, ?)",
+                            (parties[0], parties[1],))
+                        # sauvegarder dans la base de données
+                        self.conn.commit()
+                else:
+                    print(f"Erreur de format sur la ligne : {ligne}")
 
 
