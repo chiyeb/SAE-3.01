@@ -6,6 +6,9 @@ import pandas as pd
 
 
 class BUT1:
+    """
+    Classe qui appel les fonctions nécessaires pour le BUT 1
+    """
     instance = None
     insertDataInstance = None
     recupDataInstance = None

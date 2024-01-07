@@ -7,6 +7,9 @@ from insertData import *
 
 
 class BUT2:
+    """
+    Classe qui appel les fonctions nécessaires pour le BUT 2
+    """
     instance = None
     verifDataInstance = None
     scribeDataInstance = None

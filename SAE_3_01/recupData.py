@@ -9,6 +9,9 @@ from insertData import insertData
 
 
 class recupData:
+    """
+    Classe permettant de récupérer certaines données dans les fichiers
+    """
     instance = None
 
     def __new__(cls):
