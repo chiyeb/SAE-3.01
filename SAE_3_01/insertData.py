@@ -4,6 +4,9 @@ import pandas as pd
 
 
 class insertData:
+    """
+    Classe permettant d'insérer des données dans la base de données
+    """
     instance = None
 
     def __new__(cls):

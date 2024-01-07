@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 
 
 class Stats:
+    """
+    Classe qui permet de générer des graphes et des statistiques selon les données
+    """
     instance = None
 
     def __new__(cls):

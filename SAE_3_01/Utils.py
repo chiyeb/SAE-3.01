@@ -6,6 +6,9 @@ from tkinter import messagebox
 
 
 class Utils:
+    """
+    Classe où se trouve des fonctions utiles pour le programme
+    """
     instance = None
 
     def __new__(cls):

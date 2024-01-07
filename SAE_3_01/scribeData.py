@@ -8,6 +8,9 @@ from insertData import insertData
 
 
 class scribeData:
+    """
+    Classe qui permet d'écrire les données dans des fichiers
+    """
     instance = None
 
     def __new__(cls):

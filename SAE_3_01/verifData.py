@@ -7,6 +7,9 @@ import pandas as pd
 
 
 class verifData:
+    """
+    Classe permettant de vérifier la concordance des données
+    """
     instance = None
     fichierErreur = None
     nbErreur = 0

@@ -4,6 +4,9 @@ import sqlite3
 
 
 class showData:
+    """
+    Classe qui permet d'afficher les données de la base de données dans une fenêtre graphique
+    """
     instance = None
 
     def __new__(cls):

@@ -6,6 +6,9 @@ from scribeData import *
 
 
 class BUT3:
+    """
+    Classe qui appel les fonctions nécessaires pour le BUT 3
+    """
     instance = None
     insertDataInstance = None
     recupDataInstance = None
