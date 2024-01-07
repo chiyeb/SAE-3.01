@@ -6,6 +6,7 @@ import openpyxl
 import pandas as pd
 
 from insertData import insertData
+from selectFile import *
 
 
 class recupData:
@@ -13,6 +14,7 @@ class recupData:
     Classe permettant de récupérer certaines données dans les fichiers
     """
     instance = None
+    files = None
 
     def __new__(cls):
         if cls.instance is None:
@@ -25,6 +27,7 @@ class recupData:
         "Setup" l'objet : initialise la connexion à la BD
         :return:
         """
+        self.files = selectFile()
         # Initialise la connexion à la base de données
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
@@ -78,7 +81,7 @@ class recupData:
         :return:
         """
         # Charge le fichier Excel
-        fichier = 'Documents/QuiFaitQuoi_beta.xlsx'
+        fichier = self.files.QFQ_file
         df = pd.read_excel(fichier, semestre_onglet)
         donnees = {}
         ressourceActuelle = None
@@ -131,13 +134,15 @@ class recupData:
                         if existing_record:
                             # Met à jour l'enregistrement existant
                             self.cursor.execute(
-                                "UPDATE HoraireProf SET CM = ?, TD = ?, TP_Non_Dedoubles = ?, TP_Dedoubles = ?, Test = ? WHERE Semestre = ? AND Ressource = ? AND Intervenant = ?",
+                                "UPDATE HoraireProf SET CM = ?, TD = ?, TP_Non_Dedoubles = ?, TP_Dedoubles = ?, "
+                                "Test = ? WHERE Semestre = ? AND Ressource = ? AND Intervenant = ?",
                                 (d['CM'], d['TD'], d['TP (non dédoublés)'], d['TP (dédoublés)'], d['Test'], resource,
                                  intervenant))
                         else:
                             # Insère un nouvel enregistrement
                             self.cursor.execute(
-                                "INSERT INTO HoraireProf (Semestre, Ressource, Intervenant, CM, TD, TP_non_dedoubles, TP_Dedoubles, Test) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                                "INSERT INTO HoraireProf (Semestre, Ressource, Intervenant, CM, TD, TP_non_dedoubles, "
+                                "TP_Dedoubles, Test) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                                 (semestre, resource, intervenant, d['CM'], d['TD'], d['TP (non dédoublés)'],
                                  d['TP (dédoublés)'],
                                  d['Test']))
@@ -164,7 +169,8 @@ class recupData:
         :return:
         """
         # Ouvre le fichier en mode lecture
-        with open("Documents/NomProf.txt", "r") as fichier:
+        print(self.files.nom_prof_file)
+        with open(self.files.nom_prof_file, "r") as fichier:
             # Lire chaque ligne du fichier
             for ligne in fichier:
                 # Divise la ligne en utilisant le signe "=" comme séparateur
@@ -201,7 +207,7 @@ class recupData:
         self.cursor.execute("SELECT Num_Res FROM Maquette WHERE Semestre = ?", (semestre,))
         resultats = [item[0] for item in self.cursor.fetchall()]
         # On ouvre le fichier excel
-        fichier = openpyxl.load_workbook('Documents/Planning 2023-2024.xlsx')
+        fichier = openpyxl.load_workbook(self.files.planning_file)
         fichierOngletSemestre = fichier[semestre_onglet]
         for row in fichierOngletSemestre.iter_rows():
             for cell in row:
@@ -220,7 +226,7 @@ class recupData:
         :param semestre_onglet:
         :return:
         """
-        fichier = openpyxl.load_workbook('Documents/Planning 2023-2024.xlsx', data_only=True)
+        fichier = openpyxl.load_workbook(self.files.planning_file, data_only=True)
         fichierOngletSemestre = fichier[semestre_onglet]
         type_cours_dict = {}
         for row in fichierOngletSemestre.iter_rows(min_row=1, max_row=2):
@@ -240,7 +246,7 @@ class recupData:
         :param semestre_onglet:
         :return:
         """
-        fichier = openpyxl.load_workbook('Documents/Planning 2023-2024.xlsx', data_only=True)
+        fichier = openpyxl.load_workbook(self.files.planning_file, data_only=True)
         fichierOngletSemestre = fichier[semestre_onglet]
         type_cours_dict = {}
         # Les valeurs à trouver
@@ -271,7 +277,7 @@ class recupData:
         self.cursor.execute("UPDATE Horaires SET NbCours = 0 WHERE Semestre = ?",
                             (semestre,))
         # Récupération du fichier planning
-        fichier = openpyxl.load_workbook('Documents/Planning 2023-2024.xlsx', data_only=True)
+        fichier = openpyxl.load_workbook(self.files.planning_file, data_only=True)
         # Appel des fonctions nécéssaire
         ressourceCouleur = self.recupRCouleur(semestre, semestre_onglet)
         fichierOngletSemestre = fichier[semestre_onglet]
@@ -395,3 +401,6 @@ class recupData:
         """
         # Ferme la connexion à la base de données lorsque l'objet est détruit
         self.conn.close()
+
+i = recupData()
+i.recupNomProf()

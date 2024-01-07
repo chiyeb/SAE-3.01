@@ -46,14 +46,16 @@ class insertData:
         # si la requête renvoie quelque chose on update au lieu d'insérer
         if existing_row:
             self.cursor.execute(
-                "UPDATE Maquette SET Code_ressource = ?, Semestre = ?, Libelle = ?, H_CM = ?, H_TD = ?, H_TP = ?, Num_Res = ? WHERE id_res_formation = ?",
+                "UPDATE Maquette SET Code_ressource = ?, Semestre = ?, Libelle = ?, H_CM = ?, H_TD = ?, H_TP = ?, "
+                "Num_Res = ? WHERE id_res_formation = ?",
                 (Code_ressource, Semestre, Libelle, H_CM, H_TD, H_TP, num_ressource, id_res_formation)
             )
             self.conn.commit()
         # sinon on insère au lieu d'update
         else:
             self.cursor.execute(
-                "INSERT INTO Maquette (id_res_formation, Semestre, Code_ressource, Libelle, H_CM, H_TD, H_TP, Num_Res) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO Maquette (id_res_formation, Semestre, Code_ressource, Libelle, H_CM, H_TD, H_TP, "
+                "Num_Res) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 (id_res_formation, Semestre, Code_ressource, Libelle, H_CM, H_TD, H_TP, num_ressource))
             # commit les changements pour les sauvegarder dans la base de données
             self.conn.commit()
@@ -79,13 +81,15 @@ class insertData:
         # si la requête renvoie quelque chose on update au lieu d'insérer
         if existing_row:
             self.cursor.execute(
-                "UPDATE Planning SET H_CM = ?, H_TD = ?, H_TP = ?, Resp = ?, Num_res = ? WHERE Semestre = ? AND Ressource = ?",
+                "UPDATE Planning SET H_CM = ?, H_TD = ?, H_TP = ?, Resp = ?, Num_res = ? WHERE Semestre = ? AND "
+                "Ressource = ?",
                 (H_CM, H_TD, H_TP, Resp, num_ressource, Semestre, Ressource)
             )
         # sinon on insère au lieu d'update
         else:
             self.cursor.execute(
-                "INSERT INTO Planning (Semestre, Ressource, H_CM, H_TD, H_TP, Resp, Num_res) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO Planning (Semestre, Ressource, H_CM, H_TD, H_TP, Resp, Num_res) VALUES (?, ?, ?, ?, ?, "
+                "?, ?)",
                 (Semestre, Ressource, H_CM, H_TD, H_TP, Resp, num_ressource))
             # commit les changements pour les sauvegarder dans la base de données
         self.conn.commit()
@@ -95,7 +99,7 @@ class insertData:
         Écrire dans un fichier, le nombre d'heures totales de chaque professeur
         :return:
         '''
-        # réinitialiser le nombre d'heure à 0
+        # réinitialiser le nombre d'heures à 0
         self.cursor.execute("UPDATE HoraireTotalProf SET H_CM = 0, H_TD = 0, H_TP_D = 0, H_TP_ND = 0, H_TEST = 0")
         self.conn.commit()
         dictProf = {}

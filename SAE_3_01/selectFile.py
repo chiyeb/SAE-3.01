@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
-
+import os
 
 class selectFile:
     """
@@ -13,6 +13,12 @@ class selectFile:
     nom_prof = None
     planning = None
     QFQ = None
+    maquette_BUT1_file = None
+    maquette_BUT2_file = None
+    maquette_BUT3_file = None
+    nom_prof_file = None
+    planning_file = None
+    QFQ_file = None
 
     def __new__(cls):
         if cls.instance is None:
@@ -21,15 +27,16 @@ class selectFile:
         return cls.instance
 
     def _setup(self):
-        """
-        "Setup" l'objet : initialise la connexion à la BD
-        :return:
-        """
+        # vérifie si le fichier existe
+        if os.path.exists("fichiers necessaires/file_destination.txt"):
+            # vérifie si le fichier est rempli (si sa taille est supérieur à 0)
+            if os.path.getsize("fichiers necessaires/file_destination.txt") > 0:
+                self.recup_destination_file()
+
+    def open_select_file(self):
         # initialise Tkinter
         root = tk.Tk()
         root.withdraw()
-
-    def open_select_file(self):
         self.open_select_file_BUT1_maquette()
         self.open_select_file_BUT2_maquette()
         self.open_select_file_BUT3_maquette()
@@ -120,4 +127,38 @@ class selectFile:
         """
         fichier_destination = "fichiers necessaires/file_destination.txt"
         with open(fichier_destination, "a") as file:
-            file.write(f'{nom_fichier} = {destination}\n')
+            file.write(f'{nom_fichier}={destination}\n')
+
+    def recup_destination_file(self):
+        """
+        Récupère la destination de chaque fichier dans le fichier.
+        :return:
+        """
+        # Ouvre le fichier en mode lecture
+        with open("fichiers necessaires/file_destination.txt", "r") as fichier:
+            # Lire chaque ligne du fichier
+            for ligne in fichier:
+                # Divise la ligne en utilisant le signe "=" comme séparateur
+                parties = ligne.strip().split("=")
+
+                # Vérifie si la ligne a été correctement divisée en deux parties
+                if len(parties) == 2:
+                    match parties[0]:
+                        case "BUT1":
+                            self.maquette_BUT1_file = parties[1]
+                        case "BUT2":
+                            self.maquette_BUT2_file = parties[1]
+                        case "BUT3":
+                            self.maquette_BUT3_file = parties[1]
+                        case "planning":
+                            self.planning_file = parties[1]
+                        case "nom_prof":
+                            self.nom_prof_file = parties[1]
+                        case "QFQ":
+                            self.QFQ_file = parties[1]
+                        case _:
+                            print("erreur inattendu")
+                else:
+                    print(f"Erreur de format sur la ligne : {ligne}")
+
+
