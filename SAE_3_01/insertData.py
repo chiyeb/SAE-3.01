@@ -45,6 +45,7 @@ class insertData:
         existing_row = self.cursor.fetchone()
         # si la requête renvoie quelque chose on update au lieu d'insérer
         if existing_row:
+            print(Semestre, Code_ressource, Libelle, H_CM, H_TD, H_TP)
             self.cursor.execute(
                 "UPDATE Maquette SET Code_ressource = ?, Semestre = ?, Libelle = ?, H_CM = ?, H_TD = ?, H_TP = ?, "
                 "Num_Res = ? WHERE id_res_formation = ?",
@@ -83,8 +84,8 @@ class insertData:
             self.cursor.execute(
                 "UPDATE Planning SET H_CM = ?, H_TD = ?, H_TP = ?, Resp = ?, Num_res = ? WHERE Semestre = ? AND "
                 "Ressource = ?",
-                (H_CM, H_TD, H_TP, Resp, num_ressource, Semestre, Ressource)
-            )
+                (H_CM, H_TD, H_TP, Resp, num_ressource, Semestre, Ressource))
+            self.conn.commit()
         # sinon on insère au lieu d'update
         else:
             self.cursor.execute(
@@ -92,7 +93,7 @@ class insertData:
                 "?, ?)",
                 (Semestre, Ressource, H_CM, H_TD, H_TP, Resp, num_ressource))
             # commit les changements pour les sauvegarder dans la base de données
-        self.conn.commit()
+            self.conn.commit()
 
     def insertNombreHeureProf(self):
         '''

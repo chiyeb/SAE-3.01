@@ -1,0 +1,104 @@
+Erreur: heures ne correspondent pas entre la maquette et le planning
+  -semestre: S5AFA 
+  -ressource: R5.A.06 Sensibilisation à la programmation multimedia
+Erreur CM: 
+  -ressource: R5.A.06 Sensibilisation à la programmation multimedia
+   -heure planning: 2
+  -heure maquette: 0
+Erreur TD: 
+  -ressource: R5.A.06 Sensibilisation à la programmation multimedia
+  -heure planning: 10
+  -heure maquette12
+
+
+
+Erreur de concordance pour le semestre S5AFA et la ressource R5.02:
+Erreur Amphi pour la ressource R5.02 : heures écrites 0, heures attendues 4
+Erreur TD pour la ressource R5.02 : heures écrites 6, heures attendues 4
+
+
+Erreur de concordance pour le semestre S5AFA et la ressource R5.03:
+Erreur Amphi pour la ressource R5.03 : heures écrites 0, heures attendues 18
+
+
+Erreur de concordance pour le semestre S5AFA et la ressource R5.A.04:
+Erreur TD pour la ressource R5.A.04 : heures écrites 18, heures attendues 16
+
+
+Erreur de concordance pour le semestre S5AFA et la ressource R5.A.05:
+Erreur TD pour la ressource R5.A.05 : heures écrites 16, heures attendues 8
+Erreur TP pour la ressource R5.A.05 : heures écrites 8, heures attendues 6
+
+
+Erreur de concordance pour le semestre S5AFA et la ressource R5.A.07:
+Erreur TD pour la ressource R5.A.07 : heures écrites 3, heures attendues 4
+Erreur TP pour la ressource R5.A.07 : heures écrites 6, heures attendues 8
+
+
+Erreur de concordance pour le semestre S5AFA et la ressource R5.A.08:
+Erreur TD pour la ressource R5.A.08 : heures écrites 10, heures attendues 8
+
+
+Erreur de concordance pour le semestre S5AFA et la ressource R5.A.09:
+Erreur TD pour la ressource R5.A.09 : heures écrites 11, heures attendues 12
+Erreur TP pour la ressource R5.A.09 : heures écrites 3, heures attendues 4
+
+
+Erreur de concordance pour le semestre S5AFA et la ressource R5.A.10:
+Erreur TP pour la ressource R5.A.10 : heures écrites 8, heures attendues 6
+
+
+Erreur de concordance pour le semestre S5AFA et la ressource R5.A.11:
+Erreur TP pour la ressource R5.A.11 : heures écrites 3, heures attendues 2
+
+
+Erreur de concordance pour le semestre S5AFA et la ressource R5.A.12:
+Erreur TD pour la ressource R5.A.12 : heures écrites 26, heures attendues 28
+
+
+Erreur de concordance pour le semestre S5AFA et la ressource R5.A.14:
+Erreur TP pour la ressource R5.A.14 : heures écrites 24, heures attendues 20
+
+
+Erreur de concordance pour le semestre S6AFA et la ressource R6.01:
+Erreur TP pour la ressource R6.01 : heures écrites 0, heures attendues 12
+
+
+Erreur de concordance pour le semestre S6AFA et la ressource R6.02:
+Erreur TP pour la ressource R6.02 : heures écrites 0, heures attendues 12
+
+
+Erreur de concordance pour le semestre S6AFA et la ressource R6.03:
+Erreur TP pour la ressource R6.03 : heures écrites 0, heures attendues 6
+
+
+Erreur de concordance pour le semestre S6AFA et la ressource R6.04:
+Erreur TP pour la ressource R6.04 : heures écrites 0, heures attendues 6
+
+
+Erreur de concordance pour le semestre S6AFA et la ressource R6.A.05:
+Erreur TD pour la ressource R6.A.05 : heures écrites 8, heures attendues 12
+Erreur: heures ne correspondent pas entre la maquette et le planning
+  -semestre: S5AFI 
+  -ressource: R5.A.06 Sensibilisation à la programmation multimedia
+Erreur CM: 
+  -ressource: R5.A.06 Sensibilisation à la programmation multimedia
+   -heure planning: 2
+  -heure maquette: 0
+Erreur TD: 
+  -ressource: R5.A.06 Sensibilisation à la programmation multimedia
+  -heure planning: 10
+  -heure maquette12
+
+Erreur: heures ne correspondent pas entre la maquette et le planning
+  -semestre: S5AFI 
+  -ressource: R5.A.L1 Compléments IA
+Erreur CM: 
+  -ressource: R5.A.L1 Compléments IA
+   -heure planning: 4
+  -heure maquette: 8
+Erreur TD: 
+  -ressource: R5.A.L1 Compléments IA
+  -heure planning: 20
+  -heure maquette24
+

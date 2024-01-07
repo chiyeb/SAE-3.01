@@ -39,7 +39,7 @@ class recupData:
         :param semestre_onglet:
         :return:
         """
-        planning = pd.ExcelFile('Documents/Planning 2023-2024.xlsx')
+        planning = pd.ExcelFile(self.files.planning_file)
         self.cursor.execute("SELECT Libelle, Num_Res FROM Maquette WHERE Semestre = ?", (semestre,))
         resultats = self.cursor.fetchall()
         print(resultats)
@@ -50,28 +50,24 @@ class recupData:
             for index, row in S.iterrows():
                 if num_res in row.values:
                     index_num_res = row.values.tolist().index(num_res)
-                    if index_num_res + 12 < len(row) and row.iloc[index_num_res + 3] >= 0:
-                        valeur_case_3 = row.iloc[index_num_res + 3]
-                        valeur_case_5 = row.iloc[index_num_res + 5]
-                        valeur_case_7 = row.iloc[index_num_res + 7]
-                        valeur_case_12 = row.iloc[index_num_res + 10]
-                        # Vérifie si les valeurs sont NaN ou vides et remplace par 0 si nécessaire
-                        if pd.isna(valeur_case_3) or valeur_case_3 == "":
-                            valeur_case_3 = 0
-                        if pd.isna(valeur_case_5) or valeur_case_5 == "":
-                            valeur_case_5 = 0
-                        if pd.isna(valeur_case_7) or valeur_case_7 == "":
-                            valeur_case_7 = 0
-                        if pd.isna(valeur_case_12) or valeur_case_12 == "":
-                            valeur_case_12 = 0
-                        print(f"Num_Res trouvé: {num_res}")
-                        print(f"3e case après le mot: {valeur_case_3}")
-                        print(f"5e case: {valeur_case_5}")
-                        print(f"7e case: {valeur_case_7}")
-                        print(f"12e case: {valeur_case_12}")
-                        insertdata = insertData()
-                        insertdata.insert_planning(semestre, libelle, valeur_case_3, valeur_case_5, valeur_case_7,
-                                                   valeur_case_12)
+                    valeur_case_3 = 0 if pd.isna(row.iloc[index_num_res + 3]) else row.iloc[index_num_res + 3]
+                    valeur_case_5 = 0 if pd.isna(row.iloc[index_num_res + 5]) else row.iloc[index_num_res + 5]
+                    valeur_case_7 = 0 if pd.isna(row.iloc[index_num_res + 7]) else row.iloc[index_num_res + 7]
+                    valeur_case_10 = row.iloc[index_num_res + 10]
+                    additions = 0
+                    if (isinstance(valeur_case_3, int) and isinstance(valeur_case_7, int)
+                            and isinstance(valeur_case_5, int)):
+                        additions = valeur_case_3 + valeur_case_5 + valeur_case_7
+                        if index_num_res + 10 < len(row) and additions>0:
+                            print(f"Num_Res trouvé: {num_res}")
+                            print(f"3e case après le mot: {valeur_case_3}")
+                            print(f"5e case: {valeur_case_5}")
+                            print(f"7e case: {valeur_case_7}")
+                            print(f"10e case: {valeur_case_10}")
+                            insertdata = insertData()
+                            insertdata.insert_planning(semestre, libelle, valeur_case_3, valeur_case_5, valeur_case_7,
+                                                       valeur_case_10)
+
 
     def recupHProf(self, semestre, semestre_onglet):
         """
@@ -169,7 +165,6 @@ class recupData:
         :return:
         """
         # Ouvre le fichier en mode lecture
-        print(self.files.nom_prof_file)
         with open(self.files.nom_prof_file, "r") as fichier:
             # Lire chaque ligne du fichier
             for ligne in fichier:
@@ -392,15 +387,3 @@ class recupData:
         if col >= type_cours_dict2["Test"]:
             tCours = "Test"
         return tCours
-
-    def __del__(self):
-        """
-        Fonction qui ferme la connexion à la BD
-        :param self:
-        :return:
-        """
-        # Ferme la connexion à la base de données lorsque l'objet est détruit
-        self.conn.close()
-
-i = recupData()
-i.recupNomProf()

@@ -4,6 +4,7 @@ from scribeData import *
 from recupData import *
 from verifData import *
 from insertData import *
+from selectFile import *
 
 
 class BUT2:
@@ -16,6 +17,8 @@ class BUT2:
     insertDataInstance = None
     recupDataInstance = None
     BUT2_file = None
+    files = None
+
     def __new__(cls):
         if cls.instance is None:
             cls.instance = super(BUT2, cls).__new__(cls)
@@ -23,8 +26,9 @@ class BUT2:
         return cls.instance
 
     def setup(self):
+        self.files = selectFile()
         # On importe la bible BUT2
-        self.BUT2_file = pd.ExcelFile('Documents/BUT2_INFO_AIX.xlsx')
+        self.BUT2_file = pd.ExcelFile(self.files.maquette_BUT2_file)
 
         # instance de recupData
         self.recupDataInstance = recupData()
@@ -46,10 +50,11 @@ class BUT2:
         for index, row in select_colonne_BUT2_S3_A_FA.iterrows():
             if row.isnull().iloc[0]:
                 continue
-            self.insertDataInstance.insert_maquette("S3AFA", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
+            self.insertDataInstance.insert_maquette("S3AFA", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3],
+                                                    row.iloc[4])
         # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
         self.recupDataInstance.trouverVal("S3AFA", "S3")
-        # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
+        # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette national à partir de
         # la base de données pour le premier semestre
         self.verifDataInstance.concordance("S3AFA")
         self.scribeDataInstance.scribeRessource("S3AFA")
@@ -63,7 +68,9 @@ class BUT2:
             if row.isnull().iloc[0]:
                 continue
             # on insère chaque ligne dans la base de donnée
-            self.insertDataInstance.insert_maquette("S4AFA", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
+            print("tesr")
+            self.insertDataInstance.insert_maquette("S4AFA", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3],
+                                                    row.iloc[4])
         # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
         self.recupDataInstance.trouverVal("S4AFA", "S4.A")
         # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
@@ -82,7 +89,8 @@ class BUT2:
         for index, row in select_colonne_BUT2_S3_A_FI.iterrows():
             if row.isnull().iloc[0]:
                 continue
-            self.insertDataInstance.insert_maquette("S3AFI", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
+            self.insertDataInstance.insert_maquette("S3AFI", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3],
+                                                    row.iloc[4])
         # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
         self.recupDataInstance.trouverVal("S3AFI", "S3")
         # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
@@ -99,7 +107,8 @@ class BUT2:
         for index, row in select_colonne_BUT2_S4_A_FI.iterrows():
             if row.isnull().iloc[0]:
                 continue
-            self.insertDataInstance.insert_maquette("S4AFI", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
+            self.insertDataInstance.insert_maquette("S4AFI", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3],
+                                                    row.iloc[4])
         # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
         self.recupDataInstance.trouverVal("S4AFI", "S4.A")
         # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
@@ -118,7 +127,8 @@ class BUT2:
         for index, row in select_colonne_BUT2_S3_B_FA.iterrows():
             if row.isnull().iloc[0]:
                 continue
-            self.insertDataInstance.insert_maquette("S3BFA", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
+            self.insertDataInstance.insert_maquette("S3BFA", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3],
+                                                    row.iloc[4])
         # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
         self.recupDataInstance.trouverVal("S3BFA", "S3")
         # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
@@ -136,7 +146,8 @@ class BUT2:
 
             if row.isnull().iloc[0]:
                 continue
-            self.insertDataInstance.insert_maquette("S4BFA", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
+            self.insertDataInstance.insert_maquette("S4BFA", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3],
+                                                    row.iloc[4])
         # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
         self.recupDataInstance.trouverVal("S4BFA", "S4.B")
         # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
@@ -155,7 +166,8 @@ class BUT2:
         for index, row in select_colonne_BUT2_S3_B_FI.iterrows():
             if row.isnull().iloc[0]:
                 continue
-            self.insertDataInstance.insert_maquette("S3BFI", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
+            self.insertDataInstance.insert_maquette("S3BFI", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3],
+                                                    row.iloc[4])
         # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
         self.recupDataInstance.trouverVal("S3BFI", "S3")
         # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
@@ -172,7 +184,8 @@ class BUT2:
         for index, row in select_colonne_BUT2_S4_B_FI.iterrows():
             if row.isnull().iloc[0]:
                 continue
-            self.insertDataInstance.insert_maquette("S4BFI", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3], row.iloc[4])
+            self.insertDataInstance.insert_maquette("S4BFI", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3],
+                                                    row.iloc[4])
         # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
         self.recupDataInstance.trouverVal("S4BFI", "S4.B")
         # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
@@ -183,3 +196,7 @@ class BUT2:
         self.recupDataInstance.recupXetY("S4BFI", "S4.B")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S4BFI")
+
+
+i = BUT2()
+i.run()

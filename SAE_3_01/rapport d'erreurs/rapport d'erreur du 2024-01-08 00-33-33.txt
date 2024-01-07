@@ -1,0 +1,12 @@
+Erreur: heures ne correspondent pas entre la maquette et le planning
+  -semestre: S5AFA 
+  -ressource: R5.A.06 Sensibilisation à la programmation multimedia
+Erreur CM: 
+  -ressource: R5.A.06 Sensibilisation à la programmation multimedia
+   -heure planning: 2
+  -heure maquette: 0
+Erreur TD: 
+  -ressource: R5.A.06 Sensibilisation à la programmation multimedia
+  -heure planning: 10
+  -heure maquette12
+

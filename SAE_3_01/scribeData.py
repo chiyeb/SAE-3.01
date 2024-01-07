@@ -27,6 +27,19 @@ class scribeData:
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
 
+    def clean_sheet_title(self,title):
+        """
+        Nettoie le titre de la feuille Excel en supprimant ou remplaçant les caractères spéciaux.
+        Les caractères spéciaux non autorisés dans Excel sont : \, /, ?, *, [, ] et :
+        Remplace ces caractères par un espace et tronque le titre à 31 caractères si nécessaire.
+        """
+        # Remplace les caractères spéciaux par un espace
+        for char in ['\\', '/', '?', '*', '[', ']', ':']:
+            title = title.replace(char, ' ')
+
+        # Tronquer à 31 caractères si nécessaire
+        return title[:31]
+
     def scribeRessource(self, semestre):
         """
         Fonction qui écrit les informations de chaque ressources, dans le fichier final
@@ -60,9 +73,11 @@ class scribeData:
 
                     base_sheet = fichier_vierge["Feuil1"]
 
-                    # Création d'une nouvelle feuille Excel avec le nom de la ressource
+                    cleaned_resource = self.clean_sheet_title(resource)
+
+                    # Création d'une nouvelle feuille Excel avec le nom de la ressource nettoyé
                     worksheet = fichier_vierge.copy_worksheet(base_sheet)
-                    worksheet.title = resource
+                    worksheet.title = cleaned_resource
 
                     # On récupère des données de la base de données (Planning)
                     self.cursor.execute(

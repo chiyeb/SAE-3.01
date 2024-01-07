@@ -165,7 +165,7 @@ class verifData:
                         rapport += (f"  -Commentaire(s) : \n"
                                     f"      {commentaire[0]}")
                 if rapport:
-                    # incrémentation du nombre d'erreur
+                    # incrémentation du nombre d'erreurs
                     self.nbErreur += 1
                     # Écriture de l'erreur dans un fichier de rapport
                     with open(self.fichierErreur, "a") as rapport_erreur:
@@ -197,13 +197,3 @@ class verifData:
         self.fichierErreur = nouveau_chemin_fichier
 
         print(f"Le fichier a été renommé {nouveau_nom_fichier}")
-
-
-def __del__(self):
-    """
-    Fonction qui ferme la connexion à la BD
-    :param self:
-    :return:
-    """
-    # Ferme la connexion à la base de données lorsque l'objet est détruit
-    self.conn.close()

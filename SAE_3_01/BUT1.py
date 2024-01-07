@@ -3,7 +3,7 @@ from verifData import *
 from recupData import *
 from insertData import *
 import pandas as pd
-
+from selectFile import *
 
 class BUT1:
     """
@@ -16,7 +16,7 @@ class BUT1:
     verifDataInstance = None
     BUT1file = None
     BUT1_1file = None
-
+    files = None
     def __new__(cls):
         if cls.instance is None:
             cls.instance = super(BUT1, cls).__new__(cls)
@@ -28,8 +28,9 @@ class BUT1:
         "Setup" l'objet : créer les instances, initialise les fichiers...
         :return:
         """
+        self.files = selectFile()
         # lire le fichier maquette
-        self.BUT1file = pd.ExcelFile('Documents/BUT1_INFO_AIX.xlsx')
+        self.BUT1file = pd.ExcelFile(self.files.maquette_BUT1_file)
         # récupérer l'onglet BUT 1
         self.BUT1_1file = pd.read_excel(self.BUT1file, 'BUT 1')
         # instance de recupData
