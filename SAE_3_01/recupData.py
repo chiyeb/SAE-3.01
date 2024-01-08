@@ -58,7 +58,7 @@ class recupData:
                     if (isinstance(valeur_case_3, int) and isinstance(valeur_case_7, int)
                             and isinstance(valeur_case_5, int)):
                         additions = valeur_case_3 + valeur_case_5 + valeur_case_7
-                        if index_num_res + 10 < len(row) and additions>0:
+                        if index_num_res + 10 < len(row) and additions > 0:
                             print(f"Num_Res trouvé: {num_res}")
                             print(f"3e case après le mot: {valeur_case_3}")
                             print(f"5e case: {valeur_case_5}")
@@ -68,6 +68,16 @@ class recupData:
                             insertdata.insert_planning(semestre, libelle, valeur_case_3, valeur_case_5, valeur_case_7,
                                                        valeur_case_10)
 
+    def onglet_existe(self, fichier, nom_onglet):
+        """
+        Vérifie si l'onglet existe
+        :param fichier:
+        :param nom_onglet:
+        :return:
+        """
+        wb = openpyxl.load_workbook(fichier, read_only=True)
+        # Retourne True si l'onglet existe, False sinon
+        return nom_onglet in wb.sheetnames
 
     def recupHProf(self, semestre, semestre_onglet):
         """
@@ -78,86 +88,86 @@ class recupData:
         """
         # Charge le fichier Excel
         fichier = self.files.QFQ_file
-        df = pd.read_excel(fichier, semestre_onglet)
-        donnees = {}
-        ressourceActuelle = None
+        if self.onglet_existe(fichier, semestre_onglet):
+            df = pd.read_excel(fichier, semestre_onglet)
+            donnees = {}
+            ressourceActuelle = None
 
-        for _, row in df.iterrows():
-            resource = row['Ressource']
-            intervenant = row['Intervenants']
-            cm = row['CM']
-            td = row['TD']
-            tp_non_dedoubles = row['TP (non dédoublés)']
-            tp_dedoubles = row['TP (dédoublés)']
-            test = row['Test']
+            for _, row in df.iterrows():
+                resource = row['Ressource']
+                intervenant = row['Intervenants']
+                cm = row['CM']
+                td = row['TD']
+                tp_non_dedoubles = row['TP (non dédoublés)']
+                tp_dedoubles = row['TP (dédoublés)']
+                test = row['Test']
 
-            # Vérifie si une nouvelle ressource commence
-            if pd.notna(resource):
-                ressourceActuelle = resource
-                donnees[ressourceActuelle] = {}
-
-            # Vérifie si la ligne contient des données d'intervenant
-            if pd.notna(intervenant):
-                if ressourceActuelle not in donnees:
+                # Vérifie si une nouvelle ressource commence
+                if pd.notna(resource):
+                    ressourceActuelle = resource
                     donnees[ressourceActuelle] = {}
-                if intervenant not in donnees[ressourceActuelle]:
-                    donnees[ressourceActuelle][intervenant] = []
 
-                donnees[ressourceActuelle][intervenant].append({
-                    'CM': cm,
-                    'TD': td,
-                    'TP (non dédoublés)': tp_non_dedoubles,
-                    'TP (dédoublés)': tp_dedoubles,
-                    'Test': test})
+                # Vérifie si la ligne contient des données d'intervenant
+                if pd.notna(intervenant):
+                    if ressourceActuelle not in donnees:
+                        donnees[ressourceActuelle] = {}
+                    if intervenant not in donnees[ressourceActuelle]:
+                        donnees[ressourceActuelle][intervenant] = []
 
-        # Insère ou met à jour les enregistrements dans la base de données
-        for resource, intervenant_data in donnees.items():
-            if resource not in donnees:
-                donnees[resource] = {
-                    None: [{}]}  # Insère un enregistrement avec des valeurs nulles si la ressource n'est pas présente
+                    donnees[ressourceActuelle][intervenant].append({
+                        'CM': cm,
+                        'TD': td,
+                        'TP (non dédoublés)': tp_non_dedoubles,
+                        'TP (dédoublés)': tp_dedoubles,
+                        'Test': test})
 
-            for intervenant, data_list in intervenant_data.items():
-                print(f"Ressource: {resource} - Intervenant : {intervenant} ")
+            # Insère ou met à jour les enregistrements dans la base de données
+            for resource, intervenant_data in donnees.items():
+                if resource not in donnees:
+                    donnees[resource] = {
+                        None: [{}]}  # Insère un enregistrement avec des valeurs nulles si la ressource n'est pas présente
 
-                if data_list:
-                    for d in data_list:
-                        # Vérifie si l'enregistrement existe déjà dans la base de données
-                        self.cursor.execute(
-                            "SELECT * FROM HoraireProf WHERE Semestre = ? AND Ressource = ? AND Intervenant = ?",
-                            (semestre, resource, intervenant))
-                        existing_record = self.cursor.fetchone()
+                for intervenant, data_list in intervenant_data.items():
+                    print(f"Ressource: {resource} - Intervenant : {intervenant} ")
 
-                        if existing_record:
-                            # Met à jour l'enregistrement existant
+                    if data_list:
+                        for d in data_list:
+                            # Vérifie si l'enregistrement existe déjà dans la base de données
                             self.cursor.execute(
-                                "UPDATE HoraireProf SET CM = ?, TD = ?, TP_Non_Dedoubles = ?, TP_Dedoubles = ?, "
-                                "Test = ? WHERE Semestre = ? AND Ressource = ? AND Intervenant = ?",
-                                (d['CM'], d['TD'], d['TP (non dédoublés)'], d['TP (dédoublés)'], d['Test'], resource,
-                                 intervenant))
-                        else:
-                            # Insère un nouvel enregistrement
-                            self.cursor.execute(
-                                "INSERT INTO HoraireProf (Semestre, Ressource, Intervenant, CM, TD, TP_non_dedoubles, "
-                                "TP_Dedoubles, Test) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                                (semestre, resource, intervenant, d['CM'], d['TD'], d['TP (non dédoublés)'],
-                                 d['TP (dédoublés)'],
-                                 d['Test']))
+                                "SELECT * FROM HoraireProf WHERE Semestre = ? AND Ressource = ? AND Intervenant = ?",
+                                (semestre, resource, intervenant))
+                            existing_record = self.cursor.fetchone()
 
-                        self.conn.commit()
-                        # Différents affichage console
-                        print(f"    - CM : {d['CM']} heure" if pd.notna(d['CM']) else "    - CM : Non spécifié")
-                        print(f"    - TD : {d['TD']} heure" if pd.notna(d['TD']) else "    - TD : Non spécifié")
-                        print(f"    - TP (non dédoublés) : {d['TP (non dédoublés)']} heure" if pd.notna(
-                            d['TP (non dédoublés)']) else "    - TP (non dédoublés) : Non spécifié")
-                        print(f"    - TP (dédoublés) : {d['TP (dédoublés)']} heure" if pd.notna(
-                            d['TP (dédoublés)']) else "    - TP (dédoublés) : Non spécifié")
-                        print(f"    - Test : {d['Test']} heure" if pd.notna(d['Test']) else "    - Test : Non spécifié")
+                            if existing_record:
+                                # Met à jour l'enregistrement existant
+                                self.cursor.execute(
+                                    "UPDATE HoraireProf SET CM = ?, TD = ?, TP_Non_Dedoubles = ?, TP_Dedoubles = ?, "
+                                    "Test = ? WHERE Semestre = ? AND Ressource = ? AND Intervenant = ?",
+                                    (d['CM'], d['TD'], d['TP (non dédoublés)'], d['TP (dédoublés)'], d['Test'],
+                                     semestre, resource, intervenant))
+                            else:
+                                # Insère un nouvel enregistrement
+                                self.cursor.execute(
+                                    "INSERT INTO HoraireProf (Semestre, Ressource, Intervenant, CM, TD, TP_non_dedoubles, "
+                                    "TP_Dedoubles, Test) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                                    (semestre, resource, intervenant, d['CM'], d['TD'], d['TP (non dédoublés)'],
+                                     d['TP (dédoublés)'],
+                                     d['Test']))
+
+                            self.conn.commit()
+                            # Différents affichage console
+                            print(f"    - CM : {d['CM']} heure" if pd.notna(d['CM']) else "    - CM : Non spécifié")
+                            print(f"    - TD : {d['TD']} heure" if pd.notna(d['TD']) else "    - TD : Non spécifié")
+                            print(f"    - TP (non dédoublés) : {d['TP (non dédoublés)']} heure" if pd.notna(
+                                d['TP (non dédoublés)']) else "    - TP (non dédoublés) : Non spécifié")
+                            print(f"    - TP (dédoublés) : {d['TP (dédoublés)']} heure" if pd.notna(
+                                d['TP (dédoublés)']) else "    - TP (dédoublés) : Non spécifié")
+                            print(f"    - Test : {d['Test']} heure" if pd.notna(d['Test']) else "    - Test : Non spécifié")
+                            print("\n")
+                            print(f"Extraction pour la ressource: {resource} terminée !")
+                    else:
+                        print("Aucune données pour cette ressource.")
                         print("\n")
-                        print(f"Extraction pour la ressource: {resource} terminée !")
-                else:
-                    print("Aucune données pour cette ressource.")
-                    print("\n")
-        print(f"Extraction terminée !")
 
     def recupNomProf(self):
         """

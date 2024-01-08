@@ -120,7 +120,3 @@ class showData:
         """
         self.root.mainloop()
 
-
-# Utilisation de la classe
-visualizer = showData()
-visualizer.run()

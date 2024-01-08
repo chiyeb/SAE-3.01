@@ -272,7 +272,7 @@ class scribeData:
 
     def scribeHoraireTotalProf(self):
         """
-        Fonction qui écrit les heures de chaque professeurs pour chaque type de cours dans un fichier Excel.
+        Fonction qui écrit les heures de chaque professeur pour chaque type de cours dans un fichier Excel.
         :return:
         """
         try:

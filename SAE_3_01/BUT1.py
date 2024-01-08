@@ -64,6 +64,7 @@ class BUT1:
         self.recupDataInstance.recupXetY("S1", "S1")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S1")
+        self.recupDataInstance.recupHProf("S1", "S1")
 
         # Sélection des heures du deuxième semestre
         select_colonne_BUT1_S2 = self.BUT1_1file.iloc[36:58, [0, 2, 17, 18, 19]]
@@ -86,3 +87,7 @@ class BUT1:
         self.recupDataInstance.recupXetY("S2", "S2")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S2")
+        self.recupDataInstance.recupHProf("S2", "S2")
+
+#i = BUT1()
+#i.run()

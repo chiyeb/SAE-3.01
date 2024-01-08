@@ -4,6 +4,9 @@ from BUT3 import *
 from Stats import Stats
 from scribeData import *
 from verifData import *
+
+recupDataInstance = recupData()
+recupDataInstance.recupNomProf()
 BUT1_instance = BUT1()
 BUT1_instance.run()
 

@@ -5,6 +5,8 @@ from datetime import datetime
 
 import pandas as pd
 
+from insertData import insertData
+
 
 class verifData:
     """
@@ -44,11 +46,13 @@ class verifData:
         :param semestre:
         :return:
         """
+        cursor_tmp = self.cursor
+        conn_tmp = self.conn
         print("Concordance pour le", semestre, ":")
-        self.cursor.execute("SELECT * FROM Maquette WHERE Semestre = ?", (semestre,))
-        rslt_maquette = self.cursor.fetchall()
-        self.cursor.execute("SELECT * FROM Planning WHERE Semestre = ?", (semestre,))
-        rslt_planning = self.cursor.fetchall()
+        cursor_tmp.execute("SELECT * FROM Maquette WHERE Semestre = ?", (semestre,))
+        rslt_maquette = cursor_tmp.fetchall()
+        cursor_tmp.execute("SELECT * FROM Planning WHERE Semestre = ?", (semestre,))
+        rslt_planning = cursor_tmp.fetchall()
         cpt = 0
         for maquette in rslt_maquette:
             for planning in rslt_planning:
@@ -97,73 +101,83 @@ class verifData:
         :param semestre:
         :return:
         """
+        cursor_tmp = self.cursor
+        conn_tmp = self.conn
         print("Concordance pour le", semestre, ":")
-        self.cursor.execute("SELECT * FROM Horaires WHERE Semestre = ?", (semestre,))
-        rslt_horaires = self.cursor.fetchall()
-        self.cursor.execute("SELECT * FROM Planning WHERE Semestre = ?", (semestre,))
-        rslt_planning = self.cursor.fetchall()
+        cursor_tmp.execute("SELECT * FROM Horaires WHERE Semestre = ?", (semestre,))
+        rslt_horaires = cursor_tmp.fetchall()
+        cursor_tmp.execute("SELECT * FROM Planning WHERE Semestre = ?", (semestre,))
+        rslt_planning = cursor_tmp.fetchall()
         cpt = 0
         for planning in rslt_planning:
             rapport = ""
-            self.cursor.execute("SELECT Ressource FROM Horaires WHERE Semestre = ? AND Ressource = ?",
-                                (semestre, planning[6]))
-            ressource = self.cursor.fetchone()
+            cursor_tmp.execute("SELECT Ressource FROM Horaires WHERE Semestre = ? AND Ressource = ?",
+                               (semestre, planning[6]))
+            ressource = cursor_tmp.fetchone()
             print(ressource)
             if ressource is None or not (ressource[0] in planning[6]):
                 rapport += f"La ressource {planning[6]} n'existe pas ou n'a pas été placée au bon endroit.\n"
             else:
-                self.cursor.execute(
+                cursor_tmp.execute(
                     "SELECT nbCours FROM Horaires WHERE Semestre = ? AND Type_Cours = ? AND Ressource = ?",
                     (semestre, "Amphi", ressource[0]))
-                cmHoraire = self.cursor.fetchone()
+                cmHoraire = cursor_tmp.fetchone()
                 if cmHoraire is not None and planning[2] != cmHoraire[0]:
                     print("cm")
                     rapport += (f"Erreur CM: \n "
                                 f"  -ressource: {ressource[0]}"
                                 f"  -heures écrite: {planning[2]}, "
                                 f"  -heure posé: {cmHoraire[0]}\n")
-                    self.cursor.execute(
+                    cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "Amphi"))
-                    commentaire = self.cursor.fetchone()
-                    if commentaire is not None and commentaire[0] not in [None, "", "None"]:
-                        rapport += (f"- Commentaire(s) : \n"
-                                    f"      {commentaire[0]}")
+                    commentaire = cursor_tmp.fetchall()
+                    if commentaire is not None:
+                        print(commentaire)
+                        rapport += f"- Commentaire(s) : \n"
+                        for coms in commentaire:
+                            if coms[0] is not None and coms[0] not in [None, "", "None", "None,", "(None,)"]:
+                                rapport += f"-{coms[0]}\n"
 
-                self.cursor.execute("SELECT nbCours FROM Horaires WHERE Semestre = ? AND Type_Cours = ? AND Ressource "
-                                    "= ?", (semestre, "TD", ressource[0]))
-                tdHoraire = self.cursor.fetchone()
+                cursor_tmp.execute("SELECT nbCours FROM Horaires WHERE Semestre = ? AND Type_Cours = ? AND Ressource "
+                                   "= ?", (semestre, "TD", ressource[0]))
+                tdHoraire = cursor_tmp.fetchone()
                 if tdHoraire is not None and planning[3] != tdHoraire[0]:
                     print("td")
                     rapport += (f"Erreur TD:\n "
                                 f"  -ressource: {ressource[0]}\n"
                                 f"  -heure écrites: {planning[3]}\n"
                                 f"  -heure posé: {tdHoraire[0]}\n")
-                    self.cursor.execute(
+                    cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "TD"))
-                    commentaire = self.cursor.fetchone()
-                    if commentaire is not None and commentaire[0] not in [None, "", "None"]:
-                        rapport += (f"  -Commentaire(s) : \n"
-                                    f"      {commentaire[0]}")
+                    commentaire = cursor_tmp.fetchall()
+                    if commentaire is not None:
+                        print(commentaire)
+                        rapport += f"- Commentaire(s) : \n"
+                        for coms in commentaire:
+                            if coms[0] is not None and coms[0] not in [None, "", "None", "None,", "(None,)"]:
+                                rapport += f"-{coms[0]}\n"
 
-                self.cursor.execute("SELECT nbCours FROM Horaires WHERE Semestre = ? AND Type_Cours = ? AND Ressource "
-                                    "= ?", (semestre, "TP", ressource[0]))
-                tpHoraire = self.cursor.fetchone()
+                cursor_tmp.execute("SELECT nbCours FROM Horaires WHERE Semestre = ? AND Type_Cours = ? AND Ressource "
+                                   "= ?", (semestre, "TP", ressource[0]))
+                tpHoraire = cursor_tmp.fetchone()
                 if tpHoraire is not None and planning[4] != tpHoraire[0]:
                     print("tp")
                     rapport += (f"Erreur TP\n "
                                 f"  -ressource: {ressource[0]} \n"
                                 f"  -heures écrites: {planning[4]} \n "
                                 f"  -heures posés: {tpHoraire[0]} \n")
-                    self.cursor.execute(
+                    cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "TP"))
-                    commentaire = self.cursor.fetchone()
-                    if commentaire is not None and commentaire[0] not in [None, "", "None"]:
+                    commentaire = cursor_tmp.fetchall()
+                    if commentaire is not None:
                         print(commentaire)
-                        rapport += (f"  -Commentaire(s) : \n"
-                                    f"      {commentaire[0]}")
+                        rapport += f"- Commentaire(s) : \n"
+                        for coms in commentaire:
+                            if coms[0] is not None and coms[0] not in [None, "", "None", "None,", "(None,)"]:
+                                rapport += f"-{coms[0]}\n"
                 if rapport:
                     # incrémentation du nombre d'erreurs
                     self.nbErreur += 1
@@ -197,3 +211,5 @@ class verifData:
         self.fichierErreur = nouveau_chemin_fichier
 
         print(f"Le fichier a été renommé {nouveau_nom_fichier}")
+
+

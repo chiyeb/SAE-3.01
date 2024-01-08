@@ -62,8 +62,8 @@ class BUT3:
         self.recupDataInstance.recupXetY("S5AFA", "S5.A")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S5AFA")
-        self.insertDataInstance.insert_maquette("S5AFA", "test i", "test i", 2, 2,
-                                                2)
+        self.recupDataInstance.recupHProf("S5AFA", "S5.A")
+
 
         # On récupère les lignes et colonnes utiles
         select_colonne_BUT3_S6_A_FA = BUT3_A_FA_file.iloc[32:43, [0, 2, 17, 18, 19]]
@@ -82,6 +82,7 @@ class BUT3:
         self.recupDataInstance.recupXetY("S6AFA", "S6.A")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S6AFA")
+        self.recupDataInstance.recupHProf("S6AFA", "S6.A")
 
         # On affiche le parcours A FI pour ensuite prendre les données 
         BUT3_A_FI = pd.read_excel(self.BUT3_file, 'BUT 3 Parcours A FI')
@@ -102,6 +103,7 @@ class BUT3:
         self.recupDataInstance.recupXetY("S5AFI", "S5.A")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S5AFI")
+        self.recupDataInstance.recupHProf("S5AFI", "S5.A")
 
         # On récupère les lignes et colonnes utiles
         select_colonne_BUT3_S6_A_FI = BUT3_A_FI.iloc[32:42, [0, 2, 17, 18, 19]]
@@ -120,6 +122,7 @@ class BUT3:
         self.recupDataInstance.recupXetY("S6AFI", "S6.A")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S6AFI")
+        self.recupDataInstance.recupHProf("S6AFI", "S6.A")
 
         # On affiche le parcours B FA pour ensuite prendre les données 
         BUT3_B_FA = pd.read_excel(self.BUT3_file, 'BUT 3 Parcours B FA')
@@ -141,6 +144,7 @@ class BUT3:
         self.recupDataInstance.recupXetY("S5BFA", "S5.B")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S5BFA")
+        self.recupDataInstance.recupHProf("S5BFA", "S5.B")
 
         # On récupère les lignes et colonnes utiles
         select_colonne_BUT3_S6_B_FA = BUT3_B_FA.iloc[30:41, [0, 2, 17, 18, 19]]
@@ -159,6 +163,7 @@ class BUT3:
         self.recupDataInstance.recupXetY("S6BFA", "S6.B")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S6BFA")
+        self.recupDataInstance.recupHProf("S6BFA", "S6.B")
 
         # On affiche le parcours B FI pour ensuite prendre les données
         BUT3_B_FI = pd.read_excel(self.BUT3_file, 'BUT 3 Parcours B FI')
@@ -179,6 +184,7 @@ class BUT3:
         self.recupDataInstance.recupXetY("S5BFI", "S5.B")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S5BFI")
+        self.recupDataInstance.recupHProf("S5AFI", "S5.B")
 
         # On récupère les lignes et colonnes utiles
         select_colonne_BUT3_S6_B_FI = BUT3_B_FI.iloc[30:40, [0, 2, 17, 18, 19]]
@@ -197,9 +203,9 @@ class BUT3:
         self.recupDataInstance.recupXetY("S6BFI", "S6.B")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S6BFI")
-
+        self.recupDataInstance.recupHProf("S6BFI", "S6.B")
         print(self.verifDataInstance.getNbErreur())
 
 
-i = BUT3()
-i.run()
+#i = BUT3()
+#i.run()
