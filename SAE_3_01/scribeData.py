@@ -182,6 +182,9 @@ class scribeData:
                                 # Écrire les données dans la feuille Excel
                                 worksheet.cell(row=row_index5, column=column_index, value=type_cours_et_nombre)
 
+
+
+
                      # On récupère les données de la base de données Planning pour multiplier les valeurs de HorraireProf
                     self.cursor.execute(
                     "SELECT H_CM, H_TD, H_TP FROM Planning WHERE ressource = ?",
@@ -197,6 +200,14 @@ class scribeData:
                         (resource, ))
                     data_from_database = self.cursor.fetchall()
 
+                    # On récupère les données de la base de données Prof pour verfier le nom des profs qui sont dans HoraireProf
+                    self.cursor.execute(
+                        "SELECT NomProf FROM Prof")
+                    prof_data = [row[0].upper() for row in self.cursor.fetchall()]  # Convertir en majuscules
+
+                    if prof_data:
+                        print(f"Traitement des données Prof : {prof_data}")
+
                     # On écrit les données dans la feuille Excel
                     if data_from_database:
                         print(f"Traitement des données GroupeProf ({resource}): {data_from_database}")
@@ -208,33 +219,91 @@ class scribeData:
                     row_index4 = 56
                     row_index5 = 56
 
+                    row_index6 = 65
+                    row_index7 = 65
+                    row_index8 = 65
+                    row_index9 = 65
+                    row_index10 = 65
+                    row_index11 = 65
+
                     for intervenant in data_from_database:
 
-                        # ceci permet d'écrire les intervenant
-                        worksheet.cell(row=row_index0, column=1, value=intervenant[0])
-                        row_index0 += 1
-                        if intervenant[1] is not None:
-                            worksheet.cell(row=row_index1, column=12, value=intervenant[1] * multiplication_values[0])
-                        row_index1 += 1
 
-                        # ceci permet d'écrire le nombre de TD
-                        if intervenant[2] is not None:
-                            worksheet.cell(row=row_index2, column=13, value=intervenant[2] * multiplication_values[1])
-                        row_index2 += 1
+                        # Vérifier si le nom de l'intervenant est dans la liste des professeurs
+                        intervenant_name = intervenant[0].upper()
 
-                        # ceci permet d'écrire le nombre de TP dédoublés
-                        if intervenant[3] is not None:
-                            worksheet.cell(row=row_index3, column=14, value=intervenant[3] * multiplication_values[2])
-                        row_index3 += 1
+                        if intervenant_name in prof_data:
+                            print(f"{intervenant_name} est titulaire")
+                            # Écrire le nom du titulaire dans la colonne 1, ligne 65
+                            worksheet.cell(row_index6, column=1, value=intervenant_name)
+                            row_index6 += 1
 
-                        # ceci permet d'écrire le nombre de TP non dédoublés
-                        if intervenant[4] is not None:
-                            worksheet.cell(row=row_index4, column=15, value=intervenant[4] * multiplication_values[2])
-                        row_index4 += 1
+                            # écrire les groupes de  CM dans la colonne 12, ligne 65
+                            if intervenant[1] is not None:
+                                worksheet.cell(row_index7, column=12, value=intervenant[1] * multiplication_values[0])
+                                row_index7 += 1
 
-                        # ceci permet d'écrire le nombre de test
-                        worksheet.cell(row=row_index5, column=16, value=intervenant[5])
-                        row_index5 += 1
+                            # écrire les groupes de  TD dans la colonne 13, ligne 65
+                            if intervenant[2] is not None:
+                                worksheet.cell(row_index8, column=13, value=intervenant[2] * multiplication_values[1])
+                                row_index8 += 1
+
+                            # écrire les groupes de  TP dédoublés dans la colonne 14, ligne 65
+                            if intervenant[3] is not None:
+                                worksheet.cell(row_index9, column=14, value=intervenant[3] * multiplication_values[2])
+                                row_index9 += 1
+
+                            # écrire les groupes de  TP non dédoublésdans la colonne 15, ligne 65
+                            if intervenant[4] is not None:
+                                worksheet.cell(row_index10, column=15, value=intervenant[4] * multiplication_values[2])
+                                row_index10 += 1
+
+                            # écrire les groupes de  Test dans la colonne 16, ligne 65
+                            if intervenant[5] is not None:
+                                worksheet.cell(row_index11, column=16, value=intervenant[5])
+                                row_index11 += 1
+
+
+                        elif intervenant_name not in prof_data:
+
+                            print(f"{intervenant_name} est vacataire")
+
+                            # Écrire le nom du vacataire dans la colonne 1, ligne 56
+                            worksheet.cell(row_index0, column=1, value=intervenant_name)
+                            row_index0 += 1
+
+                            # écrire les groupes de  CM dans la colonne 12, ligne 56
+                            if intervenant[1]:
+                                worksheet.cell(row_index1, column=12, value=intervenant[1] * multiplication_values[0])
+    
+                                row_index1 += 1
+
+                            # écrire les groupes de  TD dans la colonne 13, ligne 56
+                            if intervenant[2] is not None:
+                                worksheet.cell(row_index2, column=13, value=intervenant[2] * multiplication_values[1])
+
+                                row_index2 += 1
+
+                            # écrire les groupes de  TP dédoublés dans la colonne 14, ligne 56
+                            if intervenant[3] is not None:
+                                worksheet.cell(row_index3, column=14, value=intervenant[3] * multiplication_values[2])
+
+                                row_index3 += 1
+
+                            # écrire les groupes de  TP non dédoublés dans la colonne 15, ligne 56
+                            if intervenant[4] is not None:
+                                worksheet.cell(row_index4, column=15, value=intervenant[4] * multiplication_values[2])
+
+                                row_index4 += 1
+
+                            # écrire les groupes de  Test dans la colonne 16, ligne 56
+                            if intervenant[5] is not None:
+                                worksheet.cell(row_index5, column=16, value=intervenant[5])
+
+                                row_index5 += 1
+
+
+
 
 
 
