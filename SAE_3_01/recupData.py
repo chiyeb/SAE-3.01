@@ -81,7 +81,7 @@ class recupData:
 
     def recupHProf(self, semestre, semestre_onglet):
         """
-        Récupère les heures de chaque professeur
+        Récupère le nombre de groupes de chaque professeur
         :param semestre:
         :param semestre_onglet:
         :return:
@@ -155,7 +155,6 @@ class recupData:
                                      d['Test']))
 
                             self.conn.commit()
-                            # Différents affichage console
                             print(f"    - CM : {d['CM']} heure" if pd.notna(d['CM']) else "    - CM : Non spécifié")
                             print(f"    - TD : {d['TD']} heure" if pd.notna(d['TD']) else "    - TD : Non spécifié")
                             print(f"    - TP (non dédoublés) : {d['TP (non dédoublés)']} heure" if pd.notna(
@@ -164,7 +163,6 @@ class recupData:
                                 d['TP (dédoublés)']) else "    - TP (dédoublés) : Non spécifié")
                             print(f"    - Test : {d['Test']} heure" if pd.notna(d['Test']) else "    - Test : Non spécifié")
                             print("\n")
-                            print(f"Extraction pour la ressource: {resource} terminée !")
                     else:
                         print("Aucune données pour cette ressource.")
                         print("\n")

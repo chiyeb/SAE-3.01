@@ -54,15 +54,15 @@ class BUT2:
                                                     row.iloc[4])
         # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
         self.recupDataInstance.trouverVal("S3AFA", "S3")
+        self.recupDataInstance.recupHProf("S3AFA", "S3")
+        # Récupérer les cours par date dans le fichier planning
+        self.recupDataInstance.recupXetY("S3AFA", "S3")
+        self.scribeDataInstance.scribeRessource("S3AFA")
         # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette national à partir de
         # la base de données pour le premier semestre
         self.verifDataInstance.concordance("S3AFA")
-        self.scribeDataInstance.scribeRessource("S3AFA")
-        # Récupérer les cours par date dans le fichier planning
-        self.recupDataInstance.recupXetY("S3AFA", "S3")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S3AFA")
-        self.recupDataInstance.recupHProf("S3AFA", "S3")
 
         select_colonne_BUT2_S4_A_FA = BUT2_A_FA_file.iloc[34:51, [0, 2, 17, 18, 19]]
         for index, row in select_colonne_BUT2_S4_A_FA.iterrows():
@@ -74,15 +74,15 @@ class BUT2:
                                                     row.iloc[4])
         # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
         self.recupDataInstance.trouverVal("S4AFA", "S4.A")
+        self.recupDataInstance.recupHProf("S4AFA", "S4.A")
+        # Récupérer les cours par date dans le fichier planning
+        self.recupDataInstance.recupXetY("S4AFA", "S4.A")
+        self.scribeDataInstance.scribeRessource("S4AFA")
+        # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+        self.verifDataInstance.concordancePlanning("S4AFA")
         # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
         # la base de données pour le premier semestre
         self.verifDataInstance.concordance("S4AFA")
-        self.scribeDataInstance.scribeRessource("S4AFA")
-        # Récupérer les cours par date dans le fichier planning
-        self.recupDataInstance.recupXetY("S4AFA", "S4.A")
-        # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
-        self.verifDataInstance.concordancePlanning("S4AFA")
-        self.recupDataInstance.recupHProf("S4AFA", "S4.A")
 
         # On affiche le parcours A FI pour ensuite prendre les données
         BUT2_A_FI = pd.read_excel(self.BUT2_file, 'BUT 2 Parcours A FI')
@@ -95,15 +95,15 @@ class BUT2:
                                                     row.iloc[4])
         # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
         self.recupDataInstance.trouverVal("S3AFI", "S3")
+        self.recupDataInstance.recupHProf("S3AFI", "S3")
+        # Récupérer les cours par date dans le fichier planning
+        self.recupDataInstance.recupXetY("S3AFI", "S3")
+        self.scribeDataInstance.scribeRessource("S3AFI")
+        # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+        self.verifDataInstance.concordancePlanning("S3AFI")
         # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
         # la base de données pour le premier semestre
         self.verifDataInstance.concordance("S3AFI")
-        self.scribeDataInstance.scribeRessource("S3AFI")
-        # Récupérer les cours par date dans le fichier planning
-        self.recupDataInstance.recupXetY("S3AFI", "S3")
-        # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
-        self.verifDataInstance.concordancePlanning("S3AFI")
-        self.recupDataInstance.recupHProf("S3AFI", "S3")
 
         # On récupère les lignes et colonnes utiles
         select_colonne_BUT2_S4_A_FI = BUT2_A_FI.iloc[34:51, [0, 2, 17, 18, 19]]
@@ -114,15 +114,15 @@ class BUT2:
                                                     row.iloc[4])
         # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
         self.recupDataInstance.trouverVal("S4AFI", "S4.A")
+        self.recupDataInstance.recupHProf("S4AFI", "S4.A")
+        # Récupérer les cours par date dans le fichier planning
+        self.recupDataInstance.recupXetY("S4AFI", "S4.A")
+        self.scribeDataInstance.scribeRessource("S4AFI")
         # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
         # la base de données pour le premier semestre
         self.verifDataInstance.concordance("S4AFI")
-        self.scribeDataInstance.scribeRessource("S4AFI")
-        # Récupérer les cours par date dans le fichier planning
-        self.recupDataInstance.recupXetY("S4AFI", "S4.A")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S4AFI")
-        self.recupDataInstance.recupHProf("S4AFI", "S4.A")
 
         # On affiche le parcours B FA pour ensuite prendre les données
         BUT2_B_FA = pd.read_excel(self.BUT2_file, 'BUT 2 Parcours B FA')
@@ -135,15 +135,15 @@ class BUT2:
                                                     row.iloc[4])
         # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
         self.recupDataInstance.trouverVal("S3BFA", "S3")
+        self.recupDataInstance.recupHProf("S3BFA", "S3")
+        # Récupérer les cours par date dans le fichier planning
+        self.recupDataInstance.recupXetY("S3BFA", "S3")
+        self.scribeDataInstance.scribeRessource("S3BFA")
+        # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
+        self.verifDataInstance.concordancePlanning("S3BFA")
         # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
         # la base de données pour le premier semestre
         self.verifDataInstance.concordance("S3BFA")
-        self.scribeDataInstance.scribeRessource("S3BFA")
-        # Récupérer les cours par date dans le fichier planning
-        self.recupDataInstance.recupXetY("S3BFA", "S3")
-        # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
-        self.verifDataInstance.concordancePlanning("S3BFA")
-        self.recupDataInstance.recupHProf("S3BFA", "S3")
 
         # On récupère les lignes et colonnes utiles
         select_colonne_BUT2_S4_B_FA = BUT2_B_FA.iloc[34:51, [0, 2, 17, 18, 19]]
@@ -155,15 +155,15 @@ class BUT2:
                                                     row.iloc[4])
         # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
         self.recupDataInstance.trouverVal("S4BFA", "S4.B")
+        self.recupDataInstance.recupHProf("S4BFA", "S4.B")
+        # Récupérer les cours par date dans le fichier planning
+        self.recupDataInstance.recupXetY("S4BFA", "S4.B")
+        self.scribeDataInstance.scribeRessource("S4BFA")
         # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
         # la base de données pour le premier semestre
         self.verifDataInstance.concordance("S4BFA")
-        self.scribeDataInstance.scribeRessource("S4BFA")
-        # Récupérer les cours par date dans le fichier planning
-        self.recupDataInstance.recupXetY("S4BFA", "S4.B")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S4BFA")
-        self.recupDataInstance.recupHProf("S4BFA", "S4.B")
 
         # On affiche le parcours B FI pour ensuite prendre les données
         BUT2_B_FI = pd.read_excel(self.BUT2_file, 'BUT 2 Parcours B FI')
@@ -176,15 +176,15 @@ class BUT2:
                                                     row.iloc[4])
         # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
         self.recupDataInstance.trouverVal("S3BFI", "S3")
+        self.recupDataInstance.recupHProf("S3BFI", "S3")
+        # Récupérer les cours par date dans le fichier planning
+        self.recupDataInstance.recupXetY("S3BFI", "S3")
+        self.scribeDataInstance.scribeRessource("S3BFI")
         # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
         # la base de données pour le premier semestre
         self.verifDataInstance.concordance("S3BFI")
-        self.scribeDataInstance.scribeRessource("S3BFI")
-        # Récupérer les cours par date dans le fichier planning
-        self.recupDataInstance.recupXetY("S3BFI", "S3")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S3BFI")
-        self.recupDataInstance.recupHProf("S3BFI", "S3")
 
         # On récupère les lignes et colonnes utiles
         select_colonne_BUT2_S4_B_FI = BUT2_B_FI.iloc[33:50, [0, 2, 17, 18, 19]]
@@ -195,16 +195,15 @@ class BUT2:
                                                     row.iloc[4])
         # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
         self.recupDataInstance.trouverVal("S4BFI", "S4.B")
+        self.recupDataInstance.recupHProf("S4BFI", "S4.B")
+        # Récupérer les cours par date dans le fichier planning
+        self.recupDataInstance.recupXetY("S4BFI", "S4.B")
+        self.scribeDataInstance.scribeRessource("S4BFI")
         # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de
         # la base de données pour le premier semestre
         self.verifDataInstance.concordance("S4BFI")
-        self.scribeDataInstance.scribeRessource("S4BFI")
-        # Récupérer les cours par date dans le fichier planning
-        self.recupDataInstance.recupXetY("S4BFI", "S4.B")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S4BFI")
-        self.recupDataInstance.recupHProf("S4BFI", "S4.B")
 
-
-#i = BUT2()
-#i.run()
+# i = BUT2()
+# i.run()
