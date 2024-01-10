@@ -15,6 +15,8 @@ class verifData:
     instance = None
     fichierErreur = None
     nbErreur = 0
+    nbErreurWarning = 0
+    fichierWarning = None
 
     def __new__(cls):
         nbErreur = 0
@@ -35,10 +37,12 @@ class verifData:
         # Création du dossier "rapport d'erreurs"
         folder_path = "rapport d'erreurs"
         os.makedirs(folder_path, exist_ok=True)
-        # Mettre le fichier dans le dossier "rapport d'erreurs"
+        # Mettre les fichiers dans le dossier "rapport d'erreurs"
         self.fichierErreur = os.path.join(
             folder_path, f"rapport d'erreur du {datetime.now().strftime('%Y-%m-%d %H-%M-%S')}.txt"
         )
+        self.fichierWarning = os.path.join(folder_path,
+                                           f"rapport de warnings du {datetime.now().strftime('%Y-%m-%d %H-%M-%S')}.txt")
 
     def concordance(self, semestre):
         """
@@ -57,39 +61,59 @@ class verifData:
         for maquette in rslt_maquette:
             for planning in rslt_planning:
                 rapport = ""
+                rapport_warning = ""
                 if not (planning[1] in maquette[3]):
                     rapport += f"La ressource {maquette[1]} n'existe pas ou n'a pas été placée au bon endroit.\n"
                 else:
-                    if planning[2] != maquette[4]:
-                        print(f"erreur cm pour le semestre {semestre} et la ressource {maquette[3]}")
-                        rapport += (f"Erreur CM: \n"
-                                    f"  -ressource: {maquette[3]}\n "
-                                    f"  -heure planning: {planning[2]}\n"
-                                    f"  -heure maquette: {maquette[4]}\n")
-                    if planning[3] != maquette[5]:
-                        print("erreur td pour le semestre {semestre} et la ressource {maquette[3]}")
-                        rapport += (f"Erreur TD: \n"
-                                    f"  -ressource: {maquette[3]}\n"
-                                    f"  -heure planning: {planning[3]}\n"
-                                    f"  -heure maquette{maquette[5]}\n")
-
-                    if planning[4] != maquette[6]:
-                        print(f"erreur tp pour le semestre {semestre} et la ressource {maquette[3]}")
-                        rapport += (f"Erreur TP: \n"
-                                    f"  -ressource: {maquette[3]} \n"
-                                    f"  -heure planning: {planning[4]} \n"
-                                    f"  -heure maquette: {maquette[6]}\n")
-
+                    if planning[2] > maquette[4]:
+                        print(f"erreur cm pour le semestre {semestre}")
+                        rapport += (f"Erreur CM écrite dans le planning supérieur à celle prévu nationalement: \n"
+                                    f"  -Ressource: {maquette[3]}\n "
+                                    f"  -Heure planning: {planning[2]}\n"
+                                    f"  -Heure maquette: {maquette[4]}\n")
+                    if planning[2] < maquette[4]:
+                        print(f"Warning CM pour le semestre {semestre}")
+                        rapport_warning += (f"Warning : Heures différentes entre le fichier planning et maquette\n"
+                                            f"  -Ressource: {maquette[3]}\n"
+                                            f"  -Heure planning: {planning[2]}\n"
+                                            f"  - Heure maquette: {maquette[4]}\n")
+                    if planning[3] > maquette[5]:
+                        print(f"Erreur TD pour le semestre {semestre}")
+                        rapport += (f"Erreur TD écrite dans le planning supérieur à celle prévu nationalement: \n"
+                                    f"  -Ressource: {maquette[3]}\n"
+                                    f"  -Heure planning: {planning[3]}\n"
+                                    f"  -Heure maquette: {maquette[5]}\n")
+                    if planning[3] < maquette[5]:
+                        print(f"Warning TD pour le semestre {semestre}")
+                        rapport_warning += (f"Warning : Heures différentes entre le fichier planning et maquette\n"
+                                            f"  -Ressource: {maquette[3]}\n"
+                                            f"  -Heure planning: {planning[3]}\n"
+                                            f"  - Heure maquette: {maquette[5]}\n")
+                    if planning[4] > maquette[6]:
+                        print(f"erreur TP pour le semestre {semestre}")
+                        rapport += (f"Erreur TP écrite dans le planning supérieur à celle prévu nationalement: \n"
+                                    f"  -Hessource: {maquette[3]} \n"
+                                    f"  -Heure planning: {planning[4]} \n"
+                                    f"  -Heure maquette: {maquette[6]}\n")
+                    if planning[4] < maquette[6]:
+                        print(f"Warning Tp pour le semestre {semestre}")
+                        rapport_warning += (f"Warning : Heures différentes entre le fichier planning et maquette\n"
+                                            f"  -Ressource: {maquette[3]}\n"
+                                            f"  -Heure planning: {planning[4]}\n"
+                                            f"  - Heure maquette: {maquette[6]}\n")
                     if rapport:
                         # incrémentation du nombre d'erreur
                         self.nbErreur += 1
                         # Écriture de l'erreur dans un fichier de rapport
                         with open(self.fichierErreur, "a") as rapport_erreur:
-                            rapport_erreur.write(f"Erreur: heures ne correspondent pas entre la maquette et le planning"
-                                                 f"\n "
-                                                 f" -semestre: {semestre} \n "
-                                                 f" -ressource: {maquette[3]}\n")
                             rapport_erreur.write(rapport)
+                            rapport_erreur.write("\n")
+                    if rapport_warning:
+                        # incrémentation du nombre d'erreurs
+                        self.nbErreurWarning += 1
+                        # Écriture de l'erreur dans un fichier de rapport
+                        with open(self.fichierWarning, "a") as rapport_erreur:
+                            rapport_erreur.write(rapport_warning)
                             rapport_erreur.write("\n")
 
                     if planning[2] == maquette[4] and planning[3] == maquette[5] and planning[4] == maquette[6]:
@@ -191,25 +215,39 @@ class verifData:
                         rapport_erreur.write("\n")
 
     def getNbErreur(self):
-        '''
+        """
         Fonction pour récupérer le nombre d'erreurs
         :return:
-        '''
+        """
         return self.nbErreur
 
-    def renomFichierAvecNbErreur(self):
-        '''
-        Fonction pour renommer le fichier avec le nombre d'erreurs
+    def getNbWarning(self):
+        """
+        Fonction pour récupérer le nombre d'erreurs
         :return:
-        '''
+        """
+        return self.nbErreurWarning
+
+    def renomFichierAvecNbErreur(self):
+        """
+        Fonction pour renommer les fichiers de rapport d'erreurs et de warnings avec le nombre respectif d'erreurs et de warnings.
+        """
+        # Renommage du fichier d'erreurs
         nb_erreurs = self.getNbErreur()
-        nom_fichier_base = os.path.splitext(self.fichierErreur)[0]
-        date_modification = datetime.fromtimestamp(os.path.getmtime(self.fichierErreur)).strftime('%Y-%m-%d %H-%M')
-        nouveau_nom_fichier = f"{nb_erreurs} erreurs -- {date_modification} -- rapport d'erreur.txt"
-        nouveau_chemin_fichier = os.path.join(os.path.dirname(self.fichierErreur), nouveau_nom_fichier)
-        os.rename(self.fichierErreur, nouveau_chemin_fichier)
-        self.fichierErreur = nouveau_chemin_fichier
+        nom_fichier_base_erreur = os.path.splitext(self.fichierErreur)[0]
+        date_modification_erreur = datetime.fromtimestamp(os.path.getmtime(self.fichierErreur)).strftime(
+            '%Y-%m-%d %H-%M')
+        nouveau_nom_fichier_erreur = f"{nb_erreurs} erreurs -- {date_modification_erreur} -- rapport d'erreur.txt"
+        nouveau_chemin_fichier_erreur = os.path.join(os.path.dirname(self.fichierErreur), nouveau_nom_fichier_erreur)
+        os.rename(self.fichierErreur, nouveau_chemin_fichier_erreur)
+        self.fichierErreur = nouveau_chemin_fichier_erreur
 
-        print(f"Le fichier a été renommé {nouveau_nom_fichier}")
-
-
+        # Renommage du fichier de warnings
+        nb_warnings = self.getNbWarning()
+        nom_fichier_base_warning = os.path.splitext(self.fichierWarning)[0]
+        date_modification_warning = datetime.fromtimestamp(os.path.getmtime(self.fichierWarning)).strftime(
+            '%Y-%m-%d %H-%M')
+        nouveau_nom_fichier_warning = f"{nb_warnings} warnings -- {date_modification_warning} -- rapport de warnings.txt"
+        nouveau_chemin_fichier_warning = os.path.join(os.path.dirname(self.fichierWarning), nouveau_nom_fichier_warning)
+        os.rename(self.fichierWarning, nouveau_chemin_fichier_warning)
+        self.fichierWarning = nouveau_chemin_fichier_warning
