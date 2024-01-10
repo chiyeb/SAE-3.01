@@ -260,7 +260,7 @@ class scribeData:
                                 worksheet.cell(row_index9, column=14, value=intervenant[3] * multiplication_values[2])
                                 row_index9 += 1
 
-                            # écrire les groupes de  TP non dédoublésdans la colonne 15, ligne 65
+                            # écrire les groupes de  TP non dédoublés dans la colonne 15, ligne 65
                             if intervenant[4] is not None:
                                 worksheet.cell(row_index10, column=15, value=intervenant[4] * multiplication_values[2])
                                 row_index10 += 1
