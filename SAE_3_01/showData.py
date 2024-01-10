@@ -120,3 +120,5 @@ class showData:
         """
         self.root.mainloop()
 
+i = showData()
+i.run()

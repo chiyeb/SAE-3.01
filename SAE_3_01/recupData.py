@@ -203,7 +203,7 @@ class recupData:
 
     def recupRCouleur(self, semestre, semestre_onglet):
         """
-        Fonction pour récupérer les couleurs lié à chaque ressources pour un semestre précis
+        Fonction pour récupérer les couleurs liée à chaque ressource pour un semestre précis
         :param semestre:
         :param semestre_onglet:
         :return:
@@ -298,7 +298,7 @@ class recupData:
                         date = cell_value.date()
                     else:
                         date = cell_value
-                    # s'il y a une date trouvé
+                    # s'il y a une date trouvée
                     if date:
                         row_index = cell.row
                         for row_cell in fichierOngletSemestre[row_index]:

@@ -94,6 +94,36 @@ class Stats:
         plt.savefig('statistiques/heures_par_responsable.jpg', format='jpg')
         plt.close()
 
+    def genereHeuresParProf(self):
+        """
+        Fonction qui génère un graphique représentant le nombre total d'heures par professeur.
+        :return:
+        """
+        # Récupération du nombre total d'heures par professeur
+        requete = """
+        SELECT Prof, SUM(H_TD + H_CM + H_TP_D + H_TEST) as TotalHours
+        FROM HoraireTotalProf
+        GROUP BY Prof
+        ORDER BY TotalHours DESC;
+        """
+        data = pd.read_sql_query(requete, self.conn)
+
+        # Génère le graphique en barres
+        plt.figure(figsize=(15, 10))
+        plt.barh(data['Prof'], data['TotalHours'], color='skyblue')
+        plt.xlabel('Heures Totales')
+        plt.ylabel('Professeur')
+        plt.title('Nombre total d\'heures par professeur')
+        plt.tight_layout()
+
+        # Vérification de l'existence du dossier "statistiques", sinon, création
+        if not os.path.exists('statistiques'):
+            os.makedirs('statistiques')
+
+        # Enregistrement du graphique
+        plt.savefig('statistiques/heures_par_professeur.jpg', format='jpg')
+        plt.close()
+
     def __del__(self):
         """
             Fonction qui ferme la connexion à la BD
@@ -102,3 +132,6 @@ class Stats:
             """
         self.conn.close()
 
+
+i = Stats()
+i.genereHeuresParProf()

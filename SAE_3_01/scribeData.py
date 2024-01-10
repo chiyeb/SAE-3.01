@@ -27,7 +27,7 @@ class scribeData:
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
 
-    def clean_sheet_title(self,title):
+    def clean_sheet_title(self, title):
         """
         Nettoie le titre de la feuille Excel en supprimant ou remplaçant les caractères spéciaux.
         Les caractères spéciaux non autorisés dans Excel sont : \, /, ?, *, [, ] et :
@@ -200,19 +200,19 @@ class scribeData:
                                 # Écrire les données dans la feuille Excel
                                 worksheet.cell(row=row_index5, column=column_index, value=type_cours_et_nombre)
 
-                     # On récupère les données de la base de données Planning pour multiplier les valeurs de HorraireProf
+                    # On récupère les données de la base de données Planning pour multiplier les valeurs de HorraireProf
                     self.cursor.execute(
-                    "SELECT H_CM, H_TD, H_TP FROM Planning WHERE ressource = ?",
-                    (resource,))
+                        "SELECT H_CM, H_TD, H_TP FROM Planning WHERE ressource = ?",
+                        (resource,))
                     multiplication_values = self.cursor.fetchone()
 
                     if multiplication_values:
                         print(f"Traitement des données Planning ({resource}): {multiplication_values}")
 
-                     # On récupère les données de la base de données HoraireProf
+                    # On récupère les données de la base de données HoraireProf
                     self.cursor.execute(
                         "SELECT Intervenant, CM, TD, TP_Dedoubles, TP_Non_Dedoubles, Test FROM HoraireProf WHERE ressource = ?",
-                        (resource, ))
+                        (resource,))
                     data_from_database = self.cursor.fetchall()
 
                     # On écrit les données dans la feuille Excel
@@ -253,10 +253,6 @@ class scribeData:
                         # ceci permet d'écrire le nombre de test
                         worksheet.cell(row=row_index5, column=16, value=intervenant[5])
                         row_index5 += 1
-
-
-
-
 
                 filename = f"{semestre}.xlsx"
                 save_directory = 'fichiers genere'
@@ -306,6 +302,3 @@ class scribeData:
 
         except sqlite3.Error as e:
             print(f"Erreur lors de la récupération des données : {e}")
-
-
-

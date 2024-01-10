@@ -162,3 +162,5 @@ class selectFile:
                     print(f"Erreur de format sur la ligne : {ligne}")
 
 
+i = selectFile()
+i.open_select_file()
