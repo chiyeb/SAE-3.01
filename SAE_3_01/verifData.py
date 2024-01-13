@@ -112,9 +112,9 @@ class verifData:
                         # incrémentation du nombre d'erreurs
                         self.nbErreurWarning += 1
                         # Écriture de l'erreur dans un fichier de rapport
-                        with open(self.fichierWarning, "a") as rapport_erreur:
-                            rapport_erreur.write(rapport_warning)
-                            rapport_erreur.write("\n")
+                        with open(self.fichierWarning, "a") as rapport_warn:
+                            rapport_warn.write(rapport_warning)
+                            rapport_warn.write("\n")
 
                     if planning[2] == maquette[4] and planning[3] == maquette[5] and planning[4] == maquette[6]:
                         print(f"pas d'erreur pour le semestre {semestre}")

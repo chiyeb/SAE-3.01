@@ -59,7 +59,8 @@ class scribeData:
 
                     # Création d'une nouvelle feuille Excel avec le nom de la ressource
                     worksheet = fichier_vierge.copy_worksheet(base_sheet)
-                    worksheet.title = resource
+                    resource_key = resource.split()[0]
+                    worksheet.title = resource_key
 
                     # On récupère des données de la base de données (Planning)
                     self.cursor.execute(

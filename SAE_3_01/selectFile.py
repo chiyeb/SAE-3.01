@@ -162,3 +162,4 @@ class selectFile:
                             print("erreur inattendu")
                 else:
                     print(f"Erreur de format sur la ligne : {ligne}")
+

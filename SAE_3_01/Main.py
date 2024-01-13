@@ -1,7 +1,7 @@
 from BUT1 import *
 from BUT2 import *
 from BUT3 import *
-from Stats import Stats
+#from Stats import Stats
 from scribeData import *
 from verifData import *
 
@@ -22,5 +22,5 @@ verifdata_instance.renomFichierAvecNbErreur()
 scribedata_instance = scribeData()
 scribedata_instance.scribeHoraireTotalProf()
 
-stats = Stats()
-stats.execAllStats()
+#stats = Stats()
+#stats.execAllStats()
