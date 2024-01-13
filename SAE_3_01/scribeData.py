@@ -79,10 +79,11 @@ class scribeData:
                         worksheet.cell(row=2, column=7, value=data_from_database[0][4])
 
                     # On récupère les données de la base de données HoraireProf
+                    resource_key = resource.split()[0]
                     self.cursor.execute(
-                        "SELECT Intervenant, TD, TP_Dedoubles,TP_Non_Dedoubles FROM HoraireProf WHERE ressource = ? "
+                        "SELECT Intervenant, TD, TP_Dedoubles,TP_Non_Dedoubles FROM HoraireProf WHERE ressource LIKE ? "
                         "AND TD IS NOT NULL AND TP_dedoubles IS NOT NULL AND TP_non_dedoubles IS NOT NULL",
-                        (resource,))
+                        (resource_key + '%',))
                     data_from_database = self.cursor.fetchall()
 
                     # On écrit les données dans la feuille Excel
@@ -113,9 +114,10 @@ class scribeData:
 
                     # On récupère les noms des intervenants ayant un chiffre dans la colonne CM pour afficher les
                     # profs qui font les CM
+                    resource_key = resource.split()[0]
                     self.cursor.execute(
-                        "SELECT Intervenant,CM FROM HoraireProf WHERE Ressource = ? AND CM IS NOT NULL",
-                        (resource,))
+                        "SELECT Intervenant, CM FROM HoraireProf WHERE Ressource LIKE ? AND CM IS NOT NULL",
+                        (resource_key + '%',))
                     data_from_database = self.cursor.fetchall()
 
                     # On écrit les données dans la feuille Excel
@@ -193,9 +195,10 @@ class scribeData:
                         print(f"Traitement des données Cours ({resource}) ({semester}): {multiplication_values}")
 
                     # On récupère les données de la base de données HoraireProf
+                    resource_key = resource.split()[0]
                     self.cursor.execute(
-                        "SELECT Intervenant, CM, TD, TP_Dedoubles, TP_Non_Dedoubles, Test FROM HoraireProf WHERE ressource = ?",
-                        (resource,))
+                        "SELECT Intervenant, CM, TD, TP_Dedoubles, TP_Non_Dedoubles, Test FROM HoraireProf WHERE ressource LIKE ?",
+                        (resource_key + '%',))
                     data_from_database = self.cursor.fetchall()
 
                     # On récupère les données de la base de données Prof pour verfier le nom des profs qui sont dans

@@ -89,6 +89,7 @@ class recupData:
         # Charge le fichier Excel
         fichier = self.files.QFQ_file
         if self.onglet_existe(fichier, semestre_onglet):
+            print("i")
             df = pd.read_excel(fichier, semestre_onglet)
             donnees = {}
             ressourceActuelle = None
@@ -101,7 +102,6 @@ class recupData:
                 tp_non_dedoubles = row['TP (non dédoublés)']
                 tp_dedoubles = row['TP (dédoublés)']
                 test = row['Test']
-
                 # Vérifie si une nouvelle ressource commence
                 if pd.notna(resource):
                     ressourceActuelle = resource
@@ -120,16 +120,15 @@ class recupData:
                         'TP (non dédoublés)': tp_non_dedoubles,
                         'TP (dédoublés)': tp_dedoubles,
                         'Test': test})
-
             # Insère ou met à jour les enregistrements dans la base de données
             for resource, intervenant_data in donnees.items():
                 if resource not in donnees:
                     donnees[resource] = {
-                        None: [{}]}  # Insère un enregistrement avec des valeurs nulles si la ressource n'est pas présente
+                        None: [
+                            {}]}  # Insère un enregistrement avec des valeurs nulles si la ressource n'est pas présente
 
                 for intervenant, data_list in intervenant_data.items():
                     print(f"Ressource: {resource} - Intervenant : {intervenant} ")
-
                     if data_list:
                         for d in data_list:
                             # Vérifie si l'enregistrement existe déjà dans la base de données
@@ -161,7 +160,8 @@ class recupData:
                                 d['TP (non dédoublés)']) else "    - TP (non dédoublés) : Non spécifié")
                             print(f"    - TP (dédoublés) : {d['TP (dédoublés)']} heure" if pd.notna(
                                 d['TP (dédoublés)']) else "    - TP (dédoublés) : Non spécifié")
-                            print(f"    - Test : {d['Test']} heure" if pd.notna(d['Test']) else "    - Test : Non spécifié")
+                            print(f"    - Test : {d['Test']} heure" if pd.notna(
+                                d['Test']) else "    - Test : Non spécifié")
                             print("\n")
                     else:
                         print("Aucune données pour cette ressource.")
@@ -395,3 +395,7 @@ class recupData:
         if col >= type_cours_dict2["Test"]:
             tCours = "Test"
         return tCours
+
+
+i = recupData()
+i.recupHProf("S2", "S2")
