@@ -37,6 +37,8 @@ class selectFile:
         # initialise Tkinter
         root = tk.Tk()
         root.withdraw()
+        if os.path.exists("fichiers necessaires/file_destination.txt"):
+            open('fichiers necessaires/file_destination.txt', 'w').close()
         self.open_select_file_BUT1_maquette()
         self.open_select_file_BUT2_maquette()
         self.open_select_file_BUT3_maquette()
