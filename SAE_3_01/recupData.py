@@ -89,7 +89,6 @@ class recupData:
         # Charge le fichier Excel
         fichier = self.files.QFQ_file
         if self.onglet_existe(fichier, semestre_onglet):
-            print("i")
             df = pd.read_excel(fichier, semestre_onglet)
             donnees = {}
             ressourceActuelle = None
@@ -123,10 +122,7 @@ class recupData:
             # Insère ou met à jour les enregistrements dans la base de données
             for resource, intervenant_data in donnees.items():
                 if resource not in donnees:
-                    donnees[resource] = {
-                        None: [
-                            {}]}  # Insère un enregistrement avec des valeurs nulles si la ressource n'est pas présente
-
+                    donnees[resource] = {None: [{}]}
                 for intervenant, data_list in intervenant_data.items():
                     print(f"Ressource: {resource} - Intervenant : {intervenant} ")
                     if data_list:
