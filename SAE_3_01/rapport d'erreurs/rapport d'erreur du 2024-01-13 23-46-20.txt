@@ -1,0 +1,266 @@
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.01
+Erreur CM: 
+   -ressource: R1.01  -heures écrite: 18,   -heure posé: 24
+- Commentaire(s) : 
+-Séance 1h30
+	-A C
+-Séance 1h30
+	-A C
+-CM avant TD
+	-A C
+Séance 1h30
+	-A C
+-Séance 1h30
+	-A C
+-CM avant les TDs
+	-A C
+Séance 1h30
+	-A C
+-CM avant TD
+	-A C
+Séance 1h30
+	-A C
+-CM avant le TP
+	-A C
+Séance 1h30
+	-A C
+-Séance 1h30
+	-A C
+-Séance 1h30
+	-A C
+-Séance 1h30
+	-A C
+-Séance 1h30
+	-A C
+-Séance 1h30
+	-A C
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.03
+Erreur TD:
+   -ressource: R1.03
+  -heure écrites: 8
+  -heure posé: 4
+- Commentaire(s) : 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.05
+Erreur TP
+   -ressource: R1.05 
+  -heures écrites: 20 
+   -heures posés: 16 
+- Commentaire(s) : 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.07
+Erreur TP
+   -ressource: R1.07 
+  -heures écrites: 9 
+   -heures posés: 8 
+- Commentaire(s) : 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.08
+Erreur TP
+   -ressource: R1.08 
+  -heures écrites: 3 
+   -heures posés: 4 
+- Commentaire(s) : 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.09
+Erreur TP
+   -ressource: R1.09 
+  -heures écrites: 0 
+   -heures posés: 2 
+- Commentaire(s) : 
+-Test sur heures TP R1.08
+	-Morgan M
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.10
+Erreur TP
+   -ressource: R1.10 
+  -heures écrites: 25 
+   -heures posés: 26 
+- Commentaire(s) : 
+-1h
+	-Morgan M
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.12
+Erreur TP
+   -ressource: R1.12 
+  -heures écrites: 3 
+   -heures posés: 2 
+- Commentaire(s) : 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.01
+Erreur TD:
+   -ressource: R2.01
+  -heure écrites: 21
+  -heure posé: 20
+- Commentaire(s) : 
+Erreur TP
+   -ressource: R2.01 
+  -heures écrites: 21 
+   -heures posés: 20 
+- Commentaire(s) : 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.02
+Erreur CM: 
+   -ressource: R2.02  -heures écrite: 6,   -heure posé: 8
+- Commentaire(s) : 
+-1h30
+	-Frédéric Flouvat
+-1h30
+	-Frédéric Flouvat
+Erreur TD:
+   -ressource: R2.02
+  -heure écrites: 22
+  -heure posé: 20
+- Commentaire(s) : 
+Erreur TP
+   -ressource: R2.02 
+  -heures écrites: 10 
+   -heures posés: 8 
+- Commentaire(s) : 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.03
+Erreur TD:
+   -ressource: R2.03
+  -heure écrites: 5
+  -heure posé: 4
+- Commentaire(s) : 
+Erreur TP
+   -ressource: R2.03 
+  -heures écrites: 13 
+   -heures posés: 12 
+- Commentaire(s) : 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.06
+Erreur CM: 
+   -ressource: R2.06  -heures écrite: 7,   -heure posé: 6
+- Commentaire(s) : 
+-CM avant TP
+Erreur TP
+   -ressource: R2.06 
+  -heures écrites: 21 
+   -heures posés: 20 
+- Commentaire(s) : 
+-MMN indispo 22 et 23/02
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.07
+Erreur CM: 
+   -ressource: R2.07  -heures écrite: 9,   -heure posé: 12
+- Commentaire(s) : 
+-1h30
+	-Morgan M
+Erreur TP
+   -ressource: R2.07 
+  -heures écrites: 6 
+   -heures posés: 8 
+- Commentaire(s) : 
+-3h
+-3h
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.08
+Erreur TP
+   -ressource: R2.08 
+  -heures écrites: 6 
+   -heures posés: 8 
+- Commentaire(s) : 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.09
+Erreur CM: 
+   -ressource: R2.09  -heures écrite: 3,   -heure posé: 4
+- Commentaire(s) : 
+-1h30
+	-Morgan M
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.10
+Erreur TD:
+   -ressource: R2.10
+  -heure écrites: 13
+  -heure posé: 12
+- Commentaire(s) : 
+Erreur TP
+   -ressource: R2.10 
+  -heures écrites: 11 
+   -heures posés: 12 
+- Commentaire(s) : 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.14
+Erreur TD:
+   -ressource: R2.14
+  -heure écrites: 11
+  -heure posé: 12
+- Commentaire(s) : 
+-1h TD / 1h TP
+Erreur TP
+   -ressource: R2.14 
+  -heures écrites: 3 
+   -heures posés: 2 
+- Commentaire(s) : 
+

@@ -179,6 +179,8 @@ class scribeData:
                                     column_index = 3
                                 elif type_cours == 'TP':
                                     column_index = 4
+                                elif type_cours == 'Test':
+                                    column_index = 5
                                 else:
                                     continue  # Si le type de cours n'est pas reconnu, passer au suivant
 
