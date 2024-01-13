@@ -8,9 +8,6 @@ from insertData import insertData
 
 
 class scribeData:
-    """
-    Classe qui permet d'écrire les données dans des fichiers
-    """
     instance = None
 
     def __new__(cls):
@@ -21,24 +18,11 @@ class scribeData:
 
     def _setup(self):
         """
-        "Setup" l'objet : initialise la connexion à la BD
-        :return:
-        """
+                "Setup" l'objet : initialise la connexion à la BD
+                :return:
+                """
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
-
-    def clean_sheet_title(self, title):
-        """
-        Nettoie le titre de la feuille Excel en supprimant ou remplaçant les caractères spéciaux.
-        Les caractères spéciaux non autorisés dans Excel sont : \, /, ?, *, [, ] et :
-        Remplace ces caractères par un espace et tronque le titre à 31 caractères si nécessaire.
-        """
-        # Remplace les caractères spéciaux par un espace
-        for char in ['\\', '/', '?', '*', '[', ']', ':']:
-            title = title.replace(char, ' ')
-
-        # Tronquer à 31 caractères si nécessaire
-        return title[:31]
 
     def scribeRessource(self, semestre):
         """
@@ -143,64 +127,70 @@ class scribeData:
                             row_index += 1
 
                     self.cursor.execute(
-                        "SELECT Date_Cours, Type_Cours, Salle FROM Cours WHERE Semestre = ? AND ? LIKE Ressource || '%'",
+                        "SELECT Date_Cours, Type_Cours FROM Cours WHERE Semestre = ? AND ? LIKE Ressource || '%'",
                         (semester, resource))
                     data_from_database = self.cursor.fetchall()
 
                     if data_from_database:
                         print(
                             f"Données de la base de données Cours ({resource}, {semester}): {data_from_database}")
-
-                        date_type_salle_rows = {}  # Ce dictionnaire stock la date, le type de cours et la salle
-                        dict_date_cours_salle = {}  # Ce dictionnaire stock les informations de cours par date
-
-                        for cours_actuel in data_from_database:
-                            date_actuelle, type_cours, salle = cours_actuel
-
-                            # Clé unique pour chaque combinaison de date, type de cours et salle
-                            cle_cours_salle = (date_actuelle, type_cours, salle)
-
-                            if cle_cours_salle not in dict_date_cours_salle:
-                                dict_date_cours_salle[cle_cours_salle] = 1  # Initialiser le compteur
-                            else:
-                                dict_date_cours_salle[cle_cours_salle] += 1  # Incrémenter le compteur
-
-                        print(dict_date_cours_salle)
-
-                        for (date_actuelle, type_cours, salle), compteur in dict_date_cours_salle.items():
+                        date_type_rows = {}
+                        dict_date_cours = {}
+                        for i, cours_actuel in enumerate(data_from_database):
+                            date_actuelle = cours_actuel[0]
+                            type_cours = cours_actuel[1]
+                            if date_actuelle in dict_date_cours:
+                                dict_date_cours[date_actuelle].append(type_cours)
+                            # Ajouter le type de cours à la liste s'il n'est pas déjà présent
+                            if type_cours not in dict_date_cours.get(date_actuelle, []):
+                                dict_date_cours.setdefault(date_actuelle, []).append(type_cours)
+                            # Parcourir les éléments suivants pour vérifier les doublons
+                        print(dict_date_cours)
+                        for cle, types_cours in dict_date_cours.items():
                             # Vérifier si la date a déjà été traitée
-                            if date_actuelle not in date_type_salle_rows:
+                            if cle not in date_type_rows:
                                 # Si la date n'a pas encore été traitée, obtenir un nouvel index de ligne
-                                row_index5 = max(date_type_salle_rows.values(), default=34) + 1
-                                date_type_salle_rows[date_actuelle] = row_index5
+                                row_index5 = max(date_type_rows.values(), default=34) + 1
+                                date_type_rows[cle] = row_index5
                             else:
-                                row_index5 = date_type_salle_rows[date_actuelle]
-
+                                row_index5 = date_type_rows[cle]
                             # Écrire la date dans la première colonne de la ligne identifiée
-                            worksheet.cell(row=row_index5, column=1, value=date_actuelle)
-                            # Concaténer le type de cours, le compteur et la salle
-                            type_cours_et_nombre = f"{type_cours} {compteur}H - Salle {salle}"
-                            # Choix du column_index en fonction du type de cours
-                            if type_cours == 'Amphi':
-                                column_index = 2
-                            elif type_cours == 'TD':
-                                column_index = 3
-                            elif type_cours == 'TP':
-                                column_index = 4
-                            else:
-                                continue  # Si le type de cours n'est pas reconnu, passer au suivant
+                            worksheet.cell(row=row_index5, column=1, value=cle)
+                            t_cours_traite = {}
+                            for type_cours in types_cours:
+                                # Vérifie si le type de cours existe déjà dans le dictionnaire
+                                if type_cours in t_cours_traite:
+                                    # Augmente le compteur existant pour ce type de cours
+                                    t_cours_traite[type_cours] += 2
+                                else:
+                                    # Initialise le compteur pour ce type de cours
+                                    t_cours_traite[type_cours] = 2
+                            for type_cours in set(types_cours):
+                                # Concaténer le type de cours avec son compteur
+                                type_cours_et_nombre = f"{type_cours} {t_cours_traite[type_cours]}H"
 
-                            # Écrire les données dans la feuille Excel
-                            worksheet.cell(row=row_index5, column=column_index, value=type_cours_et_nombre)
+                                # Choix du column_index en fonction du type de cours
+                                if type_cours == 'Amphi':
+                                    column_index = 2
+                                elif type_cours == 'TD':
+                                    column_index = 3
+                                elif type_cours == 'TP':
+                                    column_index = 4
+                                else:
+                                    continue  # Si le type de cours n'est pas reconnu, passer au suivant
 
-                    # On récupère les données de la base de données Planning pour multiplier les valeurs de HorraireProf
+                                # Écrire les données dans la feuille Excel
+                                worksheet.cell(row=row_index5, column=column_index, value=type_cours_et_nombre)
+
+                    # On récupère les données de la base de données Cours pour multiplier les valeurs de HorraireProf
                     self.cursor.execute(
-                        "SELECT H_CM, H_TD, H_TP FROM Planning WHERE ressource = ?",
-                        (resource,))
-                    multiplication_values = self.cursor.fetchone()
+                        "SELECT Type_Cours, COUNT(*) * 2 FROM Cours WHERE Semestre = ? AND ? LIKE Ressource || '%' GROUP BY Type_Cours ORDER BY Type_Cours ASC",
+                        (semester, resource)
+                    )
+                    multiplication_values = self.cursor.fetchall()
 
                     if multiplication_values:
-                        print(f"Traitement des données Planning ({resource}): {multiplication_values}")
+                        print(f"Traitement des données Cours ({resource}) ({semester}): {multiplication_values}")
 
                     # On récupère les données de la base de données HoraireProf
                     self.cursor.execute(
@@ -208,7 +198,8 @@ class scribeData:
                         (resource,))
                     data_from_database = self.cursor.fetchall()
 
-                    # On récupère les données de la base de données Prof pour verfier le nom des profs qui sont dans HoraireProf
+                    # On récupère les données de la base de données Prof pour verfier le nom des profs qui sont dans
+                    # HoraireProf
                     self.cursor.execute(
                         "SELECT NomProf FROM Prof")
                     prof_data = [row[0].upper() for row in self.cursor.fetchall()]  # Convertir en majuscules
@@ -236,6 +227,16 @@ class scribeData:
 
                     for intervenant in data_from_database:
 
+                        # Multiplication des valeurs de CM, TD, TP, Test avec les valeurs d'Amphi, TD, TP, Test
+                        cm_multiplier = next(
+                            (count for type_cours, count in multiplication_values if type_cours == 'Amphi'), 1)
+                        td_multiplier = next(
+                            (count for type_cours, count in multiplication_values if type_cours == 'TD'), 1)
+                        tp_multiplier = next(
+                            (count for type_cours, count in multiplication_values if type_cours == 'TP'), 1)
+                        test_multiplier = next(
+                            (count for type_cours, count in multiplication_values if type_cours == 'Test'), 1)
+
                         # Vérifier si le nom de l'intervenant est dans la liste des professeurs
                         intervenant_name = intervenant[0].upper()
 
@@ -247,28 +248,25 @@ class scribeData:
 
                             # écrire les groupes de  CM dans la colonne 12, ligne 65
                             if intervenant[1] is not None:
-                                worksheet.cell(row_index7, column=12, value=intervenant[1] * multiplication_values[0])
+                                worksheet.cell(row_index7, column=12, value=intervenant[1] * cm_multiplier)
                                 row_index7 += 1
 
                             # écrire les groupes de  TD dans la colonne 13, ligne 65
                             if intervenant[2] is not None:
-                                worksheet.cell(row_index8, column=13, value=intervenant[2] * multiplication_values[1])
+                                worksheet.cell(row_index8, column=13, value=intervenant[2] * td_multiplier)
                                 row_index8 += 1
 
                             # écrire les groupes de  TP dédoublés dans la colonne 14, ligne 65
                             if intervenant[3] is not None:
-                                worksheet.cell(row_index9, column=14, value=intervenant[3] * multiplication_values[2])
+                                worksheet.cell(row_index9, column=14, value=intervenant[3] * tp_multiplier)
                                 row_index9 += 1
 
-                            # écrire les groupes de  TP non dédoublés dans la colonne 15, ligne 65
+                            # écrire les groupes de  TP non dédoublésdans la colonne 15, ligne 65
                             if intervenant[4] is not None:
-                                worksheet.cell(row_index10, column=15, value=intervenant[4] * multiplication_values[2])
+                                worksheet.cell(row_index10, column=15, value=intervenant[4] * tp_multiplier)
                                 row_index10 += 1
 
-                            # écrire les groupes de  Test dans la colonne 16, ligne 65
-                            if intervenant[5] is not None:
-                                worksheet.cell(row_index11, column=16, value=intervenant[5])
-                                row_index11 += 1
+
 
                         elif intervenant_name not in prof_data:
 
@@ -280,33 +278,27 @@ class scribeData:
 
                             # écrire les groupes de  CM dans la colonne 12, ligne 56
                             if intervenant[1]:
-                                worksheet.cell(row_index1, column=12, value=intervenant[1] * multiplication_values[0])
+                                worksheet.cell(row_index1, column=12, value=intervenant[1] * cm_multiplier)
 
                                 row_index1 += 1
 
                             # écrire les groupes de  TD dans la colonne 13, ligne 56
                             if intervenant[2] is not None:
-                                worksheet.cell(row_index2, column=13, value=intervenant[2] * multiplication_values[1])
+                                worksheet.cell(row_index2, column=13, value=intervenant[2] * td_multiplier)
 
                                 row_index2 += 1
 
                             # écrire les groupes de  TP dédoublés dans la colonne 14, ligne 56
                             if intervenant[3] is not None:
-                                worksheet.cell(row_index3, column=14, value=intervenant[3] * multiplication_values[2])
+                                worksheet.cell(row_index3, column=14, value=intervenant[3] * tp_multiplier)
 
                                 row_index3 += 1
 
                             # écrire les groupes de  TP non dédoublés dans la colonne 15, ligne 56
                             if intervenant[4] is not None:
-                                worksheet.cell(row_index4, column=15, value=intervenant[4] * multiplication_values[2])
+                                worksheet.cell(row_index4, column=15, value=intervenant[4] * tp_multiplier)
 
                                 row_index4 += 1
-
-                            # écrire les groupes de  Test dans la colonne 16, ligne 56
-                            if intervenant[5] is not None:
-                                worksheet.cell(row_index5, column=16, value=intervenant[5])
-
-                                row_index5 += 1
 
                 filename = f"{semestre}.xlsx"
                 save_directory = 'fichiers genere'
@@ -322,7 +314,7 @@ class scribeData:
 
     def scribeHoraireTotalProf(self):
         """
-        Fonction qui écrit les heures de chaque professeur pour chaque type de cours dans un fichier Excel.
+        Fonction qui écrit les heures de chaque professeurs pour chaque type de cours dans un fichier Excel.
         :return:
         """
         try:
@@ -356,3 +348,7 @@ class scribeData:
 
         except sqlite3.Error as e:
             print(f"Erreur lors de la récupération des données : {e}")
+
+
+test = scribeData()
+test.scribeRessource("S1")

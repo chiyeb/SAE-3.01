@@ -143,3 +143,6 @@ class insertData:
                     " ?, ?, ?)", (hCMPActuel, hTDPActuel, hTPDPActuel, hTPNDPActuel, hTestPActuel,
                                   pr[1]))
                 self.conn.commit()
+
+i = insertData()
+i.insertNombreHeureProf()
