@@ -39,12 +39,12 @@ class selectFile:
                 file.write("")
                 self.open_select_file()
 
-    def verify_before_open(self, file, nom_fichier):
+    def verify_before_open(self, file):
         if os.path.exists(file):
             print("ok")
+            return True
         else:
-            open('fichiers necessaires/file_destination.txt', 'w').close()
-            self.open_select_file()
+            return False
 
     def open_select_file(self):
         if os.path.exists(self.fichier_destination):
@@ -160,15 +160,7 @@ class selectFile:
         Récupère la destination de chaque fichier dans le fichier.
         :return:
         """
-        with open(self.fichier_destination, "r") as fichier:
-            nb_ligne = 0
-            for ligne in fichier:
-                nb_ligne += 1
-        if nb_ligne < 5:
-            os.remove(self.fichier_destination)
-            messagebox.showerror("ERREUR","Veuillez relancer le programme et re-choisir les fichiers.")
-            exit()
-
+        fichiers_erreur = {"BUT1", "BUT2", "BUT3", "planning", "nom_prof", "QFQ"}
         with open(self.fichier_destination, "r") as fichier:
             # Lire chaque ligne du fichier
             for ligne in fichier:
@@ -181,23 +173,47 @@ class selectFile:
                     match parties[0]:
                         case "BUT1":
                             self.maquette_BUT1_file = parties[1]
-                            self.verify_before_open(parties[1], "Maquette National BUT1")
+                            if self.verify_before_open(parties[1]):
+                                fichiers_erreur.remove("BUT1")
                         case "BUT2":
                             self.maquette_BUT2_file = parties[1]
-                            self.verify_before_open(parties[1], "Maquette National BUT2")
+                            if self.verify_before_open(parties[1]):
+                                fichiers_erreur.remove("BUT2")
                         case "BUT3":
                             self.maquette_BUT3_file = parties[1]
-                            self.verify_before_open(parties[1], "Maquette National BUT3")
+                            if self.verify_before_open(parties[1]):
+                                fichiers_erreur.remove("BUT3")
                         case "planning":
                             self.planning_file = parties[1]
-                            self.verify_before_open(parties[1], "planning")
+                            if self.verify_before_open(parties[1]):
+                                fichiers_erreur.remove("planning")
                         case "nom_prof":
                             self.nom_prof_file = parties[1]
-                            self.verify_before_open(parties[1], "Nom des professeurs")
+                            if self.verify_before_open(parties[1]):
+                                fichiers_erreur.remove("nom_prof")
                         case "QFQ":
                             self.QFQ_file = parties[1]
-                            self.verify_before_open(parties[1], "Ce que fait chaque professeurs")
+                            if self.verify_before_open(parties[1]):
+                                fichiers_erreur.remove("QFQ")
                         case _:
                             print("erreur inattendu")
                 else:
                     print(f"Erreur de format sur la ligne : {ligne}")
+        print(fichiers_erreur)
+        for fichiers_cor in fichiers_erreur:
+            print(fichiers_cor)
+            match fichiers_cor:
+                case "BUT1":
+                    self.open_select_file_BUT1_maquette()
+                case "BUT2":
+                    self.open_select_file_BUT2_maquette()
+                case "BUT3":
+                    self.open_select_file_BUT3_maquette()
+                case "planning":
+                    self.open_select_file_planning()
+                case "nom_prof":
+                    self.open_select_file_nom_prof()
+                case "QFQ":
+                    self.open_select_file_QFQ()
+                case _:
+                    print("erreur inattendu")

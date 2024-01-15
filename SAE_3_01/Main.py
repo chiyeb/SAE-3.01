@@ -1,3 +1,5 @@
+import os
+
 from BUT1 import BUT1
 from BUT2 import BUT2
 from BUT3 import BUT3
@@ -6,9 +8,8 @@ from scribeData import scribeData
 from selectFile import selectFile
 from verifData import verifData
 
-print("i")
-selectFileInstance = selectFile()
-selectFileInstance.recup_destination_file()
+
+
 
 recupDataInstance = recupData()
 recupDataInstance.recupNomProf()
