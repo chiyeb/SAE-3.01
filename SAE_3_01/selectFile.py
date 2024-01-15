@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import os
+import pandas as pd
+
 
 class selectFile:
     """
@@ -33,6 +35,27 @@ class selectFile:
             if os.path.getsize("fichiers necessaires/file_destination.txt") > 0:
                 self.recup_destination_file()
 
+    def verify_before_open(self, file, nom_fichier):
+        try:
+            pd.ExcelFile(file)
+        except:
+            messagebox.showerror("ERREUR", f"Le fichier {nom_fichier} n'a pas été reconnu, veuillez le re sélectionner")
+            match nom_fichier:
+                case "Maquette National BUT1":
+                    self.open_select_file_BUT1_maquette()
+                case "Maquette National BUT2":
+                    self.open_select_file_BUT2_maquette()
+                case "Maquette National BUT3":
+                    self.open_select_file_BUT3_maquette()
+                case "planning":
+                    self.open_select_file_planning()
+                case "Nom des professeurs":
+                    self.open_select_file_nom_prof()
+                case "Ce que fait chaque professeurs":
+                    self.open_select_file_QFQ()
+                case _:
+                    print("erreur inattendu")
+
     def open_select_file(self):
         # initialise Tkinter
         root = tk.Tk()
@@ -64,7 +87,7 @@ class selectFile:
         :return:
         """
         # Affiche le message
-        messagebox.showinfo("IMPORTANT", "Veuillez sélectionner le fichier maquette national du BUT 2")
+        messagebox.showinfo("IMPORTANT", "Veuillez sélectionner le fichier du BUT 2")
         # ouvre la fenêtre pour choisir un fichier
         self.maquette_BUT2 = filedialog.askopenfilename()
         # écrit la destination dans le fichier destination
@@ -136,7 +159,6 @@ class selectFile:
         Récupère la destination de chaque fichier dans le fichier.
         :return:
         """
-        # Ouvre le fichier en mode lecture
         with open("fichiers necessaires/file_destination.txt", "r") as fichier:
             # Lire chaque ligne du fichier
             for ligne in fichier:
@@ -145,21 +167,27 @@ class selectFile:
 
                 # Vérifie si la ligne a été correctement divisée en deux parties
                 if len(parties) == 2:
+                    # Récupère chaque chemin de chaque fichier
                     match parties[0]:
                         case "BUT1":
                             self.maquette_BUT1_file = parties[1]
+                            self.verify_before_open(parties[1], "Maquette National BUT1")
                         case "BUT2":
                             self.maquette_BUT2_file = parties[1]
+                            self.verify_before_open(parties[1], "Maquette National BUT2")
                         case "BUT3":
                             self.maquette_BUT3_file = parties[1]
+                            self.verify_before_open(parties[1], "Maquette National BUT3")
                         case "planning":
                             self.planning_file = parties[1]
+                            self.verify_before_open(parties[1], "planning")
                         case "nom_prof":
                             self.nom_prof_file = parties[1]
+                            self.verify_before_open(parties[1], "Nom des professeurs")
                         case "QFQ":
                             self.QFQ_file = parties[1]
+                            self.verify_before_open(parties[1], "Ce que fait chaque professeurs")
                         case _:
                             print("erreur inattendu")
                 else:
                     print(f"Erreur de format sur la ligne : {ligne}")
-

@@ -1,5 +1,0 @@
-Warning : Heures différentes entre le fichier planning et maquette
-  -Ressource: R1.11 Bases de la communication
-  -Heure planning: 0
-  - Heure maquette: 1
-

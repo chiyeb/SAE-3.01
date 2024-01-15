@@ -39,10 +39,10 @@ class verifData:
         os.makedirs(folder_path, exist_ok=True)
         # Mettre les fichiers dans le dossier "rapport d'erreurs"
         self.fichierErreur = os.path.join(
-            folder_path, f"rapport d'erreur du {datetime.now().strftime('%Y-%m-%d %H-%M-%S')}.txt"
+            folder_path, f"rapport d'erreur du {datetime.now().strftime('%Y-%m-%d %H:%M')}.txt"
         )
         self.fichierWarning = os.path.join(folder_path,
-                                           f"rapport de warnings du {datetime.now().strftime('%Y-%m-%d %H-%M-%S')}.txt")
+                                           f"rapport de warnings du {datetime.now().strftime('%Y-%m-%d %H:%M')}.txt")
 
     def concordance(self, semestre):
         """
@@ -236,7 +236,7 @@ class verifData:
         nb_erreurs = self.getNbErreur()
         nom_fichier_base_erreur = os.path.splitext(self.fichierErreur)[0]
         date_modification_erreur = datetime.fromtimestamp(os.path.getmtime(self.fichierErreur)).strftime(
-            '%Y-%m-%d %H-%M')
+            '%Y-%m-%d %H:%M')
         nouveau_nom_fichier_erreur = f"{nb_erreurs} erreurs -- {date_modification_erreur} -- rapport d'erreur.txt"
         nouveau_chemin_fichier_erreur = os.path.join(os.path.dirname(self.fichierErreur), nouveau_nom_fichier_erreur)
         os.rename(self.fichierErreur, nouveau_chemin_fichier_erreur)
@@ -246,7 +246,7 @@ class verifData:
         nb_warnings = self.getNbWarning()
         nom_fichier_base_warning = os.path.splitext(self.fichierWarning)[0]
         date_modification_warning = datetime.fromtimestamp(os.path.getmtime(self.fichierWarning)).strftime(
-            '%Y-%m-%d %H-%M')
+            '%Y-%m-%d %H:%M')
         nouveau_nom_fichier_warning = f"{nb_warnings} warnings -- {date_modification_warning} -- rapport de warnings.txt"
         nouveau_chemin_fichier_warning = os.path.join(os.path.dirname(self.fichierWarning), nouveau_nom_fichier_warning)
         os.rename(self.fichierWarning, nouveau_chemin_fichier_warning)

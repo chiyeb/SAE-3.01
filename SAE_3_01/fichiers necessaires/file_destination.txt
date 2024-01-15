@@ -4,3 +4,4 @@ BUT3=C:/Users/nozix/OneDrive/Documents/GitHub/SAE-3.01/SAE_3_01/Documents/BUT3 _
 planning=C:/Users/nozix/OneDrive/Documents/GitHub/SAE-3.01/SAE_3_01/Documents/Planning 2023-2024.xlsx
 nom_prof=C:/Users/nozix/OneDrive/Documents/GitHub/SAE-3.01/SAE_3_01/Documents/NomProf.txt
 QFQ=C:/Users/nozix/OneDrive/Documents/GitHub/SAE-3.01/SAE_3_01/Documents/QuiFaitQuoi_beta.xlsx
+BUT1=
