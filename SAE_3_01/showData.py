@@ -120,5 +120,5 @@ class showData:
         """
         self.root.mainloop()
 
-i = showData()
-i.run()
+#i = showData()
+#i.run()

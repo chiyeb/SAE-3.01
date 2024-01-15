@@ -356,5 +356,5 @@ class scribeData:
             print(f"Erreur lors de la récupération des données : {e}")
 
 
-test = scribeData()
-test.scribeRessource("S1")
+#test = scribeData()
+#test.scribeRessource("S1")

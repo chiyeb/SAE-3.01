@@ -87,5 +87,5 @@ class BUT1:
         self.verifDataInstance.concordancePlanning("S2")
 
 
-i = BUT1()
-i.run()
+#i = BUT1()
+#i.run()

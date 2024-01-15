@@ -4,6 +4,10 @@ from BUT3 import *
 #from Stats import Stats
 from scribeData import *
 from verifData import *
+from selectFile import *
+
+selectFileInstance = selectFile()
+selectFileInstance.recup_destination_file()
 
 recupDataInstance = recupData()
 recupDataInstance.recupNomProf()

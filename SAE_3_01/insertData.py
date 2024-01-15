@@ -144,5 +144,5 @@ class insertData:
                                   pr[1]))
                 self.conn.commit()
 
-i = insertData()
-i.insertNombreHeureProf()
+#i = insertData()
+#i.insertNombreHeureProf()

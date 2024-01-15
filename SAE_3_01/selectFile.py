@@ -36,25 +36,31 @@ class selectFile:
                 self.recup_destination_file()
 
     def verify_before_open(self, file, nom_fichier):
-        try:
-            pd.ExcelFile(file)
-        except:
-            messagebox.showerror("ERREUR", f"Le fichier {nom_fichier} n'a pas été reconnu, veuillez le re sélectionner")
-            match nom_fichier:
-                case "Maquette National BUT1":
-                    self.open_select_file_BUT1_maquette()
-                case "Maquette National BUT2":
-                    self.open_select_file_BUT2_maquette()
-                case "Maquette National BUT3":
-                    self.open_select_file_BUT3_maquette()
-                case "planning":
-                    self.open_select_file_planning()
-                case "Nom des professeurs":
-                    self.open_select_file_nom_prof()
-                case "Ce que fait chaque professeurs":
-                    self.open_select_file_QFQ()
-                case _:
-                    print("erreur inattendu")
+        if nom_fichier == "Nom des professeurs":
+            try:
+                open(file, "w")
+            except:
+                messagebox.showwarning("ERREUR",
+                                     f"Le fichier {nom_fichier} n'a pas été reconnu, veuillez le re sélectionner")
+                self.open_select_file_nom_prof()
+        else:
+            try:
+                pd.ExcelFile(file)
+            except:
+                messagebox.showwarning("ERREUR", f"Le fichier {nom_fichier} n'a pas été reconnu, veuillez le re sélectionner")
+                match nom_fichier:
+                    case "Maquette National BUT1":
+                        self.open_select_file_BUT1_maquette()
+                    case "Maquette National BUT2":
+                        self.open_select_file_BUT2_maquette()
+                    case "Maquette National BUT3":
+                        self.open_select_file_BUT3_maquette()
+                    case "planning":
+                        self.open_select_file_planning()
+                    case "Ce que fait chaque professeurs":
+                        self.open_select_file_QFQ()
+                    case _:
+                        print("erreur inattendu")
 
     def open_select_file(self):
         # initialise Tkinter
