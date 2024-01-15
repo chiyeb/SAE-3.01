@@ -1,7 +1,0 @@
-BUT1=C:/Users/nozix/OneDrive/Documents/GitHub/SAE-3.01/SAE_3_01/Documents/BUT1_INFO_AIX.xlsx
-BUT2=C:/Users/nozix/OneDrive/Documents/GitHub/SAE-3.01/SAE_3_01/Documents/BUT2_INFO_AIX.xlsx
-BUT3=C:/Users/nozix/OneDrive/Documents/GitHub/SAE-3.01/SAE_3_01/Documents/BUT3 _INFO_AIX.xlsx
-planning=C:/Users/nozix/OneDrive/Documents/GitHub/SAE-3.01/SAE_3_01/Documents/Planning 2023-2024.xlsx
-nom_prof=C:/Users/nozix/OneDrive/Documents/GitHub/SAE-3.01/SAE_3_01/Documents/NomProf.txt
-QFQ=C:/Users/nozix/OneDrive/Documents/GitHub/SAE-3.01/SAE_3_01/Documents/QuiFaitQuoi_beta.xlsx
-BUT1=

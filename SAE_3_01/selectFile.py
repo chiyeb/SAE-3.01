@@ -8,6 +8,7 @@ class selectFile:
     """
     Classe qui permet de faire choisir à l'utilisateur l'endroit où se trouve chaque fichier nécessaire au programme
     """
+    fichier_destination = None
     instance = None
     maquette_BUT1 = None
     maquette_BUT2 = None
@@ -29,44 +30,24 @@ class selectFile:
         return cls.instance
 
     def _setup(self):
+        self.fichier_destination = "fichiers necessaires/file_destination.txt"
         # vérifie si le fichier existe
-        if os.path.exists("fichiers necessaires/file_destination.txt"):
-            # vérifie si le fichier est rempli (si sa taille est supérieur à 0)
-            if os.path.getsize("fichiers necessaires/file_destination.txt") > 0:
-                self.recup_destination_file()
+        if os.path.exists(self.fichier_destination):
+            self.recup_destination_file()
+        else:
+            with open(self.fichier_destination, "w") as file:
+                file.write("")
+                self.open_select_file()
 
     def verify_before_open(self, file, nom_fichier):
-        if nom_fichier == "Nom des professeurs":
-            try:
-                open(file, "w")
-            except:
-                messagebox.showwarning("ERREUR",
-                                     f"Le fichier {nom_fichier} n'a pas été reconnu, veuillez le re sélectionner")
-                self.open_select_file_nom_prof()
+        if os.path.exists(file):
+            print("ok")
         else:
-            try:
-                pd.ExcelFile(file)
-            except:
-                messagebox.showwarning("ERREUR", f"Le fichier {nom_fichier} n'a pas été reconnu, veuillez le re sélectionner")
-                match nom_fichier:
-                    case "Maquette National BUT1":
-                        self.open_select_file_BUT1_maquette()
-                    case "Maquette National BUT2":
-                        self.open_select_file_BUT2_maquette()
-                    case "Maquette National BUT3":
-                        self.open_select_file_BUT3_maquette()
-                    case "planning":
-                        self.open_select_file_planning()
-                    case "Ce que fait chaque professeurs":
-                        self.open_select_file_QFQ()
-                    case _:
-                        print("erreur inattendu")
+            open('fichiers necessaires/file_destination.txt', 'w').close()
+            self.open_select_file()
 
     def open_select_file(self):
-        # initialise Tkinter
-        root = tk.Tk()
-        root.withdraw()
-        if os.path.exists("fichiers necessaires/file_destination.txt"):
+        if os.path.exists(self.fichier_destination):
             open('fichiers necessaires/file_destination.txt', 'w').close()
         self.open_select_file_BUT1_maquette()
         self.open_select_file_BUT2_maquette()
@@ -149,23 +130,46 @@ class selectFile:
         # écrit la destination dans le fichier destination
         self.scribe_destination_file("QFQ", self.QFQ)
 
-    def scribe_destination_file(self, nom_fichier, destination):
+    def scribe_destination_file(self, nom_fichier, nouvelle_destination):
         """
         Écrit dans un fichier .TXT le nom et la destination de chaque fichier
         :param nom_fichier:
-        :param destination:
+        :param nouvelle_destination:
         :return:
         """
-        fichier_destination = "fichiers necessaires/file_destination.txt"
-        with open(fichier_destination, "a") as file:
-            file.write(f'{nom_fichier}={destination}\n')
+        with open(self.fichier_destination, "r") as file:
+            lignes = file.readlines()
+        print(lignes)
+        is_writed = False
+        # Modifier la ligne correspondante
+        with open(self.fichier_destination, "w") as file:
+            for ligne in lignes:
+                if ligne.startswith(nom_fichier + "="):
+                    # Remplacer par la nouvelle destination
+                    file.write(f"{nom_fichier}={nouvelle_destination}\n")
+                    is_writed = True
+                else:
+                    # Conserver les autres lignes telles quelles
+                    file.write(ligne)
+        if not is_writed:
+            with open(self.fichier_destination, "a") as file:
+                file.write(f"{nom_fichier}={nouvelle_destination}\n")
 
     def recup_destination_file(self):
         """
         Récupère la destination de chaque fichier dans le fichier.
         :return:
         """
-        with open("fichiers necessaires/file_destination.txt", "r") as fichier:
+        with open(self.fichier_destination, "r") as fichier:
+            nb_ligne = 0
+            for ligne in fichier:
+                nb_ligne += 1
+        if nb_ligne < 5:
+            os.remove(self.fichier_destination)
+            messagebox.showerror("ERREUR","Veuillez relancer le programme et re-choisir les fichiers.")
+            exit()
+
+        with open(self.fichier_destination, "r") as fichier:
             # Lire chaque ligne du fichier
             for ligne in fichier:
                 # Divise la ligne en utilisant le signe "=" comme séparateur
