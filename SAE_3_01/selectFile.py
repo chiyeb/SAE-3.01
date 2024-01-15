@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 import os
 
+
 class selectFile:
     """
     Classe qui permet de faire choisir à l'utilisateur l'endroit où se trouve chaque fichier nécessaire au programme
@@ -48,6 +49,7 @@ class selectFile:
         self.open_select_file_planning()
         self.open_select_file_nom_prof()
         self.open_select_file_QFQ()
+        self.recup_destination_file()
 
     def open_select_file_BUT1_maquette(self):
         """
@@ -139,7 +141,14 @@ class selectFile:
         Récupère la destination de chaque fichier dans le fichier.
         :return:
         """
-        # Ouvre le fichier en mode lecture
+        nbLigne = 0
+        with open(self.fichier_destination, "r") as fichier:
+            for ligne in fichier:
+                nbLigne += 1
+        if nbLigne < 5:
+            os.remove(self.fichier_destination)
+            messagebox.showerror("ERREUR", "Relancez le programme")
+            exit()
         with open("fichiers necessaires/file_destination.txt", "r") as fichier:
             # Lire chaque ligne du fichier
             for ligne in fichier:
