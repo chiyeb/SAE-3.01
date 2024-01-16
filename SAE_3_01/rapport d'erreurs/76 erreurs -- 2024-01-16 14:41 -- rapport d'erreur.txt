@@ -184,8 +184,6 @@ Erreur CM:
    -ressource: R2.06  -heures écrite: 7,   -heure posé: 6
 - Commentaire(s) : 
 -CM avant TP
--Séance 1h30
-	-A C
 Erreur TP
    -ressource: R2.06 
   -heures écrites: 21 

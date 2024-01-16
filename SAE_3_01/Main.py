@@ -8,9 +8,6 @@ from scribeData import scribeData
 from selectFile import selectFile
 from verifData import verifData
 
-
-
-
 recupDataInstance = recupData()
 recupDataInstance.recupNomProf()
 

@@ -110,8 +110,9 @@ class insertData:
             "SELECT HoraireProf.Ressource, Intervenant, CM, TD, TP_Non_Dedoubles, NbCours, Type_Cours, Test, "
             "TP_Dedoubles FROM HoraireProf "
             "JOIN Horaires "
-            "ON SUBSTR(HoraireProf.Ressource, 1, INSTR(HoraireProf.Ressource, ' ') - 1) = Horaires.Ressource")
+            "ON HoraireProf.Ressource = Horaires.Ressource")
         profs = self.cursor.fetchall()
+        print(profs)
         for pr in profs:
             # ajout des heures total pour chaque type de cours (sur chaque ressources)
             hCMPActuel = hTDPActuel = hTPDPActuel = hTPNDPActuel = hTestPActuel = 0
@@ -128,7 +129,7 @@ class insertData:
             # éxécution d'une requete pour savoir si le prof existe déjà dans la BD
             self.cursor.execute("SELECT Prof FROM HoraireTotalProf WHERE Prof = ?", (pr[1],))
             alreadyExist = self.cursor.fetchall()
-            # si il existe on insère
+            # si il existe on update
             if alreadyExist:
                 self.cursor.execute(
                     "UPDATE HoraireTotalProf "
@@ -136,7 +137,7 @@ class insertData:
                     "H_TEST = H_TEST + ? WHERE Prof = ?",
                     (hCMPActuel, hTDPActuel, hTPDPActuel, hTPNDPActuel, hTestPActuel, pr[1]))
                 self.conn.commit()
-            # sinon, on update
+            # sinon, on insère
             else:
                 self.cursor.execute(
                     "INSERT INTO HoraireTotalProf (H_CM, H_TD, H_TP_D, H_TP_ND, H_TEST, Prof) VALUES (?, ?, ?,"
@@ -144,5 +145,5 @@ class insertData:
                                   pr[1]))
                 self.conn.commit()
 
-#i = insertData()
-#i.insertNombreHeureProf()
+i = insertData()
+i.insertNombreHeureProf()

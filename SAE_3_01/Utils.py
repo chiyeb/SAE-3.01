@@ -32,7 +32,7 @@ class Utils:
         Fonction pour supprimer toutes les données la BD
         :return:
         """
-        confirmation = self.confirm_deletion()
+        confirmation = self.confirm_deletion("Les données de la base de données")
         # si l'utilisateur à confirmer la suppression de la BD
         if confirmation:
             # requête pour obtenir la liste des tables
@@ -49,7 +49,7 @@ class Utils:
             self.display_result(False)
 
 
-    def confirm_deletion(self):
+    def confirm_deletion(self, arg):
         """
         Fonction pour confirmer la suppresion ou l'annuler
         :return:
@@ -58,7 +58,7 @@ class Utils:
         root.withdraw()  # masquer la fenêtre principale de tkinter
 
         # créer une boîte de dialogue de confirmation
-        response = messagebox.askyesno("Confirmation", "Êtes-vous sûr de vouloir supprimer les dossiers ?")
+        response = messagebox.askyesno("Confirmation", f"Êtes-vous sûr de vouloir supprimer {arg}?")
 
         root.destroy()  # ferme la fenêtre tkinter
 
@@ -69,7 +69,7 @@ class Utils:
         Fonction pour supprimer tout les fichiers généré par le programme
         :return:
         """
-        confirmation = self.confirm_deletion()
+        confirmation = self.confirm_deletion("les fichiers")
         # si l'utilisateur a confirmé la suppression des fichiers
         if confirmation:
             # Définition des chemins des dossiers et fichiers à supprimer
@@ -134,4 +134,5 @@ class Utils:
 
 
 
-
+i = Utils()
+i.clearBD()

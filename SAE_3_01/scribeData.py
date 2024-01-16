@@ -357,4 +357,4 @@ class scribeData:
 
 
 #test = scribeData()
-#test.scribeRessource("S1")
+#test.scribeHoraireTotalProf()

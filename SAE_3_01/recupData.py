@@ -393,5 +393,5 @@ class recupData:
         return tCours
 
 
-#i = recupData()
-#i.recupHProf("S2", "S2")
+i = recupData()
+i.recupHProf("S2", "S2")
