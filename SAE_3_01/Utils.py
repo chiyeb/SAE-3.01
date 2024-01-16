@@ -2,14 +2,16 @@ import os
 import shutil
 import sqlite3
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, ttk
+from selectFile import *
 
 
 class Utils:
     """
-    Classe où se trouve des fonctions utiles pour le programme
+    Classe où se trouvent des fonctions utiles pour le programme
     """
     instance = None
+    root = None
 
     def __new__(cls):
         if cls.instance is None:
@@ -26,6 +28,26 @@ class Utils:
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
 
+    def create_main_window(self):
+        """
+        Afficher la fenêtre graphique principal pour laisser l'utilisateur choisir une action.
+        :return:
+        """
+        self.root = tk.Tk()
+        self.root.title("Gestion du programme")
+        self.root.geometry("600x600")
+
+        ttk.Label(self.root, text="Choisissez une action :").pack(pady=10)
+
+        delete_bd_button = ttk.Button(self.root, text="Supprimer la base de données",
+                                      command=self.clearBD)
+        delete_bd_button.pack(pady=5)
+
+        delete_files_button = ttk.Button(self.root, text="Supprimer les fichiers générés",
+                                         command=self.clearAllFiles)
+        delete_files_button.pack(pady=5)
+
+        self.root.mainloop()
 
     def clearBD(self):
         """
@@ -47,7 +69,6 @@ class Utils:
         # si l'utilisateur n'as pas confirmé la suppression de la BD
         else:
             self.display_result(False)
-
 
     def confirm_deletion(self, arg):
         """
@@ -130,9 +151,8 @@ class Utils:
 
         # Si le dossier n'existe pas, le créer
         if not os.path.exists(DossierStats):
-            os.makedirs(DossierStats) # recrée le dossier
-
+            os.makedirs(DossierStats)  # recrée le dossier
 
 
 i = Utils()
-i.clearBD()
+i.create_main_window()
