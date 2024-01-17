@@ -21,21 +21,25 @@ class selectFile:
     planning_file = None
     QFQ_file = None
 
-    def __new__(cls):
+    def __new__(cls, mode='defaut'):
         if cls.instance is None:
             cls.instance = super(selectFile, cls).__new__(cls)
-            cls.instance._setup()
+            cls.instance._setup(mode)
         return cls.instance
 
-    def _setup(self):
-        self.fichier_destination = "fichiers necessaires/file_destination.txt"
-        # vérifie si le fichier existe
-        if os.path.exists(self.fichier_destination):
-            self.recup_destination_file()
-        else:
-            with open(self.fichier_destination, "w") as file:
-                file.write("")
-                self.open_select_file()
+    def _setup(self, mode):
+        print(mode)
+        if mode == 'defaut':
+            self.fichier_destination = "fichiers necessaires/file_destination.txt"
+            # vérifie si le fichier existe
+            if os.path.exists(self.fichier_destination):
+                self.recup_destination_file()
+            else:
+                with open(self.fichier_destination, "w") as file:
+                    file.write("")
+                    self.open_select_file()
+        if mode == 'utils':
+            self.fichier_destination = "fichiers necessaires/file_destination.txt"
 
     def open_select_file(self):
         # initialise Tkinter

@@ -12,6 +12,7 @@ class Utils:
     """
     instance = None
     root = None
+    selectFileInstance = None
 
     def __new__(cls):
         if cls.instance is None:
@@ -27,6 +28,7 @@ class Utils:
         # Initialise la connexion à la base de données
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
+        self.selectFileInstance = selectFile('utils')
 
     def create_main_window(self):
         """
@@ -46,6 +48,9 @@ class Utils:
         delete_files_button = ttk.Button(self.root, text="Supprimer les fichiers générés",
                                          command=self.clearAllFiles)
         delete_files_button.pack(pady=5)
+        chose_file_button = ttk.Button(self.root, text="Choisir les fichiers utile pour le programme",
+                                       command=self.selectFileInstance.open_select_file)
+        chose_file_button.pack(pady=5)
 
         self.root.mainloop()
 

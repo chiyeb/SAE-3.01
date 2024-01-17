@@ -202,6 +202,7 @@ class recupData:
         :param semestre_onglet:
         :return:
         """
+        print("Récupération des couleurs")
         ressourceCouleur = {}
         self.cursor.execute("SELECT Num_Res FROM Maquette WHERE Semestre = ?", (semestre,))
         resultats = [item[0] for item in self.cursor.fetchall()]
@@ -221,7 +222,7 @@ class recupData:
 
     def trouverTypeCours2eRange(self, semestre_onglet):
         """
-        Récupère la premiere occurence de chaque type de cours dans le fichier planning
+        Récupère la deuxième occurrence de chaque type de cours dans le fichier planning
         :param semestre_onglet:
         :return:
         """
@@ -236,12 +237,12 @@ class recupData:
                     # On récupère la valeur de la colone de la cellule
                     type_cours_dict[cell.value] = cell.column
 
-        print(type_cours_dict)
+        print(f"2:{type_cours_dict}")
         return type_cours_dict
 
     def trouverTypeCours1erRange(self, semestre_onglet):
         """
-        Récupère la deuxième occurence de chaque type de cours dans le fichier planning
+        Récupère la première occurrence de chaque type de cours dans le fichier planning
         :param semestre_onglet:
         :return:
         """
@@ -262,7 +263,7 @@ class recupData:
                 # S'il y à plus de valeur dans "valeur_a_trouver"
                 if not valeurs_a_trouver:
                     return type_cours_dict
-        print(type_cours_dict)
+        print(f"1{type_cours_dict}")
         return type_cours_dict
 
     def recupXetY(self, semestre, semestre_onglet):
@@ -378,7 +379,7 @@ class recupData:
             tCours = "Amphi"
         if type_cours_dict1["TD"] <= col <= type_cours_dict1["TP"]:
             tCours = "TD"
-        if type_cours_dict1["TP"] <= col <= type_cours_dict1["Test"]:
+        if type_cours_dict1["TP"] <= col < type_cours_dict1["Test"]:
             tCours = "TP"
         if type_cours_dict1["Test"] <= col <= type_cours_dict2["Cours"]:
             tCours = "Test"
@@ -386,12 +387,9 @@ class recupData:
             tCours = "Amphi"
         if type_cours_dict2["TD"] <= col <= type_cours_dict2["TP"]:
             tCours = "TD"
-        if type_cours_dict2["TP"] <= col <= type_cours_dict2["Test"]:
+        if type_cours_dict2["TP"] <= col < type_cours_dict2["Test"]:
             tCours = "TP"
         if col >= type_cours_dict2["Test"]:
             tCours = "Test"
         return tCours
 
-
-i = recupData()
-i.recupHProf("S2", "S2")

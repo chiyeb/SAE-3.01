@@ -76,7 +76,7 @@ class verifData:
                         rapport_warning += (f"Warning : Heures différentes entre le fichier planning et maquette\n"
                                             f"  -Ressource: {maquette[3]}\n"
                                             f"  -Heure planning: {planning[2]}\n"
-                                            f"  - Heure maquette: {maquette[4]}\n")
+                                            f"  -Heure maquette: {maquette[4]}\n")
                     if planning[3] > maquette[5]:
                         print(f"Erreur TD pour le semestre {semestre}")
                         rapport += (f"Erreur TD écrite dans le planning supérieur à celle prévu nationalement: \n"
@@ -88,7 +88,7 @@ class verifData:
                         rapport_warning += (f"Warning : Heures différentes entre le fichier planning et maquette\n"
                                             f"  -Ressource: {maquette[3]}\n"
                                             f"  -Heure planning: {planning[3]}\n"
-                                            f"  - Heure maquette: {maquette[5]}\n")
+                                            f"  -Heure maquette: {maquette[5]}\n")
                     if planning[4] > maquette[6]:
                         print(f"erreur TP pour le semestre {semestre}")
                         rapport += (f"Erreur TP écrite dans le planning supérieur à celle prévu nationalement: \n"
@@ -100,7 +100,7 @@ class verifData:
                         rapport_warning += (f"Warning : Heures différentes entre le fichier planning et maquette\n"
                                             f"  -Ressource: {maquette[3]}\n"
                                             f"  -Heure planning: {planning[4]}\n"
-                                            f"  - Heure maquette: {maquette[6]}\n")
+                                            f"  -Heure maquette: {maquette[6]}\n")
                     if rapport:
                         # incrémentation du nombre d'erreur
                         self.nbErreur += 1
@@ -135,6 +135,7 @@ class verifData:
         cpt = 0
         for planning in rslt_planning:
             rapport = ""
+            rapport_warning = ""
             cursor_tmp.execute("SELECT Ressource FROM Horaires WHERE Semestre = ? AND Ressource = ?",
                                (semestre, planning[6]))
             ressource = cursor_tmp.fetchone()
@@ -146,7 +147,7 @@ class verifData:
                     "SELECT nbCours FROM Horaires WHERE Semestre = ? AND Type_Cours = ? AND Ressource = ?",
                     (semestre, "Amphi", ressource[0]))
                 cmHoraire = cursor_tmp.fetchone()
-                if cmHoraire is not None and planning[2] != cmHoraire[0]:
+                if cmHoraire is not None and planning[2] < cmHoraire[0]:
                     print("cm")
                     rapport += (f"Erreur CM: \n "
                                 f"  -ressource: {ressource[0]}"
@@ -162,11 +163,27 @@ class verifData:
                         for coms in commentaire:
                             if coms[0] is not None and coms[0] not in [None, "", "None", "None,", "(None,)"]:
                                 rapport += f"-{coms[0]}\n"
+                if cmHoraire is not None and planning[2] > cmHoraire[0]:
+                    print("cm")
+                    rapport_warning += (f"Warning CM: \n "
+                                        f"  -ressource: {ressource[0]}"
+                                        f"  -heures écrite: {planning[2]}, "
+                                        f"  -heure posé: {cmHoraire[0]}\n")
+                    cursor_tmp.execute(
+                        "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
+                        (semestre, ressource[0], "Amphi"))
+                    commentaire = cursor_tmp.fetchall()
+                    if commentaire is not None:
+                        print(commentaire)
+                        rapport_warning += f"- Commentaire(s) : \n"
+                        for coms in commentaire:
+                            if coms[0] is not None and coms[0] not in [None, "", "None", "None,", "(None,)"]:
+                                rapport_warning += f"-{coms[0]}\n"
 
                 cursor_tmp.execute("SELECT nbCours FROM Horaires WHERE Semestre = ? AND Type_Cours = ? AND Ressource "
                                    "= ?", (semestre, "TD", ressource[0]))
                 tdHoraire = cursor_tmp.fetchone()
-                if tdHoraire is not None and planning[3] != tdHoraire[0]:
+                if tdHoraire is not None and planning[3] < tdHoraire[0]:
                     print("td")
                     rapport += (f"Erreur TD:\n "
                                 f"  -ressource: {ressource[0]}\n"
@@ -182,11 +199,26 @@ class verifData:
                         for coms in commentaire:
                             if coms[0] is not None and coms[0] not in [None, "", "None", "None,", "(None,)"]:
                                 rapport += f"-{coms[0]}\n"
-
+                if tdHoraire is not None and planning[3] > tdHoraire[0]:
+                    print("td")
+                    rapport_warning += (f"Warning TD:\n "
+                                        f"  -ressource: {ressource[0]}\n"
+                                        f"  -heure écrites: {planning[3]}\n"
+                                        f"  -heure posé: {tdHoraire[0]}\n")
+                    cursor_tmp.execute(
+                        "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
+                        (semestre, ressource[0], "TD"))
+                    commentaire = cursor_tmp.fetchall()
+                    if commentaire is not None:
+                        print(commentaire)
+                        rapport_warning += f"- Commentaire(s) : \n"
+                        for coms in commentaire:
+                            if coms[0] is not None and coms[0] not in [None, "", "None", "None,", "(None,)"]:
+                                rapport_warning += f"-{coms[0]}\n"
                 cursor_tmp.execute("SELECT nbCours FROM Horaires WHERE Semestre = ? AND Type_Cours = ? AND Ressource "
                                    "= ?", (semestre, "TP", ressource[0]))
                 tpHoraire = cursor_tmp.fetchone()
-                if tpHoraire is not None and planning[4] != tpHoraire[0]:
+                if tpHoraire is not None and planning[4] < tpHoraire[0]:
                     print("tp")
                     rapport += (f"Erreur TP\n "
                                 f"  -ressource: {ressource[0]} \n"
@@ -202,6 +234,22 @@ class verifData:
                         for coms in commentaire:
                             if coms[0] is not None and coms[0] not in [None, "", "None", "None,", "(None,)"]:
                                 rapport += f"-{coms[0]}\n"
+                if tpHoraire is not None and planning[4] > tpHoraire[0]:
+                    print("tp")
+                    rapport_warning += (f"Warning TP\n "
+                                        f"  -ressource: {ressource[0]} \n"
+                                        f"  -heures écrites: {planning[4]} \n "
+                                        f"  -heures posés: {tpHoraire[0]} \n")
+                    cursor_tmp.execute(
+                        "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
+                        (semestre, ressource[0], "TP"))
+                    commentaire = cursor_tmp.fetchall()
+                    if commentaire is not None:
+                        print(commentaire)
+                        rapport_warning += f"- Commentaire(s) : \n"
+                        for coms in commentaire:
+                            if coms[0] is not None and coms[0] not in [None, "", "None", "None,", "(None,)"]:
+                                rapport_warning += f"-{coms[0]}\n"
                 if rapport:
                     # incrémentation du nombre d'erreurs
                     self.nbErreur += 1
@@ -213,6 +261,17 @@ class verifData:
                                              f" -ressource: {ressource[0]}\n")
                         rapport_erreur.write(rapport)
                         rapport_erreur.write("\n")
+                if rapport_warning:
+                    # incrémentation du nombre d'erreurs
+                    self.nbErreurWarning += 1
+                    # Écriture de l'erreur dans un fichier de rapport
+                    with open(self.fichierWarning, "a") as rapport_w:
+                        rapport_w.write(f"\n \n Warning: heure posé et écrites différentes dans le planning"
+                                              f"\n "
+                                              f" -semestre: {semestre} \n "
+                                              f" -ressource: {ressource[0]}\n")
+                        rapport_w.write(rapport_warning)
+                        rapport_w.write("\n")
 
     def getNbErreur(self):
         """
