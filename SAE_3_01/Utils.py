@@ -41,7 +41,7 @@ class Utils:
 
         ttk.Label(self.root, text="Choisissez une action :").pack(pady=10)
 
-        delete_bd_button = ttk.Button(self.root, text="Supprimer la base de données",
+        delete_bd_button = ttk.Button(self.root, text="Supprimer les données de la base de données",
                                       command=self.clearBD)
         delete_bd_button.pack(pady=5)
 
