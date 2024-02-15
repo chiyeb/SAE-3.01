@@ -65,12 +65,17 @@ class verifData:
                 if not (planning[1] in maquette[3]):
                     rapport += f"La ressource {maquette[1]} n'existe pas ou n'a pas été placée au bon endroit.\n"
                 else:
+                    diff_cm = planning[2] - maquette[4]
+                    diff_td = planning[3] - maquette[5]
+                    diff_tp = planning[4] - maquette[6]
                     if planning[2] > maquette[4]:
                         print(f"erreur cm pour le semestre {semestre}")
                         rapport += (f"Erreur CM écrite dans le planning supérieur à celle prévu nationalement: \n"
                                     f"  -Ressource: {maquette[3]}\n "
                                     f"  -Heure planning: {planning[2]}\n"
-                                    f"  -Heure maquette: {maquette[4]}\n")
+                                    f"  -Heure maquette: {maquette[4]}\n"
+                                    f"  -Différence: {diff_cm}\n")
+
                     if planning[2] < maquette[4]:
                         print(f"Warning CM pour le semestre {semestre}")
                         rapport_warning += (f"Warning : Heures différentes entre le fichier planning et maquette\n"
@@ -82,7 +87,8 @@ class verifData:
                         rapport += (f"Erreur TD écrite dans le planning supérieur à celle prévu nationalement: \n"
                                     f"  -Ressource: {maquette[3]}\n"
                                     f"  -Heure planning: {planning[3]}\n"
-                                    f"  -Heure maquette: {maquette[5]}\n")
+                                    f"  -Heure maquette: {maquette[5]}\n"
+                                    f"  -Différence: {diff_td}\n")
                     if planning[3] < maquette[5]:
                         print(f"Warning TD pour le semestre {semestre}")
                         rapport_warning += (f"Warning : Heures différentes entre le fichier planning et maquette\n"
@@ -94,7 +100,8 @@ class verifData:
                         rapport += (f"Erreur TP écrite dans le planning supérieur à celle prévu nationalement: \n"
                                     f"  -Hessource: {maquette[3]} \n"
                                     f"  -Heure planning: {planning[4]} \n"
-                                    f"  -Heure maquette: {maquette[6]}\n")
+                                    f"  -Heure maquette: {maquette[6]}\n"
+                                    f"  -Différence: {diff_tp}\n")
                     if planning[4] < maquette[6]:
                         print(f"Warning Tp pour le semestre {semestre}")
                         rapport_warning += (f"Warning : Heures différentes entre le fichier planning et maquette\n"
@@ -143,16 +150,21 @@ class verifData:
             if ressource is None or not (ressource[0] in planning[6]):
                 rapport += f"La ressource {planning[6]} n'existe pas ou n'a pas été placée au bon endroit.\n"
             else:
+
+
                 cursor_tmp.execute(
                     "SELECT nbCours FROM Horaires WHERE Semestre = ? AND Type_Cours = ? AND Ressource = ?",
                     (semestre, "Amphi", ressource[0]))
                 cmHoraire = cursor_tmp.fetchone()
                 if cmHoraire is not None and planning[2] < cmHoraire[0]:
+                    diff_cm = planning[2] - cmHoraire[0]
+
                     print("cm")
                     rapport += (f"Erreur CM: \n "
                                 f"  -ressource: {ressource[0]}"
                                 f"  -heures écrite: {planning[2]}, "
-                                f"  -heure posé: {cmHoraire[0]}\n")
+                                f"  -heure posé: {cmHoraire[0]}\n"
+                                f"  -Différence: {diff_cm}\n")
                     cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "Amphi"))
@@ -168,7 +180,8 @@ class verifData:
                     rapport_warning += (f"Warning CM: \n "
                                         f"  -ressource: {ressource[0]}"
                                         f"  -heures écrite: {planning[2]}, "
-                                        f"  -heure posé: {cmHoraire[0]}\n")
+                                        f"  -heure posé: {cmHoraire[0]}\n"
+                                        f"  -Différence: {diff_cm}\n")
                     cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "Amphi"))
@@ -184,11 +197,14 @@ class verifData:
                                    "= ?", (semestre, "TD", ressource[0]))
                 tdHoraire = cursor_tmp.fetchone()
                 if tdHoraire is not None and planning[3] < tdHoraire[0]:
+                    diff_td = planning[3] - tdHoraire[0]
+
                     print("td")
                     rapport += (f"Erreur TD:\n "
                                 f"  -ressource: {ressource[0]}\n"
                                 f"  -heure écrites: {planning[3]}\n"
-                                f"  -heure posé: {tdHoraire[0]}\n")
+                                f"  -heure posé: {tdHoraire[0]}\n"
+                                f"  -Différence: {diff_td}\n")
                     cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "TD"))
@@ -204,7 +220,8 @@ class verifData:
                     rapport_warning += (f"Warning TD:\n "
                                         f"  -ressource: {ressource[0]}\n"
                                         f"  -heure écrites: {planning[3]}\n"
-                                        f"  -heure posé: {tdHoraire[0]}\n")
+                                        f"  -heure posé: {tdHoraire[0]}\n"
+                                        f"  -Différence: {diff_td}\n")
                     cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "TD"))
@@ -219,11 +236,13 @@ class verifData:
                                    "= ?", (semestre, "TP", ressource[0]))
                 tpHoraire = cursor_tmp.fetchone()
                 if tpHoraire is not None and planning[4] < tpHoraire[0]:
+                    diff_tp = planning[4] - tpHoraire[0]
                     print("tp")
                     rapport += (f"Erreur TP\n "
                                 f"  -ressource: {ressource[0]} \n"
                                 f"  -heures écrites: {planning[4]} \n "
-                                f"  -heures posés: {tpHoraire[0]} \n")
+                                f"  -heures posés: {tpHoraire[0]} \n"
+                                f"  -Différence: {diff_tp}\n")
                     cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "TP"))
@@ -239,7 +258,8 @@ class verifData:
                     rapport_warning += (f"Warning TP\n "
                                         f"  -ressource: {ressource[0]} \n"
                                         f"  -heures écrites: {planning[4]} \n "
-                                        f"  -heures posés: {tpHoraire[0]} \n")
+                                        f"  -heures posés: {tpHoraire[0]} \n"
+                                        f"  -Différence: {diff_tp}\n")
                     cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "TP"))
@@ -310,3 +330,7 @@ class verifData:
         nouveau_chemin_fichier_warning = os.path.join(os.path.dirname(self.fichierWarning), nouveau_nom_fichier_warning)
         os.rename(self.fichierWarning, nouveau_chemin_fichier_warning)
         self.fichierWarning = nouveau_chemin_fichier_warning
+
+vData = verifData()
+vData.concordance("S3FA")
+vData.concordancePlanning("S3FA")
