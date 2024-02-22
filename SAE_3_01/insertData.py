@@ -1,3 +1,4 @@
+import os
 import sqlite3
 import math
 import pandas as pd
@@ -145,5 +146,19 @@ class insertData:
                                   pr[1]))
                 self.conn.commit()
 
-i = insertData()
-i.insertNombreHeureProf()
+    def insert_data_from_fichier_generer(self, valeurs_recuperes):
+        self.cursor.execute("DELETE FROM FichiersGenere")
+
+        for valeurs_fichier in valeurs_recuperes:
+            for fichier, onglet, _, valeurs_onglet in valeurs_fichier:
+                nom_fichier_sans_extension = os.path.splitext(fichier)[0]  # Récupérer le nom de fichier sans extension
+                for ligne in valeurs_onglet:
+                    # Insérer les données dans la base de données
+                    self.cursor.execute(
+                        "INSERT INTO FichiersGenere (Semestre, Ressources, Prof, H_CM, H_TD, H_TP) VALUES (?, ?, ?, "
+                        "?, ?, ?)",
+                        (nom_fichier_sans_extension, onglet, ligne[0], ligne[1], ligne[2], ligne[3]))
+
+        self.conn.commit()
+        self.conn.close()
+
