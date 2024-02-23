@@ -46,7 +46,6 @@ class insertData:
         existing_row = self.cursor.fetchone()
         # si la requête renvoie quelque chose on update au lieu d'insérer
         if existing_row:
-            print(Semestre, Code_ressource, Libelle, H_CM, H_TD, H_TP)
             self.cursor.execute(
                 "UPDATE Maquette SET Code_ressource = ?, Semestre = ?, Libelle = ?, H_CM = ?, H_TD = ?, H_TP = ?, "
                 "Num_Res = ? WHERE id_res_formation = ?",
@@ -113,7 +112,6 @@ class insertData:
             "JOIN Horaires "
             "ON HoraireProf.Ressource = Horaires.Ressource")
         profs = self.cursor.fetchall()
-        print(profs)
         for pr in profs:
             # ajout des heures total pour chaque type de cours (sur chaque ressources)
             hCMPActuel = hTDPActuel = hTPDPActuel = hTPNDPActuel = hTestPActuel = 0

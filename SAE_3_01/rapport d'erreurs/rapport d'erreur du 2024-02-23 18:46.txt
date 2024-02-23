@@ -1,0 +1,38 @@
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.01
+Erreur CM: 
+   -ressource: R1.01  -heures écrite: 18,   -heure posé: 24
+- Commentaire(s) : 
+-CM avant les TDs
+	-A C
+Séance 1h30
+	-A C
+-CM avant TD
+	-A C
+Séance 1h30
+	-A C
+-CM avant le TP
+	-A C
+Séance 1h30
+	-A C
+-Séance 1h30
+	-A C
+-Séance 1h30
+	-A C
+-Séance 1h30
+	-A C
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.10
+Erreur TP
+   -ressource: R1.10 
+  -heures écrites: 25 
+   -heures posés: 26 
+- Commentaire(s) : 
+

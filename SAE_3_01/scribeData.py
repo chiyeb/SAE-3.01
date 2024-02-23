@@ -34,29 +34,22 @@ class scribeData:
         """
         try:
             print("Début de la méthode scribeRessource")
-
             # On récupère les semestres uniques du planning
             self.cursor.execute("SELECT DISTINCT Semestre FROM Planning WHERE Semestre = ?", (semestre,))
             semesters = [row[0] for row in self.cursor.fetchall()]
-            print(f"Semestres trouvés : {semesters}")
 
             # On ouvre le fichier "fichier_vierge.xlsx"
             try:
                 fichier_vierge = openpyxl.load_workbook("fichiers necessaires/fichier_vierge.xlsx", read_only=False)
             except FileNotFoundError:
-                print("Le fichier fichier_vierge.xlsx n'a pas été trouvé.")
                 exit()
             for semester in semesters:
-                print(f"Traitement du semestre : {semester}")
 
                 # On récupère des ressources pour le semestre actuel
                 self.cursor.execute("SELECT DISTINCT Ressource FROM Planning WHERE Semestre = ?", (semester,))
                 resources = [row[0] for row in self.cursor.fetchall()]
-                print(f"Ressources trouvées : {resources}")
 
                 for resource in resources:
-                    print(f"Traitement de la ressource : {resource}")
-
                     base_sheet = fichier_vierge["Feuil1"]
 
                     # Création d'une nouvelle feuille Excel avec le nom de la ressource
@@ -74,7 +67,6 @@ class scribeData:
 
                     # On écrit les données de la base de données dans la nouvelle feuille Excel
                     if data_from_database:
-                        print(f"Traitement des données ({resource}, {semester}): {data_from_database}")
                         worksheet.cell(row=5, column=2, value=data_from_database[0][1])
                         worksheet.cell(row=5, column=3, value=data_from_database[0][2])
                         worksheet.cell(row=5, column=4, value=data_from_database[0][3])
@@ -125,7 +117,6 @@ class scribeData:
 
                     # On écrit les données dans la feuille Excel
                     if data_from_database:
-                        print(f"Traitement des données ({resource}): {data_from_database}")
                         row_index = 15
                         for intervenant in data_from_database:
                             worksheet.cell(row=row_index, column=1, value=intervenant[0])
@@ -137,8 +128,6 @@ class scribeData:
                     data_from_database = self.cursor.fetchall()
 
                     if data_from_database:
-                        print(
-                            f"Données de la base de données Cours ({resource}, {semester}): {data_from_database}")
                         date_type_rows = {}
                         dict_date_cours = {}
                         for i, cours_actuel in enumerate(data_from_database):
@@ -150,7 +139,6 @@ class scribeData:
                             if type_cours not in dict_date_cours.get(date_actuelle, []):
                                 dict_date_cours.setdefault(date_actuelle, []).append(type_cours)
                             # Parcourir les éléments suivants pour vérifier les doublons
-                        print(dict_date_cours)
                         for cle, types_cours in dict_date_cours.items():
                             # Vérifier si la date a déjà été traitée
                             if cle not in date_type_rows:
@@ -249,7 +237,6 @@ class scribeData:
                         intervenant_name = intervenant[0].upper()
 
                         if intervenant_name in prof_data:
-                            print(f"{intervenant_name} est titulaire")
                             # Écrire le nom du titulaire dans la colonne 1, ligne 65
                             worksheet.cell(row_index6, column=1, value=intervenant_name)
                             row_index6 += 1
@@ -273,13 +260,7 @@ class scribeData:
                             if intervenant[4] is not None:
                                 worksheet.cell(row_index10, column=15, value=intervenant[4] * tp_multiplier)
                                 row_index10 += 1
-
-
-
                         elif intervenant_name not in prof_data:
-
-                            print(f"{intervenant_name} est vacataire")
-
                             # Écrire le nom du vacataire dans la colonne 1, ligne 56
                             worksheet.cell(row_index0, column=1, value=intervenant_name)
                             row_index0 += 1
@@ -315,8 +296,6 @@ class scribeData:
                 save_path = os.path.join(save_directory, filename)
                 # Sauvegarde du fichier Excel
                 fichier_vierge.save(save_path)
-                print(f"Les données ont été ajoutées à {save_path}")
-
         except sqlite3.Error as e:
             print(f"Erreur lors de la connexion à la base de données : {e}")
 
@@ -352,8 +331,6 @@ class scribeData:
             fichier = "Professeurs_Horaires.xlsx"
             lieu_enregistrement = os.path.join(dossier, fichier)
             excel.to_excel(lieu_enregistrement, index=False)
-            print(f"Les données ont été écrites dans le fichier {lieu_enregistrement}")
-
         except sqlite3.Error as e:
             print(f"Erreur lors de la récupération des données : {e}")
 
@@ -367,8 +344,6 @@ class scribeData:
         data_from_database = self.cursor.fetchall()
 
         if data_from_database:
-            print(f"Traitement des données: {data_from_database}")
-
             # Déterminer le nombre de colonnes dans la base de données
             num_columns = len(data_from_database[0])
 

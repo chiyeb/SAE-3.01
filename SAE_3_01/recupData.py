@@ -44,7 +44,6 @@ class recupData:
         planning = pd.ExcelFile(self.files.planning_file)
         self.cursor.execute("SELECT Libelle, Num_Res FROM Maquette WHERE Semestre = ?", (semestre,))
         resultats = self.cursor.fetchall()
-        print(resultats)
         for row in resultats:
             num_res = row[1]
             libelle = row[0]
@@ -61,11 +60,6 @@ class recupData:
                             and isinstance(valeur_case_5, int)):
                         additions = valeur_case_3 + valeur_case_5 + valeur_case_7
                         if index_num_res + 10 < len(row) and additions > 0:
-                            print(f"Num_Res trouvé: {num_res}")
-                            print(f"3e case après le mot: {valeur_case_3}")
-                            print(f"5e case: {valeur_case_5}")
-                            print(f"7e case: {valeur_case_7}")
-                            print(f"10e case: {valeur_case_10}")
                             insertdata = insertData()
                             insertdata.insert_planning(semestre, libelle, valeur_case_3, valeur_case_5, valeur_case_7,
                                                        valeur_case_10)
@@ -126,7 +120,6 @@ class recupData:
                 if resource not in donnees:
                     donnees[resource] = {None: [{}]}
                 for intervenant, data_list in intervenant_data.items():
-                    print(f"Ressource: {resource} - Intervenant : {intervenant} ")
                     if data_list:
                         for d in data_list:
                             # Vérifie si l'enregistrement existe déjà dans la base de données
@@ -152,15 +145,6 @@ class recupData:
                                      d['Test']))
 
                             self.conn.commit()
-                            print(f"    - CM : {d['CM']} heure" if pd.notna(d['CM']) else "    - CM : Non spécifié")
-                            print(f"    - TD : {d['TD']} heure" if pd.notna(d['TD']) else "    - TD : Non spécifié")
-                            print(f"    - TP (non dédoublés) : {d['TP (non dédoublés)']} heure" if pd.notna(
-                                d['TP (non dédoublés)']) else "    - TP (non dédoublés) : Non spécifié")
-                            print(f"    - TP (dédoublés) : {d['TP (dédoublés)']} heure" if pd.notna(
-                                d['TP (dédoublés)']) else "    - TP (dédoublés) : Non spécifié")
-                            print(f"    - Test : {d['Test']} heure" if pd.notna(
-                                d['Test']) else "    - Test : Non spécifié")
-                            print("\n")
                     else:
                         print("Aucune données pour cette ressource.")
                         print("\n")
@@ -239,7 +223,6 @@ class recupData:
                     # On récupère la valeur de la colone de la cellule
                     type_cours_dict[cell.value] = cell.column
 
-        print(f"2:{type_cours_dict}")
         return type_cours_dict
 
     def trouverTypeCours1erRange(self, semestre_onglet):
@@ -265,7 +248,6 @@ class recupData:
                 # S'il y à plus de valeur dans "valeur_a_trouver"
                 if not valeurs_a_trouver:
                     return type_cours_dict
-        print(f"1{type_cours_dict}")
         return type_cours_dict
 
     def recupXetY(self, semestre, semestre_onglet):
@@ -312,7 +294,6 @@ class recupData:
                                 couleur = row_cell.fill.start_color.rgb
                                 # On récupère les coordonnées du cours (X,Y)
                                 idCours = row_cell.coordinate
-                                print(date)
                                 for cle, valeur in ressourceCouleur.items():
                                     # Si la couleur de la cellule = la couleur d'une ressource
                                     if valeur == couleur:
@@ -366,7 +347,6 @@ class recupData:
                                                                 "Type_Cours, nbCours, Salle) VALUES (?, ?, ?, 2, ?)",
                                                                 (semestre, cle, tCours, salle))
                                         self.cursor.connection.commit()
-                                        print(f"Cle: {cle} Valeur: {valeur}, Couleur: {couleur}")
 
     def typeCours(self, type_cours_dict1, type_cours_dict2, col):
         """

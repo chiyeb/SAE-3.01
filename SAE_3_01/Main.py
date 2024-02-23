@@ -8,15 +8,18 @@ from scribeData import scribeData
 from selectFile import selectFile
 from verifData import verifData
 
+print("Début du programme\nVeuillez patienter...")
+print("Instantiation des classes...")
 recupDataInstance = recupData()
 recupDataInstance.recupNomProf()
-
+print("Classes instanciées")
+print("Lancement du programme pour le BUT1")
 BUT1_instance = BUT1()
 BUT1_instance.run()
-
+print("Lancement du programme pour le BUT2")
 BUT2_instance = BUT2()
 BUT2_instance.run()
-
+print("Lancement du programme pour le BUT3")
 BUT3_instance = BUT3()
 BUT3_instance.run()
 
