@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
+from tkinter import Scrollbar
 import sqlite3
 
 class ShowError:
@@ -22,9 +23,6 @@ class ShowError:
         self.root.title("Rapport d'erreurs")
         self.root.geometry("1500x1300")
 
-        # Mise en blanc du fond de la fenêtre principale
-        self.root.configure(bg='white')
-
         # Création d'un Notebook pour les onglets
         self.notebook = ttk.Notebook(self.root)
         self.notebook.pack(fill='both', expand=True)
@@ -35,21 +33,31 @@ class ShowError:
         self.notebook.add(self.tab_errors, text='Erreurs')
         self.notebook.add(self.tab_warnings, text='Warnings')
 
-        # Récupération de toutes les lignes de la table
-        self.cursor.execute('SELECT * FROM Erreurs')
+        # Background color
+        self.tab_errors.config(bg='white')
+        self.tab_warnings.config(bg='white')
+
+        # Récupération des données de la base de données sauf la dernière colonne
+        self.cursor.execute('SELECT Id_Erreur, Libelle, Type_Erreur, Semestre, Ressource, Heure_ecrites, Heure_poses, Commentaires FROM Erreurs')
+
         rows = self.cursor.fetchall()
 
         # Récupération des noms des colonnes
         self.column_names = [description[0] for description in self.cursor.description]
-
-        # Nombre de colonnes par ligne
-        num_columns = 6
 
         self.trees = []
         self.labels = []
         self.label_states = [False] * len(rows)
 
         self.sort_data(rows)
+        self.display_errors(rows)
+        self.display_warnings(rows)
+
+
+
+    def display_errors(self, rows):
+        # Nombre de colonnes par ligne
+        num_columns = 4
 
         for index, row in enumerate(rows):
             if row[2] == 'Erreur':
@@ -57,13 +65,14 @@ class ShowError:
                 label = tk.Label(self.tab_errors, text=f"{index}", bg='black', fg='white', font='Helvetica 12 bold', padx=10, pady=5)
                 label.grid(row=(index // num_columns) * 2, column=index % num_columns, padx=7, pady=5, sticky='n')
 
+
                 # Création du tableau
                 tree = ttk.Treeview(self.tab_errors,columns=('Value',))
                 tree.heading('#0', text='Erreur')
                 tree.heading('#1', text='Valeur')
 
-                tree.column('#0', width=100, anchor='w')
-                tree.column('#1', width=100, anchor='w')
+                tree.column('#0', width=140, anchor='w')
+                tree.column('#1', width=140, anchor='w')
 
                 # Positionnement du tableau pour qu'il y ait 6 colonnes par ligne maximum
                 tree.grid(row=(index // num_columns) * 2 + 1, column=index % num_columns, padx=7, pady=30)
@@ -81,7 +90,14 @@ class ShowError:
                 # Création du bouton
                 button = tk.Button(self.tab_errors, text="Détail", border=0 ,fg='black', font='Helvetica 12 bold', command=lambda index=index: self.on_button_click(index))
                 # Ajout du bouton à la dernière ligne de chaque tableau positionné en bas
-                button.grid(row=(index // num_columns) * 2 + 1, column=index % num_columns, padx=7, pady=35, sticky='s')
+                button.grid(row=(index // num_columns) * 2 + 1, column=index % num_columns, padx=7, pady=35, sticky='sw')
+
+                # Ajout du bouton cacher à la dernière ligne de chaque tableau positionné en bas à droite
+                button2 = tk.Button(self.tab_errors, text="Supprimer", border=0, fg='black', font='Helvetica 12 bold',
+                                    command=lambda index=index: self.delete_error(index))
+                # Ajout du bouton à la dernière ligne de chaque tableau positionné en bas à droite
+                button2.grid(row=(index // num_columns) * 2 + 1, column=index % num_columns, padx=7, pady=35,
+                             sticky='se')
 
                 # Ajout d'une image au-dessus du tableau
                 img = Image.open('images/logo_IUT.png')
@@ -94,6 +110,10 @@ class ShowError:
                 # Gardez une référence à l'image pour l'empêcher d'être supprimée par le ramasse-miettes
                 canvas.img = img
 
+    def display_warnings(self, rows):
+        # Nombre de colonnes par ligne
+        num_columns = 4
+
         for index, row in enumerate(rows):
             if row[2] != 'Erreur':
                 # Création du label pour numéroter le tableau
@@ -105,8 +125,8 @@ class ShowError:
                 tree.heading('#0', text='Erreur')
                 tree.heading('#1', text='Valeur')
 
-                tree.column('#0', width=100, anchor='w')
-                tree.column('#1', width=100, anchor='w')
+                tree.column('#0', width=140, anchor='w')
+                tree.column('#1', width=140, anchor='w')
 
                 tree.grid(row=(index // num_columns) * 2 + 1, column=index % num_columns, padx=7, pady=30)
                 tree.tag_configure('odd', foreground='white')
@@ -116,9 +136,21 @@ class ShowError:
 
                 self.trees.append(tree)
 
-                # Ajout des boutons dans l'onglet "Warnings"
-                button = tk.Button(self.tab_warnings, text="Détail", border=0, fg='black', font='Helvetica 12 bold', command=lambda index=index: self.on_button_click2(index))
-                button.grid(row=(index // num_columns) * 2 + 1, column=index % num_columns, padx=7, pady=35, sticky='s')
+                # Création du bouton
+                button = tk.Button(self.tab_warnings, text="Détail", border=0, fg='black', font='Helvetica 12 bold',
+                                   command=lambda index=index: self.on_button_click2(index))
+                # Ajout du bouton à la dernière ligne de chaque tableau positionné en bas à gauche
+                button.grid(row=(index // num_columns) * 2 + 1, column=index % num_columns, padx=7, pady=35,
+                            sticky='sw')
+
+                # Ajout du bouton cacher à la dernière ligne de chaque tableau positionné en bas à droite
+                button2 = tk.Button(self.tab_warnings, text="Supprimer", border=0, fg='black', font='Helvetica 12 bold',
+                                      command=lambda index=index: self.delete_error(index))
+                # Ajout du bouton à la dernière ligne de chaque tableau positionné en bas à droite
+                button2.grid(row=(index // num_columns) * 2 + 1, column=index % num_columns, padx=7, pady=35,
+                            sticky='se')
+
+
 
                 # Ajout d'une image au-dessus du tableau
                 img = Image.open('images/logo_IUT.png')
@@ -131,8 +163,18 @@ class ShowError:
                 # Gardez une référence à l'image pour l'empêcher d'être supprimée par le ramasse-miettes
                 canvas.img = img
 
-                # Ajout du tableau à la liste pour y accéder ultérieurement
-                self.trees.append(tree)
+    def delete_error(self, index):
+        # Récupération de l'identifiant de l'erreur à supprimer dans la base de données
+        id_error = self.trees[index].item(self.trees[index].get_children()[0])['values'][0]
+        print(f"Suppression de l'erreur = {id_error}")
+
+        # Mise à jour de la base de données pour marquer l'erreur comme supprimée avec la colonne is_delete = 1
+        self.cursor.execute('UPDATE Erreurs SET is_delete = 1 WHERE Id_Erreur = ?', (id_error,))
+        self.conn.commit()
+
+
+        # Supprimer le tableau correspondant de l'interface utilisateur
+        self.trees[index].destroy()
 
     def sort_data(self, rows):
         # Tri des données en fonction de la troisième colonne
@@ -148,9 +190,10 @@ class ShowError:
         if last_row:
             last_row_str = " ".join(str(x) for x in last_row)
 
-            label = tk.Label(self.tab_errors, text=f"Commentaire {index} : {last_row_str}", wraplength=200, border=2,
-                             relief='solid', bg='white', fg='black', font='Helvetica 14 bold')
-            label.grid(row=(index // 6) * 2 + 2, column=index % 6, padx=7, pady=3, sticky='s')
+            label = tk.Label(self.tab_errors, text=f"Commentaire {index} : {last_row_str}", wraplength=150, border=2,
+                             relief='solid', bg='white', fg='black', font='Helvetica 14 bold', padx=5, pady=5)
+
+            label.grid(row=(index // 6) * 2 + 2, column=index % 6, padx=5, pady=2, sticky='s')
 
             # Mettre à jour l'état du label
             self.label_states[index] = True
@@ -159,9 +202,10 @@ class ShowError:
             self.labels.append(label)
 
         else:
-            label = tk.Label(self.tab_errors, text=f"Commentaire {index} est vide", wraplength=200, border=2,
-                             relief='solid', bg='white', fg='black', font='Helvetica 14 bold')
-            label.grid(row=(index // 6) * 2 + 2, column=index % 6, padx=7, pady=3, sticky='s')
+            label = tk.Label(self.tab_errors, text=f"Commentaire {index} est vide",wraplength=150, border=2,
+                             relief='solid', bg='white', fg='black', font='Helvetica 14 bold', padx=5, pady=5)
+
+            label.grid(row=(index // 6) * 2 + 2, column=index % 6, padx=5, pady=2, sticky='s')
 
             # Mettre à jour l'état du label
             self.label_states[index] = False
@@ -179,9 +223,10 @@ class ShowError:
         if last_row:
             last_row_str = " ".join(str(x) for x in last_row)
 
-            label = tk.Label(self.tab_warnings, text=f"Commentaire {index} : {last_row_str}", wraplength=200, border=2,
-                             relief='solid', bg='white', fg='black', font='Helvetica 14 bold')
-            label.grid(row=(index // 6) * 2 + 2, column=index % 6, padx=7, pady=3, sticky='s')
+            label = tk.Label(self.tab_warnings, text=f"Commentaire {index} : {last_row_str}", wraplength=150, border=2,
+                             relief='solid', bg='white', fg='black', font='Helvetica 14 bold', padx=5, pady=5)
+
+            label.grid(row=(index // 6) * 2 + 2, column=index % 6, padx=5, pady=2, sticky='s')
 
             # Mettre à jour l'état du label
             self.label_states[index] = True
