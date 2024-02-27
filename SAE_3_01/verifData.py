@@ -1,11 +1,6 @@
 import os
 import sqlite3
-import math
 from datetime import datetime
-
-import pandas as pd
-
-from insertData import insertData
 
 
 class verifData:
@@ -75,13 +70,13 @@ class verifData:
                                     f"  -Heure planning: {planning[2]}\n"
                                     f"  -Heure maquette: {maquette[4]}\n"
                                     f"  -Différence: {diff_cm}\n")
-
                     if planning[2] < maquette[4]:
                         print(f"Warning CM pour le semestre {semestre}")
                         rapport_warning += (f"Warning : Heures différentes entre le fichier planning et maquette\n"
                                             f"  -Ressource: {maquette[3]}\n"
                                             f"  -Heure planning: {planning[2]}\n"
-                                            f"  -Heure maquette: {maquette[4]}\n")
+                                            f"  -Heure maquette: {maquette[4]}\n"
+                                            f"  -Différence: {diff_cm}\n")
                     if planning[3] > maquette[5]:
                         print(f"Erreur TD pour le semestre {semestre}")
                         rapport += (f"Erreur TD écrite dans le planning supérieur à celle prévu nationalement: \n"
@@ -94,7 +89,8 @@ class verifData:
                         rapport_warning += (f"Warning : Heures différentes entre le fichier planning et maquette\n"
                                             f"  -Ressource: {maquette[3]}\n"
                                             f"  -Heure planning: {planning[3]}\n"
-                                            f"  -Heure maquette: {maquette[5]}\n")
+                                            f"  -Heure maquette: {maquette[5]}\n"
+                                            f"  -Différence: {diff_td}\n")
                     if planning[4] > maquette[6]:
                         print(f"erreur TP pour le semestre {semestre}")
                         rapport += (f"Erreur TP écrite dans le planning supérieur à celle prévu nationalement: \n"
@@ -107,7 +103,8 @@ class verifData:
                         rapport_warning += (f"Warning : Heures différentes entre le fichier planning et maquette\n"
                                             f"  -Ressource: {maquette[3]}\n"
                                             f"  -Heure planning: {planning[4]}\n"
-                                            f"  -Heure maquette: {maquette[6]}\n")
+                                            f"  -Heure maquette: {maquette[6]}\n"
+                                            f"  -Différence: {diff_tp}\n")
                     if rapport:
                         # incrémentation du nombre d'erreur
                         self.nbErreur += 1
@@ -150,15 +147,12 @@ class verifData:
             if ressource is None or not (ressource[0] in planning[6]):
                 rapport += f"La ressource {planning[6]} n'existe pas ou n'a pas été placée au bon endroit.\n"
             else:
-
-
                 cursor_tmp.execute(
                     "SELECT nbCours FROM Horaires WHERE Semestre = ? AND Type_Cours = ? AND Ressource = ?",
                     (semestre, "Amphi", ressource[0]))
                 cmHoraire = cursor_tmp.fetchone()
                 if cmHoraire is not None and planning[2] < cmHoraire[0]:
-                    diff_cm = planning[2] - cmHoraire[0]
-
+                    diff_cm = cmHoraire[0] - planning[2]
                     print("cm")
                     rapport += (f"Erreur CM: \n "
                                 f"  -ressource: {ressource[0]}"
@@ -181,7 +175,7 @@ class verifData:
                                         f"  -ressource: {ressource[0]}"
                                         f"  -heures écrite: {planning[2]}, "
                                         f"  -heure posé: {cmHoraire[0]}\n"
-                                        f"  -Différence: {diff_cm}\n")
+                                        f"  -Différence: {planning[2] - cmHoraire[0]}\n")
                     cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "Amphi"))
@@ -197,8 +191,7 @@ class verifData:
                                    "= ?", (semestre, "TD", ressource[0]))
                 tdHoraire = cursor_tmp.fetchone()
                 if tdHoraire is not None and planning[3] < tdHoraire[0]:
-                    diff_td = planning[3] - tdHoraire[0]
-
+                    diff_td = tdHoraire[0] - planning[3]
                     print("td")
                     rapport += (f"Erreur TD:\n "
                                 f"  -ressource: {ressource[0]}\n"
@@ -221,7 +214,7 @@ class verifData:
                                         f"  -ressource: {ressource[0]}\n"
                                         f"  -heure écrites: {planning[3]}\n"
                                         f"  -heure posé: {tdHoraire[0]}\n"
-                                        f"  -Différence: {diff_td}\n")
+                                        f"  -Différence: {planning[3] - tdHoraire[0]}\n")
                     cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "TD"))
@@ -236,7 +229,7 @@ class verifData:
                                    "= ?", (semestre, "TP", ressource[0]))
                 tpHoraire = cursor_tmp.fetchone()
                 if tpHoraire is not None and planning[4] < tpHoraire[0]:
-                    diff_tp = planning[4] - tpHoraire[0]
+                    diff_tp = tpHoraire[0] - planning[4]
                     print("tp")
                     rapport += (f"Erreur TP\n "
                                 f"  -ressource: {ressource[0]} \n"
@@ -259,7 +252,7 @@ class verifData:
                                         f"  -ressource: {ressource[0]} \n"
                                         f"  -heures écrites: {planning[4]} \n "
                                         f"  -heures posés: {tpHoraire[0]} \n"
-                                        f"  -Différence: {diff_tp}\n")
+                                        f"  -Différence: {planning[4] - tpHoraire[0]}\n")
                     cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "TP"))
@@ -332,5 +325,5 @@ class verifData:
         self.fichierWarning = nouveau_chemin_fichier_warning
 
 vData = verifData()
-vData.concordance("S3FA")
-vData.concordancePlanning("S3FA")
+vData.concordance("S1")
+vData.concordancePlanning("S1")
