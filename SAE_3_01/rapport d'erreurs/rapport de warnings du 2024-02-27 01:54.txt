@@ -1,0 +1,66 @@
+Warning : Heures différentes entre le fichier planning et maquette
+  -Ressource: R1.11 Bases de la communication
+  -Heure planning: 0
+  -Heure maquette: 1
+  -Différence: -1
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.03
+Warning TD:
+   -ressource: R1.03
+  -heure écrites: 8
+  -heure posé: 4
+  -Différence: 4
+- Commentaire(s) : 
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.05
+Warning TP
+   -ressource: R1.05 
+  -heures écrites: 20 
+   -heures posés: 16 
+  -Différence: 4
+- Commentaire(s) : 
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.07
+Warning TP
+   -ressource: R1.07 
+  -heures écrites: 9 
+   -heures posés: 6 
+  -Différence: 3
+- Commentaire(s) : 
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.08
+Warning TP
+   -ressource: R1.08 
+  -heures écrites: 3 
+   -heures posés: 2 
+  -Différence: 1
+- Commentaire(s) : 
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.12
+Warning TP
+   -ressource: R1.12 
+  -heures écrites: 3 
+   -heures posés: 2 
+  -Différence: 1
+- Commentaire(s) : 
+
