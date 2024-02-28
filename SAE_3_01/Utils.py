@@ -4,6 +4,7 @@ import sqlite3
 import tkinter as tk
 from tkinter import messagebox, ttk
 from selectFile import *
+from scribeFileProf import *
 
 
 class Utils:
@@ -50,8 +51,11 @@ class Utils:
         delete_files_button.pack(pady=5)
         chose_file_button = ttk.Button(self.root, text="Choisir les fichiers utile pour le programme",
                                        command=self.selectFileInstance.open_select_file)
-        chose_file_button.pack(pady=5)
 
+        chose_file_button.pack(pady=5)
+        generer_fichier_prof_button = ttk.Button(self.root, text="Générer le fichier d'heures par professeurs",
+                                                 command=self.generer_fichier_heure_prof)
+        generer_fichier_prof_button.pack(pady=5)
         self.root.mainloop()
 
     def clearBD(self):
@@ -157,6 +161,14 @@ class Utils:
         # Si le dossier n'existe pas, le créer
         if not os.path.exists(DossierStats):
             os.makedirs(DossierStats)  # recrée le dossier
+
+    def generer_fichier_heure_prof(self):
+        """
+        Fonction pour générer le fichier d'heure par professeur
+        :return:
+        """
+        scribeFileProfInstance = scribeFileProf()
+        scribeFileProfInstance.run()
 
 
 i = Utils()

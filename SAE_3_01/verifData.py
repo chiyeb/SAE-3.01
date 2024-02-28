@@ -311,7 +311,6 @@ class verifData:
                             if coms[0] is not None and coms[0] not in [None, "", "None", "None,", "(None,)"]:
                                 rapport_warning += f"-{coms[0]}\n"
                                 commentaire_strBD += f"-{coms[0]}\n"
-                print(commentaire)
                 if rapport:
                     print(commentaire_strBD)
                     # incrémentation du nombre d'erreurs
