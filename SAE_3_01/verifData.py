@@ -1,11 +1,6 @@
 import os
 import sqlite3
-import math
 from datetime import datetime
-
-import pandas as pd
-
-from insertData import insertData
 
 
 class verifData:
@@ -13,13 +8,13 @@ class verifData:
     Classe permettant de vérifier la concordance des données
     """
     instance = None
-    fichierErreur = None
-    nbErreur = 0
-    nbErreurWarning = 0
-    fichierWarning = None
+    fichier_erreur = None
+    nb_erreur = 0
+    nb_erreur_warning = 0
+    fichier_warning = None
 
     def __new__(cls):
-        nbErreur = 0
+        nb_erreur = 0
         if cls.instance is None:
             cls.instance = super(verifData, cls).__new__(cls)
             cls.instance._setup()
@@ -38,11 +33,11 @@ class verifData:
         folder_path = "rapport d'erreurs"
         os.makedirs(folder_path, exist_ok=True)
         # Mettre les fichiers dans le dossier "rapport d'erreurs"
-        self.fichierErreur = os.path.join(
+        self.fichier_erreur = os.path.join(
             folder_path, f"rapport d'erreur du {datetime.now().strftime('%Y-%m-%d %H:%M')}.txt"
         )
-        self.fichierWarning = os.path.join(folder_path,
-                                           f"rapport de warnings du {datetime.now().strftime('%Y-%m-%d %H:%M')}.txt")
+        self.fichier_warning = os.path.join(folder_path,
+                                            f"rapport de warnings du {datetime.now().strftime('%Y-%m-%d %H:%M')}.txt")
 
     def concordance(self, semestre):
         """
@@ -141,18 +136,18 @@ class verifData:
                         heure_maquette = maquette[6]
                     if rapport:
                         # incrémentation du nombre d'erreur
-                        self.nbErreur += 1
+                        self.nb_erreur += 1
                         self.insert_error(libelle, type_erreur, semestre, ressource, heure_planning, heure_maquette,
                                           commentaire)
                         # Écriture de l'erreur dans un fichier de rapport
-                        with open(self.fichierErreur, "a") as rapport_erreur:
+                        with open(self.fichier_erreur, "a") as rapport_erreur:
                             rapport_erreur.write(rapport)
                             rapport_erreur.write("\n")
                     if rapport_warning:
                         # incrémentation du nombre d'erreurs
-                        self.nbErreurWarning += 1
+                        self.nb_erreur_warning += 1
                         # Écriture de l'erreur dans un fichier de rapport
-                        with open(self.fichierWarning, "a") as rapport_warn:
+                        with open(self.fichier_warning, "a") as rapport_warn:
                             rapport_warn.write(rapport_warning)
                             rapport_warn.write("\n")
 
@@ -314,12 +309,12 @@ class verifData:
                 if rapport:
                     print(commentaire_strBD)
                     # incrémentation du nombre d'erreurs
-                    self.nbErreur += 1
+                    self.nb_erreur += 1
                     libelleBD = "Heure posé et écrites différentes dans le planning"
                     self.insert_error(libelleBD, type_erreurBD, semestre, ressourceBD, heure_ecritesBD, heure_posesBD,
                                       commentaire_strBD)
                     # Écriture de l'erreur dans un fichier de rapport
-                    with open(self.fichierErreur, "a") as rapport_erreur:
+                    with open(self.fichier_erreur, "a") as rapport_erreur:
                         rapport_erreur.write(f"\n \n Erreur: heure posé et écrites différentes dans le planning"
                                              f"\n "
                                              f" -semestre: {semestre} \n "
@@ -328,15 +323,16 @@ class verifData:
                         rapport_erreur.write("\n")
                 if rapport_warning:
                     libelle = "Heure posé et écrites différentes dans le planning"
-                    self.insert_error(libelleBD, type_erreurBD, semestre, ressourceBD, heure_ecritesBD, heure_posesBD, commentaire_strBD)
+                    self.insert_error(libelleBD, type_erreurBD, semestre, ressourceBD, heure_ecritesBD, heure_posesBD,
+                                      commentaire_strBD)
                     # incrémentation du nombre d'erreurs
-                    self.nbErreurWarning += 1
+                    self.nb_erreur_warning += 1
                     # Écriture de l'erreur dans un fichier de rapport
-                    with open(self.fichierWarning, "a") as rapport_w:
+                    with open(self.fichier_warning, "a") as rapport_w:
                         rapport_w.write(f"\n \n Warning: heure posé et écrites différentes dans le planning"
-                                              f"\n "
-                                              f" -semestre: {semestre} \n "
-                                              f" -ressource: {ressource[0]}\n")
+                                        f"\n "
+                                        f" -semestre: {semestre} \n "
+                                        f" -ressource: {ressource[0]}\n")
                         rapport_w.write(rapport_warning)
                         rapport_w.write("\n")
 
@@ -345,14 +341,14 @@ class verifData:
         Fonction pour récupérer le nombre d'erreurs
         :return:
         """
-        return self.nbErreur
+        return self.nb_erreur
 
     def getNbWarning(self):
         """
         Fonction pour récupérer le nombre d'erreurs
         :return:
         """
-        return self.nbErreurWarning
+        return self.nb_erreur_warning
 
     def renomFichierAvecNbErreur(self):
         """
@@ -360,23 +356,24 @@ class verifData:
         """
         # Renommage du fichier d'erreurs
         nb_erreurs = self.getNbErreur()
-        nom_fichier_base_erreur = os.path.splitext(self.fichierErreur)[0]
-        date_modification_erreur = datetime.fromtimestamp(os.path.getmtime(self.fichierErreur)).strftime(
+        nom_fichier_base_erreur = os.path.splitext(self.fichier_erreur)[0]
+        date_modification_erreur = datetime.fromtimestamp(os.path.getmtime(self.fichier_erreur)).strftime(
             '%Y-%m-%d %H:%M')
         nouveau_nom_fichier_erreur = f"{nb_erreurs} erreurs -- {date_modification_erreur} -- rapport d'erreur.txt"
-        nouveau_chemin_fichier_erreur = os.path.join(os.path.dirname(self.fichierErreur), nouveau_nom_fichier_erreur)
-        os.rename(self.fichierErreur, nouveau_chemin_fichier_erreur)
-        self.fichierErreur = nouveau_chemin_fichier_erreur
+        nouveau_chemin_fichier_erreur = os.path.join(os.path.dirname(self.fichier_erreur), nouveau_nom_fichier_erreur)
+        os.rename(self.fichier_erreur, nouveau_chemin_fichier_erreur)
+        self.fichier_erreur = nouveau_chemin_fichier_erreur
 
         # Renommage du fichier de warnings
         nb_warnings = self.getNbWarning()
-        nom_fichier_base_warning = os.path.splitext(self.fichierWarning)[0]
-        date_modification_warning = datetime.fromtimestamp(os.path.getmtime(self.fichierWarning)).strftime(
+        nom_fichier_base_warning = os.path.splitext(self.fichier_warning)[0]
+        date_modification_warning = datetime.fromtimestamp(os.path.getmtime(self.fichier_warning)).strftime(
             '%Y-%m-%d %H:%M')
         nouveau_nom_fichier_warning = f"{nb_warnings} warnings -- {date_modification_warning} -- rapport de warnings.txt"
-        nouveau_chemin_fichier_warning = os.path.join(os.path.dirname(self.fichierWarning), nouveau_nom_fichier_warning)
-        os.rename(self.fichierWarning, nouveau_chemin_fichier_warning)
-        self.fichierWarning = nouveau_chemin_fichier_warning
+        nouveau_chemin_fichier_warning = os.path.join(os.path.dirname(self.fichier_warning),
+                                                      nouveau_nom_fichier_warning)
+        os.rename(self.fichier_warning, nouveau_chemin_fichier_warning)
+        self.fichier_warning = nouveau_chemin_fichier_warning
 
     def insert_error(self, libelle, type_erreur, semestre, ressource, heure_ecrites, heure_poses, commentaires,
                      is_delete=0):
@@ -408,6 +405,7 @@ class verifData:
                 print("Erreur ajoutée avec succès dans la base de données.")
             except sqlite3.Error as e:
                 print("Erreur lors de l'insertion de l'erreur dans la base de données.", e)
+
 
 test = verifData()
 test.concordancePlanning("S1")

@@ -2,10 +2,12 @@ from recupData import *
 from insertData import *
 from scribeData import *
 
+
 class scribeFileProf:
     """
     Classe qui s'occupe de lancer les différents scripts pour le fichier Professeurs_Horaires.xlsx
     """
+
     def __init__(self):
         """
         Constructeur de la classe
@@ -44,6 +46,7 @@ class scribeFileProf:
         print("Écriture des valeurs récupérées dans le fichier de destination")
         scribeDataInstance.write_data_to_excel("fichiers genere/Professeurs_Horaires.xlsx")
         print("Valeurs récupérées")
+
 
 if __name__ == "__main__":
     scribe_prof = scribeFileProf()

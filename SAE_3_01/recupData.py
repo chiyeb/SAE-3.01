@@ -1,5 +1,4 @@
 import sqlite3
-import math
 from datetime import datetime
 
 import openpyxl
@@ -138,8 +137,8 @@ class recupData:
                             else:
                                 # Insère un nouvel enregistrement
                                 self.cursor.execute(
-                                    "INSERT INTO HoraireProf (Semestre, Ressource, Intervenant, CM, TD, TP_non_dedoubles, "
-                                    "TP_Dedoubles, Test) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                                    "INSERT INTO HoraireProf (Semestre, Ressource, Intervenant, CM, TD, "
+                                    "TP_non_dedoubles, TP_Dedoubles, Test) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                                     (semestre, resource, intervenant, d['CM'], d['TD'], d['TP (non dédoublés)'],
                                      d['TP (dédoublés)'],
                                      d['Test']))
@@ -356,24 +355,24 @@ class recupData:
         :param col:
         :return:
         """
-        tCours = None
+        t_cours = None
         if type_cours_dict1["Cours"] <= col <= type_cours_dict1["TD"]:
-            tCours = "Amphi"
+            t_cours = "Amphi"
         if type_cours_dict1["TD"] <= col <= type_cours_dict1["TP"]:
-            tCours = "TD"
+            t_cours = "TD"
         if type_cours_dict1["TP"] <= col < type_cours_dict1["Test"]:
-            tCours = "TP"
+            t_cours = "TP"
         if type_cours_dict1["Test"] <= col <= type_cours_dict2["Cours"]:
-            tCours = "Test"
+            t_cours = "Test"
         if type_cours_dict2["Cours"] <= col <= type_cours_dict2["TD"]:
-            tCours = "Amphi"
+            t_cours = "Amphi"
         if type_cours_dict2["TD"] <= col <= type_cours_dict2["TP"]:
-            tCours = "TD"
+            t_cours = "TD"
         if type_cours_dict2["TP"] <= col < type_cours_dict2["Test"]:
-            tCours = "TP"
+            t_cours = "TP"
         if col >= type_cours_dict2["Test"]:
-            tCours = "Test"
-        return tCours
+            t_cours = "Test"
+        return t_cours
 
     def recuperer_valeurs_dans_fichier_genere(self):
         valeurs_globales = []

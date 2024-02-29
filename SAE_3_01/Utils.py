@@ -5,6 +5,7 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 from selectFile import *
 from scribeFileProf import *
+from mail import *
 
 
 class Utils:
@@ -56,6 +57,9 @@ class Utils:
         generer_fichier_prof_button = ttk.Button(self.root, text="Générer le fichier d'heures par professeurs",
                                                  command=self.generer_fichier_heure_prof)
         generer_fichier_prof_button.pack(pady=5)
+        envoie_mail_prof_button = ttk.Button(self.root, text="Envoyer les fichiers par mail",
+                                             command=run)
+        envoie_mail_prof_button.pack(pady=5)
         self.root.mainloop()
 
     def clearBD(self):
