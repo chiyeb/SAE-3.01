@@ -45,7 +45,7 @@ class scribeFileProf:
         # Écrire les valeurs récupérées dans le fichier de destination
         print("Écriture des valeurs récupérées dans le fichier de destination")
         scribeDataInstance.write_data_to_excel("fichiers genere/Professeurs_Horaires.xlsx")
-        print("Valeurs récupérées")
+        print("Valeurs écrites")
 
 
 if __name__ == "__main__":

@@ -2,11 +2,12 @@ import os
 import shutil
 import sqlite3
 import tkinter as tk
+import webbrowser
 from tkinter import messagebox, ttk
 from selectFile import *
 from scribeFileProf import *
 from mail import *
-
+from showData import *
 
 class Utils:
     """
@@ -15,6 +16,7 @@ class Utils:
     instance = None
     root = None
     selectFileInstance = None
+    showDataInstance = None
 
     def __new__(cls):
         if cls.instance is None:
@@ -31,7 +33,6 @@ class Utils:
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
         self.selectFileInstance = selectFile('utils')
-
     def create_main_window(self):
         """
         Afficher la fenêtre graphique principal pour laisser l'utilisateur choisir une action.
@@ -60,7 +61,15 @@ class Utils:
         envoie_mail_prof_button = ttk.Button(self.root, text="Envoyer les fichiers par mail",
                                              command=run)
         envoie_mail_prof_button.pack(pady=5)
+
+        open_link_button = ttk.Button(self.root, text="Ouvrir le manuel d'utilisation",
+                                      command=self.open_link)
+        open_link_button.pack(pady=5)
+
         self.root.mainloop()
+
+    def open_link(self):
+        webbrowser.open_new("https://chihebbr.notion.site/Manuel-d-utilisation-f730396ababa421796965488ed0aa194?pvs=4")
 
     def clearBD(self):
         """
@@ -109,6 +118,7 @@ class Utils:
             # Définition des chemins des dossiers et fichiers à supprimer
             dossierRapErr = 'rapport d\'erreurs'
             dossierFichGenere = 'fichiers genere'
+            dossierFichereMail = 'fichiers genere mail'
             DossierStats = 'statistiques'
             # Supprimer le contenu du dossier "rapport d'erreurs"
             if os.path.exists(dossierRapErr):
@@ -125,6 +135,10 @@ class Utils:
                 shutil.rmtree(DossierStats)
                 os.makedirs(DossierStats)
             self.display_result(True)
+            # si le dossier "fichiers genere mail" existe, le supprimer
+            if os.path.exists(dossierFichereMail):
+                shutil.rmtree(dossierFichereMail)
+                os.makedirs(dossierFichereMail)
         # si l'utilisateur n'as pas confirmé la suppression des fichiers
         else:
             self.display_result(False)
@@ -139,9 +153,9 @@ class Utils:
         root.withdraw()
 
         if is_deleted:
-            messagebox.showinfo("Suppression", "Tous les fichiers ont été supprimés.")
+            messagebox.showinfo("Suppression", "Tous les fichiers/données ont été supprimés.")
         else:
-            messagebox.showinfo("Suppression", "Les fichiers n'ont pas été supprimés.")
+            messagebox.showinfo("Suppression", "Les fichiers/données n'ont pas été supprimés.")
 
         root.destroy()
 

@@ -174,4 +174,6 @@ def trouver_fichier_excel(dossier):
     """
     return glob.glob(f"{dossier}/*.xlsx")
 
-run()
+if __name__ == "__main__":
+    run()
+    print("Fin du programme")

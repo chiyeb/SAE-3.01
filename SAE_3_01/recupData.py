@@ -150,35 +150,39 @@ class recupData:
 
     def recupNomProf(self):
         """
-        Récupère les noms des professeurs dans le fichier texte, ainsi que leur acronymes
-        :return:
+        Récupère les noms des professeurs dans le fichier texte, ainsi que leur acronymes et emails, et les insère ou met à jour dans la base de données.
         """
         # Ouvre le fichier en mode lecture
         with open(self.files.nom_prof_file, "r") as fichier:
             # Lire chaque ligne du fichier
             for ligne in fichier:
-                # Divise la ligne en utilisant le signe "=" comme séparateur
+                # Divise la ligne en utilisant le signe "=" comme séparateur (acronyme=nom_professeur=email)
                 parties = ligne.strip().split("=")
+                print(ligne)
+                print(parties)
+                # S'assurer qu'il y a au moins un acronyme et un nom avant de continuer
+                if len(parties) >= 2:
+                    # Prépare les variables pour acronyme, nom et initialise email à None
+                    acronyme, nom = parties[0], parties[1]
+                    email = parties[2] if len(parties) == 3 else None  # Email si présent
 
-                # Vérifie si la ligne a été correctement divisée en deux parties
-                if len(parties) == 2:
-                    # Exécute la requête SQL
-                    resultat_requete = self.cursor.execute("SELECT Acronyme, NomProf FROM PROF WHERE Acronyme = ?",
-                                                           (parties[0],)).fetchall()
+                    # Exécute la requête SQL pour vérifier si le prof existe déjà
+                    resultat_requete = self.cursor.execute("SELECT Acronyme FROM Prof WHERE Acronyme = ?",
+                                                           (acronyme,)).fetchone()
+
                     # Vérifie si la requête a renvoyé des résultats, pour savoir si le prof existe déjà
                     if resultat_requete:
-                        # On update le nom du prof
-                        self.cursor.execute("UPDATE PROF SET NomProf = ? WHERE Acronyme = ?", (parties[1], parties[0]))
-                        self.conn.commit()
+                        # Mise à jour du nom du prof et potentiellement de l'email
+                        self.cursor.execute("UPDATE Prof SET NomProf = ?, MailProf = ? WHERE Acronyme = ?",
+                                            (nom, email, acronyme))
                     else:
-                        # On insère le nouveau prof
-                        self.cursor.execute(
-                            "INSERT INTO Prof (Acronyme, NomProf) VALUES (?, ?)",
-                            (parties[0], parties[1],))
-                        # sauvegarder dans la base de données
-                        self.conn.commit()
+                        # Insertion du nouveau prof avec potentiellement un email
+                        self.cursor.execute("INSERT INTO Prof (Acronyme, NomProf, MailProf) VALUES (?, ?, ?)",
+                                            (acronyme, nom, email))
+                    # Sauvegarder les changements dans la base de données
+                    self.conn.commit()
                 else:
-                    print(f"Erreur de format sur la ligne : {ligne}")
+                    print(f"Erreur de format ou ligne incomplète : {ligne}")
 
     def recupRCouleur(self, semestre, semestre_onglet):
         """
@@ -421,3 +425,5 @@ class recupData:
                 valeurs_globales.append(valeurs_fichier)
 
         return valeurs_globales
+
+recupData().recupNomProf()

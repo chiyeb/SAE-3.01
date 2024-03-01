@@ -1,11 +1,11 @@
-SA=Samuele ANNI
-AC=Alain CASALI
-FF=Frédéric FLOUVAT
-PG=Patricia GAITAN
-GG=Giulio GUERRIERI
-RJ=Rim JOUINI
-LL=Lotfi LAKHAL
-ChM=Christine MAKSSOUD
+SA=Samuele ANNI=example@gmail.com
+AC=Alain CASALI=example@gmail.com
+FF=Frédéric FLOUVAT=example@gmail.com
+PG=Patricia GAITAN=example@gmail.com
+GG=Giulio GUERRIERI=example@gmail.com
+RJ=Rim JOUINI=example@gmail.com
+LL=Lotfi LAKHAL=example@gmail.com
+ChM=Christine MAKSSOUD=example@gmail.com
 MMN=Mickaël MARTIN NEVOT
 MMD=Marlène MONNET DUPUY
 MoM=Morgan MORANCEY
@@ -15,6 +15,3 @@ AS=Alexandra SALOU
 ES=Eileen SLEZAK
 JV=Josée VAQUIERI PORTOLANO
 SY=Safa YAHI
-
-
-

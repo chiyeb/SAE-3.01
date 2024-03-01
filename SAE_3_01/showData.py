@@ -21,9 +21,11 @@ class showData:
         :return:
         """
         # connexion à la base de données
-        self.conn = sqlite3.connect('database/database.db')
-        self.cursor = self.conn.cursor()
-
+        try:
+            self.conn = sqlite3.connect('database/database.db')
+            self.cursor = self.conn.cursor()
+        except sqlite3.Error as e:
+            print(f"Erreur de connexion à la base de données SQLite : {e}")
         # Initialise l'interface graphique tKinter
         self.root = tk.Tk()
         self.root.title("Visualiseur de Base de Données")
@@ -120,5 +122,6 @@ class showData:
         """
         self.root.mainloop()
 
-i = showData()
-i.run()
+
+if __name__ == "__main__":
+    showData().run()
