@@ -1,8 +1,7 @@
+from tkinter import ttk, Scrollbar
 import tkinter as tk
-from tkinter import ttk
-from PIL import Image, ImageTk
-from tkinter import Scrollbar
 import sqlite3
+from PIL import Image, ImageTk
 
 class ShowError:
     instance = None
@@ -33,7 +32,7 @@ class ShowError:
         self.notebook.add(self.tab_errors, text='Erreurs')
         self.notebook.add(self.tab_warnings, text='Warnings')
 
-        # Background color
+        # Fond blanc pour les onglets
         self.tab_errors.config(bg='white')
         self.tab_warnings.config(bg='white')
 
@@ -53,8 +52,6 @@ class ShowError:
         self.display_errors(rows)
         self.display_warnings(rows)
 
-
-
     def display_errors(self, rows):
         # Nombre de colonnes par ligne
         num_columns = 4
@@ -65,9 +62,8 @@ class ShowError:
                 label = tk.Label(self.tab_errors, text=f"{index}", bg='black', fg='white', font='Helvetica 12 bold', padx=10, pady=5)
                 label.grid(row=(index // num_columns) * 2, column=index % num_columns, padx=7, pady=5, sticky='n')
 
-
                 # Création du tableau
-                tree = ttk.Treeview(self.tab_errors,columns=('Value',))
+                tree = ttk.Treeview(self.tab_errors, columns=('Value',))
                 tree.heading('#0', text='Erreur')
                 tree.heading('#1', text='Valeur')
 
@@ -150,8 +146,6 @@ class ShowError:
                 button2.grid(row=(index // num_columns) * 2 + 1, column=index % num_columns, padx=7, pady=35,
                             sticky='se')
 
-
-
                 # Ajout d'une image au-dessus du tableau
                 img = Image.open('images/logo_IUT.png')
                 img = img.resize((100, 100), Image.ANTIALIAS)
@@ -163,15 +157,24 @@ class ShowError:
                 # Gardez une référence à l'image pour l'empêcher d'être supprimée par le ramasse-miettes
                 canvas.img = img
 
+                # Barre de défilement pour l'onglet "Erreurs"
+                scrollbar = Scrollbar(self.tab_errors, orient='vertical')
+                scrollbar.grid(row=0, column=4, rowspan=70, sticky='nes')
+                scrollbar.config(command=tree.yview)
+                tree.config(yscrollcommand=scrollbar.set)
+
     def delete_error(self, index):
         # Récupération de l'identifiant de l'erreur à supprimer dans la base de données
         id_error = self.trees[index].item(self.trees[index].get_children()[0])['values'][0]
         print(f"Suppression de l'erreur = {id_error}")
 
-        # Mise à jour de la base de données pour marquer l'erreur comme supprimée avec la colonne is_delete = 1
-        self.cursor.execute('UPDATE Erreurs SET is_delete = 1 WHERE Id_Erreur = ?', (id_error,))
-        self.conn.commit()
+        # Récupération de la valeur de la colonne is_delete
+        is_delete = self.cursor.execute('SELECT is_delete FROM Erreurs WHERE Id_Erreur = ?', (id_error,)).fetchone()[0]
 
+        # Mise à jour de la base de données pour marquer l'erreur comme supprimée avec la colonne is_delete = 1
+        new_is_delete = 0 if is_delete == 1 else 1
+        self.cursor.execute(f"UPDATE Erreurs SET is_delete = {new_is_delete} WHERE Id_Erreur = ?", (id_error,))
+        self.conn.commit()
 
         # Supprimer le tableau correspondant de l'interface utilisateur
         self.trees[index].destroy()
@@ -248,5 +251,5 @@ class ShowError:
     def run(self):
         self.root.mainloop()
 
-i = ShowError()
-i.run()
+app = ShowError()
+app.run()
