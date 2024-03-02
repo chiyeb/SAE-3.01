@@ -132,6 +132,3 @@ class Stats:
             """
         self.conn.close()
 
-
-#i = Stats()
-#i.genereHeuresParProf()

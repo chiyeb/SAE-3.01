@@ -21,16 +21,16 @@ class ScribeFileProf:
         """
         print("Début du programme, veuillez patienter...")
         # on instancie les classes pour pouvoir les utiliser
-        recupDataInstance = RecupData()
-        insertDataInstance = InsertData()
-        scribeDataInstance = ScribeData()
+        recup_data_instance = RecupData()
+        insert_data_instance = InsertData()
+        scribe_data_instance = ScribeData()
         print("Classes instanciées")
         print("Récupération des valeurs dans les fichiers générés")
-        valeurs_recuperes = recupDataInstance.recuperer_valeurs_dans_fichier_genere()
+        valeurs_recuperes = recup_data_instance.recuperer_valeurs_dans_fichier_genere()
         print("Valeurs récupérées")
         # Insérer les valeurs récupérées dans la base de données
         print("Insertion des valeurs récupérées dans la base de données")
-        insertDataInstance.insert_data_from_fichier_generer(valeurs_recuperes)
+        insert_data_instance.insert_data_from_fichier_generer(valeurs_recuperes)
         print("Valeurs insérées")
         # Afficher les valeurs récupérées pour chaque fichier
         # for valeurs_fichier in valeurs_recuperes:
@@ -44,7 +44,7 @@ class ScribeFileProf:
 
         # Écrire les valeurs récupérées dans le fichier de destination
         print("Écriture des valeurs récupérées dans le fichier de destination")
-        scribeDataInstance.write_data_to_excel("fichiers genere/Professeurs_Horaires.xlsx")
+        scribe_data_instance.write_data_to_excel("fichiers genere/Professeurs_Horaires.xlsx")
         print("Valeurs écrites")
 
 

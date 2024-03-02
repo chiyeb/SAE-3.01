@@ -178,3 +178,13 @@ class SelectFile:
                             print("erreur inattendu")
                 else:
                     print(f"Erreur de format sur la ligne : {ligne}")
+
+
+if __name__ == "__main__":
+    SelectFile()
+    print(SelectFile.maquette_BUT1_file)
+    print(SelectFile.maquette_BUT2_file)
+    print(SelectFile.maquette_BUT3_file)
+    print(SelectFile.nom_prof_file)
+    print(SelectFile.planning_file)
+    print(SelectFile.QFQ_file)

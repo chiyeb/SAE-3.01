@@ -426,4 +426,3 @@ class RecupData:
 
         return valeurs_globales
 
-# RecupData().recup_nom_prof()

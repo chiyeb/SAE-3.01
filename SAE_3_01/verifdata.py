@@ -406,5 +406,3 @@ class VerifData:
                 print("Erreur lors de l'insertion de l'erreur dans la base de données.", e)
 
 
-test = VerifData()
-test.concordancePlanning("S1")
