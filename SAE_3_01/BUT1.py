@@ -1,9 +1,9 @@
-from scribeData import *
-from verifData import *
-from recupData import *
-from insertData import *
+from scribedata import *
+from verifdata import *
+from recupdata import *
+from insert_data import *
 import pandas as pd
-from selectFile import *
+from selectfile import *
 
 
 class BUT1:
@@ -30,19 +30,19 @@ class BUT1:
         "Setup" l'objet : créer les instances, initialise les fichiers...
         :return:
         """
-        self.files = selectFile()
+        self.files = SelectFile()
         # lire le fichier maquette
         self.BUT1file = pd.ExcelFile(self.files.maquette_BUT1_file)
         # récupérer l'onglet BUT 1
         self.BUT1_1file = pd.read_excel(self.BUT1file, 'BUT 1')
         # instance de recupData
-        self.recupDataInstance = recupData()
+        self.recupDataInstance = RecupData()
         # instance insertData
-        self.insertDataInstance = insertData()
+        self.insertDataInstance = InsertData()
         # instance verifData
-        self.verifDataInstance = verifData()
+        self.verifDataInstance = VerifData()
         # instance scribeData
-        self.scribeDataInstance = scribeData()
+        self.scribeDataInstance = ScribeData()
 
     def run(self):
         # Sélection des heures du premier semestre
@@ -54,10 +54,10 @@ class BUT1:
             self.insertDataInstance.insert_maquette("S1", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3],
                                                     row.iloc[4])
         # fonction pour récupérer les valeurs du premier semestre dans le fichier planning
-        self.recupDataInstance.trouverVal("S1", "S1")
-        self.recupDataInstance.recupHProf("S1", "S1")
+        self.recupDataInstance.trouver_val("S1", "S1")
+        self.recupDataInstance.recup_h_prof("S1", "S1")
         # Récupérer les cours par date dans le fichier planning
-        self.recupDataInstance.recupXetY("S1", "S1")
+        self.recupDataInstance.recup_X_et_Y("S1", "S1")
         # écrire les informations du S1
         self.scribeDataInstance.scribeRessource("S1")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
@@ -74,10 +74,10 @@ class BUT1:
             self.insertDataInstance.insert_maquette("S2", row.iloc[0], row.iloc[1], row.iloc[2], row.iloc[3],
                                                     row.iloc[4])
         # fonction pour récupérer les valeurs du deuxième semestre dans le fichier planning
-        self.recupDataInstance.trouverVal("S2", "S2")
-        self.recupDataInstance.recupHProf("S2", "S2")
+        self.recupDataInstance.trouver_val("S2", "S2")
+        self.recupDataInstance.recup_h_prof("S2", "S2")
         # Récupérer les cours par date dans le fichier planning
-        self.recupDataInstance.recupXetY("S2", "S2")
+        self.recupDataInstance.recup_X_et_Y("S2", "S2")
         # écrire les informations du S2
         self.scribeDataInstance.scribeRessource("S2")
         # fonction pour vérifier les concordances entre le fichier planning et le fichier maquette nationnal à partir de

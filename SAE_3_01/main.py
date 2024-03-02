@@ -3,15 +3,15 @@ import os
 from BUT1 import BUT1
 from BUT2 import BUT2
 from BUT3 import BUT3
-from recupData import recupData
-from scribeData import scribeData
-from selectFile import selectFile
-from verifData import verifData
+from recupdata import RecupData
+from scribedata import ScribeData
+from selectfile import SelectFile
+from verifdata import VerifData
 
 print("Début du programme\nVeuillez patienter...")
 print("Instantiation des classes...")
-recupDataInstance = recupData()
-recupDataInstance.recupNomProf()
+recupDataInstance = RecupData()
+recupDataInstance.recup_nom_prof()
 print("Classes instanciées")
 print("Lancement du programme pour le BUT1")
 BUT1_instance = BUT1()
@@ -23,10 +23,10 @@ print("Lancement du programme pour le BUT3")
 BUT3_instance = BUT3()
 BUT3_instance.run()
 
-verifdata_instance = verifData()
+verifdata_instance = VerifData()
 verifdata_instance.renomFichierAvecNbErreur()
 
-scribedata_instance = scribeData()
+scribedata_instance = ScribeData()
 scribedata_instance.scribeHoraireTotalProf()
 
 #stats = Stats()

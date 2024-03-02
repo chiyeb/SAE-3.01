@@ -1,9 +1,9 @@
-from recupData import *
-from insertData import *
-from scribeData import *
+from recupdata import *
+from insert_data import *
+from scribedata import *
 
 
-class scribeFileProf:
+class ScribeFileProf:
     """
     Classe qui s'occupe de lancer les différents scripts pour le fichier Professeurs_Horaires.xlsx
     """
@@ -21,9 +21,9 @@ class scribeFileProf:
         """
         print("Début du programme, veuillez patienter...")
         # on instancie les classes pour pouvoir les utiliser
-        recupDataInstance = recupData()
-        insertDataInstance = insertData()
-        scribeDataInstance = scribeData()
+        recupDataInstance = RecupData()
+        insertDataInstance = InsertData()
+        scribeDataInstance = ScribeData()
         print("Classes instanciées")
         print("Récupération des valeurs dans les fichiers générés")
         valeurs_recuperes = recupDataInstance.recuperer_valeurs_dans_fichier_genere()
@@ -49,5 +49,5 @@ class scribeFileProf:
 
 
 if __name__ == "__main__":
-    scribe_prof = scribeFileProf()
+    scribe_prof = ScribeFileProf()
     scribe_prof.run()

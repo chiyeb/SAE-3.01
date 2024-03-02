@@ -5,7 +5,6 @@ from email.mime.text import MIMEText
 import openpyxl
 import sqlite3
 from openpyxl.workbook import Workbook
-from sqlalchemy import create_engine
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
@@ -120,16 +119,16 @@ def traitement_fichier_excel(chemin, dossier="fichiers genere mail"):
     """
     Fonction qui traite les fichiers Excel générés par le programme
     :param chemin: Chemin des fichiers
+    :param dossier: Dossier où sauvegarder les nouveaux fichiers
     """
     if not verif_bd_connect():
         print("Impossible de se connecter à la base de données. Vérifiez la configuration.")
         return
 
-    engine = create_engine(db)
     feuille_prof = defaultdict(list)
     for chemin_fichier in chemin:
         wb = openpyxl.load_workbook(chemin_fichier)
-        nom_fichier_base = os.path.splitext(os.path.basename(chemin_fichier))[0]  # Extrait le nom de base sans l'extension
+        nom_fichier_base = os.path.splitext(os.path.basename(chemin_fichier))[0]
         print(f"Traitement du fichier {chemin_fichier}...")
         for nom_feuille in wb.sheetnames:
             feuille = wb[nom_feuille]
@@ -148,7 +147,8 @@ def traitement_fichier_excel(chemin, dossier="fichiers genere mail"):
             nouvelle_feuille = new_wb.create_sheet(title=titre_nouvelle_feuille)
             for row in original_sheet.iter_rows(values_only=True):
                 nouvelle_feuille.append(row)
-
+        print(nom_prof)
+        nom_prof = f'{nom_prof}'
         nom_nv_fichier = f"{nom_prof.replace(' ', '_')}_sheets.xlsx"
         chemin_nv_fichier = os.path.join(dossier, nom_nv_fichier)
         try:
@@ -173,6 +173,7 @@ def trouver_fichier_excel(dossier):
     :param dossier: Dossier où chercher les fichiers
     """
     return glob.glob(f"{dossier}/*.xlsx")
+
 
 if __name__ == "__main__":
     run()

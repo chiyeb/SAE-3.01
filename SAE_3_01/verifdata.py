@@ -3,7 +3,7 @@ import sqlite3
 from datetime import datetime
 
 
-class verifData:
+class VerifData:
     """
     Classe permettant de vérifier la concordance des données
     """
@@ -14,9 +14,8 @@ class verifData:
     fichier_warning = None
 
     def __new__(cls):
-        nb_erreur = 0
         if cls.instance is None:
-            cls.instance = super(verifData, cls).__new__(cls)
+            cls.instance = super(VerifData, cls).__new__(cls)
             cls.instance._setup()
         return cls.instance
 
@@ -407,5 +406,5 @@ class verifData:
                 print("Erreur lors de l'insertion de l'erreur dans la base de données.", e)
 
 
-test = verifData()
+test = VerifData()
 test.concordancePlanning("S1")

@@ -3,7 +3,7 @@ from tkinter import ttk
 import sqlite3
 
 
-class showData:
+class ShowData:
     """
     Classe qui permet d'afficher les données de la base de données dans une fenêtre graphique
     """
@@ -11,7 +11,7 @@ class showData:
 
     def __new__(cls):
         if cls.instance is None:
-            cls.instance = super(showData, cls).__new__(cls)
+            cls.instance = super(ShowData, cls).__new__(cls)
             cls.instance._setup()
         return cls.instance
 
@@ -63,11 +63,10 @@ class showData:
             self.update_table_view(None)
 
     #
-    def update_table_view(self, event):
+    def update_table_view(self):
         """
         Met à jour le Treeview (tableau où sont affiché les données) pour afficher les données de la table sélectionnée
         dans le combobox (liste des tables de la BD).
-        :param event:
         :return:
         """
         table_name = self.table_var.get()
@@ -76,7 +75,7 @@ class showData:
     def update_table_data(self, table_name):
         """
         Fonction récupère et affiche les données de la table sélectionné dans le Treeview (tableau où sont affiché les données).
-        :param table_name: 
+        :param table_name: Nom de la table
         :return: 
         """
         self.cursor.execute(f"PRAGMA table_info({table_name})")
@@ -124,4 +123,4 @@ class showData:
 
 
 if __name__ == "__main__":
-    showData().run()
+    ShowData().run()

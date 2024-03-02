@@ -3,7 +3,7 @@ from tkinter import filedialog, messagebox
 import os
 
 
-class selectFile:
+class SelectFile:
     """
     Classe qui permet de faire choisir à l'utilisateur l'endroit où se trouve chaque fichier nécessaire au programme
     """
@@ -23,7 +23,7 @@ class selectFile:
 
     def __new__(cls, mode='defaut'):
         if cls.instance is None:
-            cls.instance = super(selectFile, cls).__new__(cls)
+            cls.instance = super(SelectFile, cls).__new__(cls)
             cls.instance._setup(mode)
         return cls.instance
 

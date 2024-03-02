@@ -25,15 +25,15 @@ class Stats:
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
 
-    def execAllStats(self):
+    def exec_all_stats(self):
         """
         Exécute chaque fonction pour les statistiques
         :return:
         """
-        self.genereGraph()
-        self.generePie()
+        self.genere_graph()
+        self.genere_pie()
 
-    def genereGraph(self):
+    def genere_graph(self):
         """
         Fonction qui génère un graphique
         :return:
@@ -67,7 +67,7 @@ class Stats:
         plt.savefig('statistiques/ressources_par_semestre.jpg', format='jpg')
         plt.close()
 
-    def generePie(self):
+    def genere_pie(self):
         """
         Fonction qui génère un camembert
         :return:
@@ -94,7 +94,7 @@ class Stats:
         plt.savefig('statistiques/heures_par_responsable.jpg', format='jpg')
         plt.close()
 
-    def genereHeuresParProf(self):
+    def genere_heures_par_prof(self):
         """
         Fonction qui génère un graphique représentant le nombre total d'heures par professeur.
         :return:

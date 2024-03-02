@@ -5,11 +5,11 @@ import openpyxl
 import pandas as pd
 from openpyxl.reader.excel import load_workbook
 
-from insertData import insertData
-from selectFile import *
+from insert_data import InsertData
+from selectfile import *
 
 
-class recupData:
+class RecupData:
     """
     Classe permettant de récupérer certaines données dans les fichiers
     """
@@ -19,7 +19,7 @@ class recupData:
 
     def __new__(cls):
         if cls.instance is None:
-            cls.instance = super(recupData, cls).__new__(cls)
+            cls.instance = super(RecupData, cls).__new__(cls)
             cls.instance._setup()
         return cls.instance
 
@@ -28,12 +28,12 @@ class recupData:
         "Setup" l'objet : initialise la connexion à la BD
         :return:
         """
-        self.files = selectFile()
+        self.files = SelectFile()
         # Initialise la connexion à la base de données
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
 
-    def trouverVal(self, semestre, semestre_onglet):
+    def trouver_val(self, semestre, semestre_onglet):
         """
         Fonction qui trouve les ressources dans le fichier planning, récupère les valeurs des heures de CM,TD et TP.
         :param semestre:
@@ -46,39 +46,38 @@ class recupData:
         for row in resultats:
             num_res = row[1]
             libelle = row[0]
-            S = pd.read_excel(planning, semestre_onglet)
-            for index, row in S.iterrows():
+            s = pd.read_excel(planning, semestre_onglet)
+            for index, row in s.iterrows():
                 if num_res in row.values:
                     index_num_res = row.values.tolist().index(num_res)
                     valeur_case_3 = 0 if pd.isna(row.iloc[index_num_res + 3]) else row.iloc[index_num_res + 3]
                     valeur_case_5 = 0 if pd.isna(row.iloc[index_num_res + 5]) else row.iloc[index_num_res + 5]
                     valeur_case_7 = 0 if pd.isna(row.iloc[index_num_res + 7]) else row.iloc[index_num_res + 7]
                     valeur_case_10 = row.iloc[index_num_res + 10]
-                    additions = 0
                     if (isinstance(valeur_case_3, int) and isinstance(valeur_case_7, int)
                             and isinstance(valeur_case_5, int)):
                         additions = valeur_case_3 + valeur_case_5 + valeur_case_7
                         if index_num_res + 10 < len(row) and additions > 0:
-                            insertdata = insertData()
+                            insertdata = InsertData()
                             insertdata.insert_planning(semestre, libelle, valeur_case_3, valeur_case_5, valeur_case_7,
                                                        valeur_case_10)
 
     def onglet_existe(self, fichier, nom_onglet):
         """
         Vérifie si l'onglet existe
-        :param fichier:
-        :param nom_onglet:
+        :param fichier: Chemin du fichier
+        :param nom_onglet: Nom de l'onglet
         :return:
         """
         wb = openpyxl.load_workbook(fichier, read_only=True)
         # Retourne True si l'onglet existe, False sinon
         return nom_onglet in wb.sheetnames
 
-    def recupHProf(self, semestre, semestre_onglet):
+    def recup_h_prof(self, semestre, semestre_onglet):
         """
         Récupère le nombre de groupes de chaque professeur
-        :param semestre:
-        :param semestre_onglet:
+        :param semestre: Semestre
+        :param semestre_onglet: Semestre de l'onglet
         :return:
         """
         # Charge le fichier Excel
@@ -86,7 +85,7 @@ class recupData:
         if self.onglet_existe(fichier, semestre_onglet):
             df = pd.read_excel(fichier, semestre_onglet)
             donnees = {}
-            ressourceActuelle = None
+            ressource_actuelle = None
 
             for _, row in df.iterrows():
                 resource = row['Ressource']
@@ -98,17 +97,17 @@ class recupData:
                 test = row['Test']
                 # Vérifie si une nouvelle ressource commence
                 if pd.notna(resource):
-                    ressourceActuelle = resource
-                    donnees[ressourceActuelle] = {}
+                    ressource_actuelle = resource
+                    donnees[ressource_actuelle] = {}
 
                 # Vérifie si la ligne contient des données d'intervenant
                 if pd.notna(intervenant):
-                    if ressourceActuelle not in donnees:
-                        donnees[ressourceActuelle] = {}
-                    if intervenant not in donnees[ressourceActuelle]:
-                        donnees[ressourceActuelle][intervenant] = []
+                    if ressource_actuelle not in donnees:
+                        donnees[ressource_actuelle] = {}
+                    if intervenant not in donnees[ressource_actuelle]:
+                        donnees[ressource_actuelle][intervenant] = []
 
-                    donnees[ressourceActuelle][intervenant].append({
+                    donnees[ressource_actuelle][intervenant].append({
                         'CM': cm,
                         'TD': td,
                         'TP (non dédoublés)': tp_non_dedoubles,
@@ -148,9 +147,10 @@ class recupData:
                         print("Aucune données pour cette ressource.")
                         print("\n")
 
-    def recupNomProf(self):
+    def recup_nom_prof(self):
         """
-        Récupère les noms des professeurs dans le fichier texte, ainsi que leur acronymes et emails, et les insère ou met à jour dans la base de données.
+        Récupère les noms des professeurs dans le fichier texte, ainsi que leur acronymes et emails, et les insère
+        ou met à jour dans la base de données.
         """
         # Ouvre le fichier en mode lecture
         with open(self.files.nom_prof_file, "r") as fichier:
@@ -184,21 +184,21 @@ class recupData:
                 else:
                     print(f"Erreur de format ou ligne incomplète : {ligne}")
 
-    def recupRCouleur(self, semestre, semestre_onglet):
+    def recup_res_couleur(self, semestre, semestre_onglet):
         """
         Fonction pour récupérer les couleurs liée à chaque ressource pour un semestre précis
-        :param semestre:
-        :param semestre_onglet:
+        :param semestre: Semestre
+        :param semestre_onglet: Onglet du semestre
         :return:
         """
         print("Récupération des couleurs")
-        ressourceCouleur = {}
+        ressource_couleur = {}
         self.cursor.execute("SELECT Num_Res FROM Maquette WHERE Semestre = ?", (semestre,))
         resultats = [item[0] for item in self.cursor.fetchall()]
         # On ouvre le fichier excel
         fichier = openpyxl.load_workbook(self.files.planning_file)
-        fichierOngletSemestre = fichier[semestre_onglet]
-        for row in fichierOngletSemestre.iter_rows():
+        fichier_onglet_semestre = fichier[semestre_onglet]
+        for row in fichier_onglet_semestre.iter_rows():
             for cell in row:
                 # Si ressource trouvé
                 if cell.value in resultats:
@@ -206,13 +206,13 @@ class recupData:
                     # Si couleur est autre que blanche
                     if couleur != '00000000' and couleur:
                         # On récupère la couleur de la cellule
-                        ressourceCouleur[cell.value] = couleur
-        return ressourceCouleur
+                        ressource_couleur[cell.value] = couleur
+        return ressource_couleur
 
-    def trouverTypeCours2eRange(self, semestre_onglet):
+    def trouver_type_cours_2e_range(self, semestre_onglet):
         """
         Récupère la deuxième occurrence de chaque type de cours dans le fichier planning
-        :param semestre_onglet:
+        :param semestre_onglet: Onglet du semestre
         :return:
         """
         fichier = openpyxl.load_workbook(self.files.planning_file, data_only=True)
@@ -228,18 +228,18 @@ class recupData:
 
         return type_cours_dict
 
-    def trouverTypeCours1erRange(self, semestre_onglet):
+    def trouver_type_cours_1er_range(self, semestre_onglet):
         """
         Récupère la première occurrence de chaque type de cours dans le fichier planning
-        :param semestre_onglet:
+        :param semestre_onglet: Onglet du semestre
         :return:
         """
         fichier = openpyxl.load_workbook(self.files.planning_file, data_only=True)
-        fichierOngletSemestre = fichier[semestre_onglet]
+        fichier_onglet_semestre = fichier[semestre_onglet]
         type_cours_dict = {}
         # Les valeurs à trouver
         valeurs_a_trouver = {"Cours", "TD", "TP", "Test"}
-        for row in fichierOngletSemestre.iter_rows(min_row=1, max_row=2):
+        for row in fichier_onglet_semestre.iter_rows(min_row=1, max_row=2):
             # On itère chaque cellule
             for cell in row:
                 # Si la valeur de la celulle = ["Cours", "TD", "TP", "Test"]
@@ -253,11 +253,11 @@ class recupData:
                     return type_cours_dict
         return type_cours_dict
 
-    def recupXetY(self, semestre, semestre_onglet):
+    def recup_X_et_Y(self, semestre, semestre_onglet):
         """
         Récupère chaque cours dans le fichier planning
-        :param semestre:
-        :param semestre_onglet:
+        :param semestre: Semestre
+        :param semestre_onglet: Onglet du semestre
         :return:
         """
         # On réinitialise les valeurs de la base de donnée
@@ -266,11 +266,11 @@ class recupData:
         # Récupération du fichier planning
         fichier = openpyxl.load_workbook(self.files.planning_file, data_only=True)
         # Appel des fonctions nécéssaire
-        ressourceCouleur = self.recupRCouleur(semestre, semestre_onglet)
-        fichierOngletSemestre = fichier[semestre_onglet]
-        type_cours_dict1 = self.trouverTypeCours1erRange(semestre_onglet)
-        type_cours_dict2 = self.trouverTypeCours2eRange(semestre_onglet)
-        for col in fichierOngletSemestre.iter_cols():
+        ressource_couleur = self.recup_res_couleur(semestre, semestre_onglet)
+        fichier_onglet_semestre = fichier[semestre_onglet]
+        type_cours_dict1 = self.trouver_type_cours_1er_range(semestre_onglet)
+        type_cours_dict2 = self.trouver_type_cours_2e_range(semestre_onglet)
+        for col in fichier_onglet_semestre.iter_cols():
             if col[0].value is not None and 'Date' in col[0].value:
                 # Parcourir les lignes pour la colonne de date
                 for cell in col:
@@ -283,7 +283,7 @@ class recupData:
                     # s'il y a une date trouvée
                     if date:
                         row_index = cell.row
-                        for row_cell in fichierOngletSemestre[row_index]:
+                        for row_cell in fichier_onglet_semestre[row_index]:
                             # Récupérer la valeur et la couleur de chaque cellule de la ligne
                             if row_cell.value == "X" or row_cell.value == "Y":
                                 if row_cell.value == "X":
@@ -291,13 +291,13 @@ class recupData:
                                 else:
                                     salle = "Machine"
                                 # Appel de la fonction typeCours qui permet de vérifier quel type de cours est une case
-                                tCours = self.typeCours(type_cours_dict1, type_cours_dict2, row_cell.column)
+                                tCours = self.type_cours(type_cours_dict1, type_cours_dict2, row_cell.column)
                                 valeur = row_cell.value
                                 # Récupération de la couleur de la cellule
                                 couleur = row_cell.fill.start_color.rgb
                                 # On récupère les coordonnées du cours (X,Y)
                                 idCours = row_cell.coordinate
-                                for cle, valeur in ressourceCouleur.items():
+                                for cle, valeur in ressource_couleur.items():
                                     # Si la couleur de la cellule = la couleur d'une ressource
                                     if valeur == couleur:
                                         # On vérifie si le cours existe déjà dans la BD
@@ -351,7 +351,7 @@ class recupData:
                                                                 (semestre, cle, tCours, salle))
                                         self.cursor.connection.commit()
 
-    def typeCours(self, type_cours_dict1, type_cours_dict2, col):
+    def type_cours(self, type_cours_dict1, type_cours_dict2, col):
         """
         Fonction qui vérifie pour une case précise, quel type de cours c'est
         :param type_cours_dict1:
@@ -426,4 +426,4 @@ class recupData:
 
         return valeurs_globales
 
-recupData().recupNomProf()
+# RecupData().recup_nom_prof()

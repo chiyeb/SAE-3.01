@@ -6,15 +6,15 @@ from datetime import datetime
 
 from openpyxl.reader.excel import load_workbook
 
-from insertData import insertData
+from insert_data import InsertData
 
 
-class scribeData:
+class ScribeData:
     instance = None
 
     def __new__(cls):
         if cls.instance is None:
-            cls.instance = super(scribeData, cls).__new__(cls)
+            cls.instance = super(ScribeData, cls).__new__(cls)
             cls.instance._setup()
         return cls.instance
 
@@ -305,8 +305,8 @@ class scribeData:
         :return:
         """
         try:
-            insertdata_instance = insertData()
-            insertdata_instance.insertNombreHeureProf()
+            insertdata_instance = InsertData()
+            insertdata_instance.insert_nombre_heure_prof()
             # récupération du nombres d'heures de chaque profs
             self.cursor.execute("SELECT * FROM HoraireTotalProf")
             heures = self.cursor.fetchall()
