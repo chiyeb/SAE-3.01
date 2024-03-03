@@ -4,7 +4,9 @@
   -semestre: S1 
   -ressource: R1.01
 Erreur CM: 
-   -ressource: R1.01  -heures écrite: 18,   -heure posé: 24
+   -ressource: R1.01,
+  -heures écrite: 18,
+   -heure posé: 24
 - Commentaire(s) : 
 -Séance 1h30
 	-A C
@@ -49,60 +51,10 @@ Erreur TP
   -heures écrites: 25 
    -heures posés: 26 
 - Commentaire(s) : 
--1h
+-Groupe entier
 	-Morgan M
-
-
- 
- Erreur: heure posé et écrites différentes dans le planning
-  -semestre: S1 
-  -ressource: R1.01
-Erreur CM: 
-   -ressource: R1.01  -heures écrite: 18,   -heure posé: 24
-- Commentaire(s) : 
--Séance 1h30
-	-A C
--Séance 1h30
-	-A C
--CM avant TD
-	-A C
-Séance 1h30
-	-A C
--Séance 1h30
-	-A C
--CM avant les TDs
-	-A C
-Séance 1h30
-	-A C
--CM avant TD
-	-A C
-Séance 1h30
-	-A C
--CM avant le TP
-	-A C
-Séance 1h30
-	-A C
--Séance 1h30
-	-A C
--Séance 1h30
-	-A C
--Séance 1h30
-	-A C
--Séance 1h30
-	-A C
--Séance 1h30
-	-A C
-
-
- 
- Erreur: heure posé et écrites différentes dans le planning
-  -semestre: S1 
-  -ressource: R1.10
-Erreur TP
-   -ressource: R1.10 
-  -heures écrites: 25 
-   -heures posés: 26 
-- Commentaire(s) : 
+-Groupe entier
+	-Morgan M
 -1h
 	-Morgan M
 
@@ -112,7 +64,9 @@ Erreur TP
   -semestre: S2 
   -ressource: R2.02
 Erreur CM: 
-   -ressource: R2.02  -heures écrite: 6,   -heure posé: 8
+   -ressource: R2.02,
+  -heures écrite: 6,
+   -heure posé: 8
 - Commentaire(s) : 
 -1h30
 	-Frédéric Flouvat
@@ -125,7 +79,9 @@ Erreur CM:
   -semestre: S2 
   -ressource: R2.07
 Erreur CM: 
-   -ressource: R2.07  -heures écrite: 9,   -heure posé: 12
+   -ressource: R2.07,
+  -heures écrite: 9,
+   -heure posé: 12
 - Commentaire(s) : 
 -1h30
 	-Morgan M
@@ -136,7 +92,9 @@ Erreur CM:
   -semestre: S2 
   -ressource: R2.09
 Erreur CM: 
-   -ressource: R2.09  -heures écrite: 3,   -heure posé: 4
+   -ressource: R2.09,
+  -heures écrite: 3,
+   -heure posé: 4
 - Commentaire(s) : 
 -1h30
 	-Morgan M
@@ -151,6 +109,8 @@ Erreur TD:
   -heure écrites: 11
   -heure posé: 12
 - Commentaire(s) : 
+-1h Com / 1h PPP
+	-Morgan M
 -1h TD / 1h TP
 
 
@@ -159,7 +119,9 @@ Erreur TD:
   -semestre: S3AFA 
   -ressource: R3.02
 Erreur CM: 
-   -ressource: R3.02  -heures écrite: 3,   -heure posé: 4
+   -ressource: R3.02,
+  -heures écrite: 3,
+   -heure posé: 4
 - Commentaire(s) : 
 -1.5 h
 	-Jean-Philippe Prost
@@ -187,7 +149,9 @@ Erreur TD:
   -semestre: S3AFA 
   -ressource: R3.09
 Erreur CM: 
-   -ressource: R3.09  -heures écrite: 6,   -heure posé: 8
+   -ressource: R3.09,
+  -heures écrite: 6,
+   -heure posé: 8
 - Commentaire(s) : 
 -1h30
 	-Morgan M
@@ -343,7 +307,9 @@ Erreur CM écrite dans le planning supérieur à celle prévu nationalement:
   -semestre: S5AFA 
   -ressource: R5.02
 Erreur CM: 
-   -ressource: R5.02  -heures écrite: 0,   -heure posé: 4
+   -ressource: R5.02,
+  -heures écrite: 0,
+   -heure posé: 4
 - Commentaire(s) : 
 -3h
 	-Morgan M
@@ -356,7 +322,9 @@ Erreur CM:
   -semestre: S5AFA 
   -ressource: R5.03
 Erreur CM: 
-   -ressource: R5.03  -heures écrite: 0,   -heure posé: 18
+   -ressource: R5.03,
+  -heures écrite: 0,
+   -heure posé: 18
 - Commentaire(s) : 
 
 
@@ -415,6 +383,8 @@ Erreur TD:
   -heure écrites: 26
   -heure posé: 28
 - Commentaire(s) : 
+-1h
+	-Morgan M
 -Soutenances
 	-Morgan M
 

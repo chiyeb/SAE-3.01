@@ -201,7 +201,7 @@ class BUT3:
         self.verif_data_instance.concordance("S6BFI")
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verif_data_instance.concordancePlanning("S6BFI")
-        print(self.verif_data_instance.getNbErreur())
+        print(self.verif_data_instance.get_nb_erreur())
 
 # i = BUT3()
 # i.run()

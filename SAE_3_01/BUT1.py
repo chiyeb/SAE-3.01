@@ -1,7 +1,7 @@
 from scribedata import *
 from verifdata import *
 from recupdata import *
-from insert_data import *
+from insertdata import *
 import pandas as pd
 from selectfile import *
 

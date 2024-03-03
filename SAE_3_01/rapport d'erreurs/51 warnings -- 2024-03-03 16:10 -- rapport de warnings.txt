@@ -53,61 +53,6 @@ Warning TP
    -heures posés: 2 
 - Commentaire(s) : 
 
-
- 
- Warning: heure posé et écrites différentes dans le planning
-  -semestre: S1 
-  -ressource: R1.03
-Warning TD:
-   -ressource: R1.03
-  -heure écrites: 8
-  -heure posé: 4
-- Commentaire(s) : 
-
-
- 
- Warning: heure posé et écrites différentes dans le planning
-  -semestre: S1 
-  -ressource: R1.05
-Warning TP
-   -ressource: R1.05 
-  -heures écrites: 20 
-   -heures posés: 16 
-- Commentaire(s) : 
-
-
- 
- Warning: heure posé et écrites différentes dans le planning
-  -semestre: S1 
-  -ressource: R1.07
-Warning TP
-   -ressource: R1.07 
-  -heures écrites: 9 
-   -heures posés: 6 
-- Commentaire(s) : 
-
-
- 
- Warning: heure posé et écrites différentes dans le planning
-  -semestre: S1 
-  -ressource: R1.08
-Warning TP
-   -ressource: R1.08 
-  -heures écrites: 3 
-   -heures posés: 2 
-- Commentaire(s) : 
-
-
- 
- Warning: heure posé et écrites différentes dans le planning
-  -semestre: S1 
-  -ressource: R1.12
-Warning TP
-   -ressource: R1.12 
-  -heures écrites: 3 
-   -heures posés: 2 
-- Commentaire(s) : 
-
 Warning : Heures différentes entre le fichier planning et maquette
   -Ressource: R1.11 Bases de la communication
   -Heure planning: 0
@@ -123,6 +68,12 @@ Warning TD:
   -heure écrites: 21
   -heure posé: 20
 - Commentaire(s) : 
+-Salle avec un vidéo
+	-A C
+-3h
+	-Morgan M
+-Salle avec un vidéo
+	-A C
 Warning TP
    -ressource: R2.01 
   -heures écrites: 21 
@@ -144,6 +95,8 @@ Warning TP
   -heures écrites: 10 
    -heures posés: 8 
 - Commentaire(s) : 
+-TP avant le test.
+	-Mickaël Martin-Nevot
 
 
  
@@ -251,6 +204,10 @@ Warning TD:
   -heure écrites: 10
   -heure posé: 8
 - Commentaire(s) : 
+-3h
+	-Morgan M
+-Salle avec un vidéo
+	-A C
 
 
  
@@ -277,6 +234,8 @@ Warning TD:
   -heure écrites: 14
   -heure posé: 12
 - Commentaire(s) : 
+-Salle avec un vidéo
+	-A C
 
 
  
@@ -299,6 +258,8 @@ Warning TD:
   -heure écrites: 14
   -heure posé: 12
 - Commentaire(s) : 
+-Salle avec un vidéo
+	-A C
 
 
  
@@ -457,6 +418,8 @@ Warning TD:
   -heure écrites: 20
   -heure posé: 18
 - Commentaire(s) : 
+-1h
+	-Morgan M
 
 
  
@@ -520,6 +483,8 @@ Warning TP
    -heures posés: 6 
 - Commentaire(s) : 
 -non dédoublé
+	-A C
+-Non dédoublé
 	-A C
 -Salle avec Video
 	-A C

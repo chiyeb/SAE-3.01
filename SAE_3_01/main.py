@@ -24,10 +24,7 @@ BUT3_instance = BUT3()
 BUT3_instance.run()
 
 verifdata_instance = VerifData()
-verifdata_instance.renomFichierAvecNbErreur()
-
-scribedata_instance = ScribeData()
-scribedata_instance.scribeHoraireTotalProf()
+verifdata_instance.renom_fichier_avec_nb_erreur()
 
 #stats = Stats()
 #stats.execAllStats()

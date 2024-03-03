@@ -1,10 +1,5 @@
-import os
 import shutil
-import sqlite3
-import tkinter as tk
 import webbrowser
-from tkinter import messagebox, ttk
-from selectfile import *
 from scribefileprof import *
 from mail import *
 from showdata import *
@@ -82,7 +77,7 @@ class Utils:
         :return:
         """
         confirmation = self.confirm_deletion("Les données de la base de données")
-        # si l'utilisateur à confirmer la suppression de la BD
+        # si l'utilisateur à confirmer la suppression des données de la BD
         if confirmation:
             # requête pour obtenir la liste des tables
             self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
@@ -90,10 +85,9 @@ class Utils:
             # Parcoure chaque table et supprimer toutes les données
             for table in tables:
                 self.cursor.execute(f"DELETE FROM {table}")
-            # Valide les modifications
             self.conn.commit()
             self.display_result(True)
-        # si l'utilisateur n'as pas confirmé la suppression de la BD
+        # si l'utilisateur n'as pas confirmé la suppression des données de de la BD
         else:
             self.display_result(False)
 
@@ -171,28 +165,28 @@ class Utils:
         :return:
         """
         # Définition des chemins des dossiers et fichiers à supprimer
-        dossierRapErr = 'rapport d\'erreurs'
-        dossierFichGenere = 'fichiers genere'
-        DossierStats = 'statistiques'
+        dossier_rap_err = 'rapport d\'erreurs'
+        dossier_fich_genere = 'fichiers genere'
+        dossier_stats = 'statistiques'
         # Si le dossier n'existe pas, le créer
-        if not os.path.exists(dossierRapErr):
-            os.makedirs(dossierRapErr)  # recrée le dossier
+        if not os.path.exists(dossier_rap_err):
+            os.makedirs(dossier_rap_err)  # recrée le dossier
 
         # Si le dossier n'existe pas, le créer
-        if not os.path.exists(dossierFichGenere):
-            os.makedirs(dossierFichGenere)  # recrée le dossier vide
+        if not os.path.exists(dossier_fich_genere):
+            os.makedirs(dossier_fich_genere)  # recrée le dossier vide
 
         # Si le dossier n'existe pas, le créer
-        if not os.path.exists(DossierStats):
-            os.makedirs(DossierStats)  # recrée le dossier
+        if not os.path.exists(dossier_stats):
+            os.makedirs(dossier_stats)  # recrée le dossier
 
     def generer_fichier_heure_prof(self):
         """
         Fonction pour générer le fichier d'heure par professeur
         :return:
         """
-        scribeFileProfInstance = ScribeFileProf()
-        scribeFileProfInstance.run()
+        scribe_file_prof_instance = ScribeFileProf()
+        scribe_file_prof_instance.run()
 
 
 i = Utils()

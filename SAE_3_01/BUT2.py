@@ -3,7 +3,7 @@ import pandas as pd
 from scribedata import *
 from recupdata import *
 from verifdata import *
-from insert_data import *
+from insertdata import *
 from selectfile import *
 
 

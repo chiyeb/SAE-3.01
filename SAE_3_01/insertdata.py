@@ -139,24 +139,3 @@ class InsertData:
                     " ?, ?, ?)", (hCMPActuel, hTDPActuel, hTPDPActuel, hTPNDPActuel, hTestPActuel,
                                   pr[1]))
                 self.conn.commit()
-
-    def insert_data_from_fichier_generer(self, valeurs_recuperes):
-        """
-        Fonction qui insère les données récupérées dans la base de données à partir des fichiers générés
-        :param valeurs_recuperes: Les valeurs récupérées dans les fichiers générés
-        """
-        self.cursor.execute("DELETE FROM FichiersGenere")
-
-        for valeurs_fichier in valeurs_recuperes:
-            for fichier, onglet, _, valeurs_onglet in valeurs_fichier:
-                nom_fichier_sans_extension = os.path.splitext(fichier)[0]  # Récupérer le nom de fichier sans extension
-                for ligne in valeurs_onglet:
-                    # Insérer les données dans la base de données
-                    self.cursor.execute(
-                        "INSERT INTO FichiersGenere (Semestre, Ressources, Prof, H_CM, H_TD, H_TP) VALUES (?, ?, ?, "
-                        "?, ?, ?)",
-                        (nom_fichier_sans_extension, onglet, ligne[0], ligne[1], ligne[2], ligne[3]))
-
-        self.conn.commit()
-        self.conn.close()
-

@@ -167,14 +167,14 @@ class VerifData:
         rslt_planning = cursor_tmp.fetchall()
         cpt = 0
         for planning in rslt_planning:
-            libelleBD = ""
-            type_erreurBD = ""
-            ressourceBD = ""
-            heure_ecritesBD = 0
-            heure_posesBD = 0
+            libelle_bd = ""
+            type_erreur_bd = ""
+            ressource_bd = ""
+            heure_ecrites_bd = 0
+            heure_poses_bd = 0
             rapport = ""
             rapport_warning = ""
-            commentaire_strBD = ""
+            commentaire_str_bd = ""
             cursor_tmp.execute("SELECT Ressource FROM Horaires WHERE Semestre = ? AND Ressource = ?",
                                (semestre, planning[6]))
             ressource = cursor_tmp.fetchone()
@@ -187,13 +187,13 @@ class VerifData:
                 cmHoraire = cursor_tmp.fetchone()
                 if cmHoraire is not None and planning[2] < cmHoraire[0]:
                     rapport += (f"Erreur CM: \n "
-                                f"  -ressource: {ressource[0]}"
-                                f"  -heures écrite: {planning[2]}, "
+                                f"  -ressource: {ressource[0]},\n"
+                                f"  -heures écrite: {planning[2]},\n "
                                 f"  -heure posé: {cmHoraire[0]}\n")
-                    ressourceBD = ressource[0]
-                    type_erreurBD = "Erreur"
-                    heure_ecritesBD = planning[2]
-                    heure_posesBD = cmHoraire[0]
+                    ressource_bd = ressource[0]
+                    type_erreur_bd = "Erreur"
+                    heure_ecrites_bd = planning[2]
+                    heure_poses_bd = cmHoraire[0]
                     cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "Amphi"))
@@ -204,16 +204,16 @@ class VerifData:
                         for coms in commentaire:
                             if coms[0] is not None and coms[0] not in [None, "", "None", "None,", "(None,)"]:
                                 rapport += f"-{coms[0]}\n"
-                                commentaire_strBD += f"-{coms[0]}\n"
+                                commentaire_str_bd += f"-{coms[0]}\n"
                 if cmHoraire is not None and planning[2] > cmHoraire[0]:
                     rapport_warning += (f"Warning CM: \n "
-                                        f"  -ressource: {ressource[0]}"
-                                        f"  -heures écrite: {planning[2]}, "
+                                        f"  -ressource: {ressource[0]} \n"
+                                        f"  -heures écrite: {planning[2]}, \n"
                                         f"  -heure posé: {cmHoraire[0]}\n")
-                    ressourceBD = ressource[0]
-                    type_erreurBD = "Warning"
-                    heure_ecritesBD = planning[2]
-                    heure_posesBD = cmHoraire[0]
+                    ressource_bd = ressource[0]
+                    type_erreur_bd = "Warning"
+                    heure_ecrites_bd = planning[2]
+                    heure_poses_bd = cmHoraire[0]
                     cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "Amphi"))
@@ -223,7 +223,7 @@ class VerifData:
                         for coms in commentaire:
                             if coms[0] is not None and coms[0] not in [None, "", "None", "None,", "(None,)"]:
                                 rapport_warning += f"-{coms[0]}\n"
-                                commentaire_strBD += f"-{coms[0]}\n"
+                                commentaire_str_bd += f"-{coms[0]}\n"
                 cursor_tmp.execute("SELECT nbCours FROM Horaires WHERE Semestre = ? AND Type_Cours = ? AND Ressource "
                                    "= ?", (semestre, "TD", ressource[0]))
                 tdHoraire = cursor_tmp.fetchone()
@@ -232,10 +232,10 @@ class VerifData:
                                 f"  -ressource: {ressource[0]}\n"
                                 f"  -heure écrites: {planning[3]}\n"
                                 f"  -heure posé: {tdHoraire[0]}\n")
-                    ressourceBD = ressource[0]
-                    type_erreurBD = "Erreur"
-                    heure_ecritesBD = planning[3]
-                    heure_posesBD = tdHoraire[0]
+                    ressource_bd = ressource[0]
+                    type_erreur_bd = "Erreur"
+                    heure_ecrites_bd = planning[3]
+                    heure_poses_bd = tdHoraire[0]
                     cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "TD"))
@@ -245,16 +245,16 @@ class VerifData:
                         for coms in commentaire:
                             if coms[0] is not None and coms[0] not in [None, "", "None", "None,", "(None,)"]:
                                 rapport += f"-{coms[0]}\n"
-                                commentaire_strBD += f"-{coms[0]}\n"
+                                commentaire_str_bd += f"-{coms[0]}\n"
                 if tdHoraire is not None and planning[3] > tdHoraire[0]:
                     rapport_warning += (f"Warning TD:\n "
                                         f"  -ressource: {ressource[0]}\n"
                                         f"  -heure écrites: {planning[3]}\n"
                                         f"  -heure posé: {tdHoraire[0]}\n")
-                    ressourceBD = ressource[0]
-                    type_erreurBD = "Warning"
-                    heure_ecritesBD = planning[3]
-                    heure_posesBD = tdHoraire[0]
+                    ressource_bd = ressource[0]
+                    type_erreur_bd = "Warning"
+                    heure_ecrites_bd = planning[3]
+                    heure_poses_bd = tdHoraire[0]
                     cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "TD"))
@@ -264,7 +264,7 @@ class VerifData:
                         for coms in commentaire:
                             if coms[0] is not None and coms[0] not in [None, "", "None", "None,", "(None,)"]:
                                 rapport_warning += f"-{coms[0]}\n"
-                                commentaire_strBD += f"-{coms[0]}\n"
+                                commentaire_str_bd += f"-{coms[0]}\n"
                 cursor_tmp.execute("SELECT nbCours FROM Horaires WHERE Semestre = ? AND Type_Cours = ? AND Ressource "
                                    "= ?", (semestre, "TP", ressource[0]))
                 tpHoraire = cursor_tmp.fetchone()
@@ -273,9 +273,9 @@ class VerifData:
                                 f"  -ressource: {ressource[0]} \n"
                                 f"  -heures écrites: {planning[4]} \n "
                                 f"  -heures posés: {tpHoraire[0]} \n")
-                    ressourceBD = ressource[0]
-                    type_erreurBD = "Erreur"
-                    heure_ecritesBD = planning[4]
+                    ressource_bd = ressource[0]
+                    type_erreur_bd = "Erreur"
+                    heure_ecrites_bd = planning[4]
                     cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "TP"))
@@ -285,16 +285,16 @@ class VerifData:
                         for coms in commentaire:
                             if coms[0] is not None and coms[0] not in [None, "", "None", "None,", "(None,)"]:
                                 rapport += f"-{coms[0]}\n"
-                                commentaire_strBD += f"-{coms[0]}\n"
+                                commentaire_str_bd += f"-{coms[0]}\n"
                 if tpHoraire is not None and planning[4] > tpHoraire[0]:
                     rapport_warning += (f"Warning TP\n "
                                         f"  -ressource: {ressource[0]} \n"
                                         f"  -heures écrites: {planning[4]} \n "
                                         f"  -heures posés: {tpHoraire[0]} \n")
-                    ressourceBD = ressource[0]
-                    type_erreurBD = "Warning"
-                    heure_ecritesBD = planning[4]
-                    heure_posesBD = tpHoraire[0]
+                    ressource_bd = ressource[0]
+                    type_erreur_bd = "Warning"
+                    heure_ecrites_bd = planning[4]
+                    heure_poses_bd = tpHoraire[0]
                     cursor_tmp.execute(
                         "SELECT Commentaire FROM Cours WHERE Semestre = ? AND Ressource = ? AND Type_Cours = ?",
                         (semestre, ressource[0], "TP"))
@@ -304,14 +304,14 @@ class VerifData:
                         for coms in commentaire:
                             if coms[0] is not None and coms[0] not in [None, "", "None", "None,", "(None,)"]:
                                 rapport_warning += f"-{coms[0]}\n"
-                                commentaire_strBD += f"-{coms[0]}\n"
+                                commentaire_str_bd += f"-{coms[0]}\n"
                 if rapport:
-                    print(commentaire_strBD)
+                    print(commentaire_str_bd)
                     # incrémentation du nombre d'erreurs
                     self.nb_erreur += 1
-                    libelleBD = "Heure posé et écrites différentes dans le planning"
-                    self.insert_error(libelleBD, type_erreurBD, semestre, ressourceBD, heure_ecritesBD, heure_posesBD,
-                                      commentaire_strBD)
+                    libelle_bd = "Heure posé et écrites différentes dans le planning"
+                    self.insert_error(libelle_bd, type_erreur_bd, semestre, ressource_bd, heure_ecrites_bd, heure_poses_bd,
+                                      commentaire_str_bd)
                     # Écriture de l'erreur dans un fichier de rapport
                     with open(self.fichier_erreur, "a") as rapport_erreur:
                         rapport_erreur.write(f"\n \n Erreur: heure posé et écrites différentes dans le planning"
@@ -322,8 +322,8 @@ class VerifData:
                         rapport_erreur.write("\n")
                 if rapport_warning:
                     libelle = "Heure posé et écrites différentes dans le planning"
-                    self.insert_error(libelleBD, type_erreurBD, semestre, ressourceBD, heure_ecritesBD, heure_posesBD,
-                                      commentaire_strBD)
+                    self.insert_error(libelle_bd, type_erreur_bd, semestre, ressource_bd, heure_ecrites_bd, heure_poses_bd,
+                                      commentaire_str_bd)
                     # incrémentation du nombre d'erreurs
                     self.nb_erreur_warning += 1
                     # Écriture de l'erreur dans un fichier de rapport
@@ -335,26 +335,26 @@ class VerifData:
                         rapport_w.write(rapport_warning)
                         rapport_w.write("\n")
 
-    def getNbErreur(self):
+    def get_nb_erreur(self):
         """
         Fonction pour récupérer le nombre d'erreurs
         :return:
         """
         return self.nb_erreur
 
-    def getNbWarning(self):
+    def get_nb_warning(self):
         """
         Fonction pour récupérer le nombre d'erreurs
         :return:
         """
         return self.nb_erreur_warning
 
-    def renomFichierAvecNbErreur(self):
+    def renom_fichier_avec_nb_erreur(self):
         """
         Fonction pour renommer les fichiers de rapport d'erreurs et de warnings avec le nombre respectif d'erreurs et de warnings.
         """
         # Renommage du fichier d'erreurs
-        nb_erreurs = self.getNbErreur()
+        nb_erreurs = self.get_nb_erreur()
         nom_fichier_base_erreur = os.path.splitext(self.fichier_erreur)[0]
         date_modification_erreur = datetime.fromtimestamp(os.path.getmtime(self.fichier_erreur)).strftime(
             '%Y-%m-%d %H:%M')
@@ -364,7 +364,7 @@ class VerifData:
         self.fichier_erreur = nouveau_chemin_fichier_erreur
 
         # Renommage du fichier de warnings
-        nb_warnings = self.getNbWarning()
+        nb_warnings = self.get_nb_warning()
         nom_fichier_base_warning = os.path.splitext(self.fichier_warning)[0]
         date_modification_warning = datetime.fromtimestamp(os.path.getmtime(self.fichier_warning)).strftime(
             '%Y-%m-%d %H:%M')
@@ -378,12 +378,11 @@ class VerifData:
                      is_delete=0):
         """Méthode pour insérer ou mettre à jour une erreur dans la base de données en fonction de l'Id_Erreur."""
         id_erreur = type_erreur + semestre + ressource + str(heure_ecrites) + str(heure_poses)
-        # Vérifier si l'Id_Erreur existe déjà
+        # Vérifie si l'Id_Erreur existe déjà
         self.cursor.execute("SELECT COUNT(*) FROM Erreurs WHERE Id_Erreur = ?", (id_erreur,))
         exists = self.cursor.fetchone()[0] > 0
 
         if exists:
-            # Mise à jour de l'entrée existante
             sql_update = '''UPDATE Erreurs SET Libelle=?, Type_Erreur=?, Semestre=?, Ressource=?, Heure_ecrites=?, 
                             Heure_poses=?, Commentaires=?, is_delete=? WHERE Id_Erreur=?'''
             try:
@@ -394,7 +393,6 @@ class VerifData:
             except sqlite3.Error as e:
                 print("Erreur lors de la mise à jour de l'erreur dans la base de données.", e)
         else:
-            # Insertion d'une nouvelle entrée
             sql_insert = '''INSERT INTO Erreurs(Id_Erreur, Libelle, Type_Erreur, Semestre, Ressource, Heure_ecrites, 
                             Heure_poses, Commentaires, is_delete) VALUES(?,?,?,?,?,?,?,?,?)'''
             try:
