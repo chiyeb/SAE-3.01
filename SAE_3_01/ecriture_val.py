@@ -56,38 +56,52 @@ class ecriture_val:
             row_index = 2 if is_empty else worksheet.max_row + 1  # Commencer à la deuxième ligne ou à la ligne suivante
 
             for row_data in data_from_database:
-                current_prof = row_data[0]
+                prof, ressource, h_cm, h_td, h_tp, test = row_data
 
-                if current_prof != last_prof:
+                # Vérifier si la ressource a un professeur associé
+                if prof:
                     # Insérer une ligne vide si le professeur actuel est différent du dernier professeur ajouté
-                    if not is_empty:
+                    if last_prof != prof and not is_empty:
                         worksheet.insert_rows(row_index)
-                    last_prof = current_prof
-                    row_index += 2 # Avancer à la nouvelle ligne insérée
+                        last_prof = prof
+                        row_index += 2  # Avancer à la nouvelle ligne insérée
 
-                # Écrire les données dans les colonnes correspondantes et appliquer les styles de bordure
-                for col_index, cell_data in enumerate(row_data, start=1):
-                    cell_data = "" if cell_data is None else cell_data
-                    cell = worksheet.cell(row=row_index, column=col_index, value=cell_data)
-                    cell.border = self.thin_border  # Appliquer une bordure fine à toutes les cellules
+                    # Écrire les données dans les colonnes correspondantes et appliquer les styles de bordure
+                    cell_data = "" if prof is None else prof
+                    cell = worksheet.cell(row=row_index, column=1, value=cell_data)
+                    cell.border = self.thin_border  # Appliquer une bordure fine à la cellule
 
-                # Appliquer une bordure épaisse à la première ligne du groupe de professeurs
-                if current_prof != last_prof:
-                    for col in worksheet.iter_cols(min_col=1, max_col=num_columns, min_row=row_index,
-                                                   max_row=row_index):
-                        for cell in col:
-                            cell.border = self.thick_border
+                    cell_data = "" if ressource is None else ressource
+                    cell = worksheet.cell(row=row_index, column=2, value=cell_data)
+                    cell.border = self.thin_border  # Appliquer une bordure fine à la cellule
 
-                # Calculer la somme des valeurs H_CM, H_TD et H_TP et les écrire dans la colonne 7
-                h_cm = row_data[2] if row_data[2] else 0
-                h_td = row_data[3] if row_data[3] else 0
-                h_tp = row_data[4] if row_data[4] else 0
-                total_hours = h_cm + h_td + h_tp
-                worksheet.cell(row=row_index, column=num_columns + 1, value=total_hours).border = self.thin_border
+                    cell_data = h_cm if h_cm is not None else 0
+                    cell = worksheet.cell(row=row_index, column=3, value=cell_data)
+                    cell.border = self.thin_border  # Appliquer une bordure fine à la cellule
 
-                # Appliquer une bordure fine à la colonne supplémentaire pour la continuité de la ligne
+                    cell_data = h_td if h_td is not None else 0
+                    cell = worksheet.cell(row=row_index, column=4, value=cell_data)
+                    cell.border = self.thin_border  # Appliquer une bordure fine à la cellule
 
-                row_index += 1  # Avancer à la ligne suivante
+                    cell_data = h_tp if h_tp is not None else 0
+                    cell = worksheet.cell(row=row_index, column=5, value=cell_data)
+                    cell.border = self.thin_border  # Appliquer une bordure fine à la cellule
+
+                    cell_data = "" if test is None else test
+                    cell = worksheet.cell(row=row_index, column=6, value=cell_data)
+                    cell.border = self.thin_border  # Appliquer une bordure fine à la cellule
+
+                    total_hours = sum(filter(None, [h_cm, h_td, h_tp]))
+                    worksheet.cell(row=row_index, column=num_columns + 1, value=total_hours).border = self.thin_border
+
+                    # Appliquer une bordure épaisse à la première ligne du groupe de professeurs
+                    if last_prof != prof:
+                        for col in worksheet.iter_cols(min_col=1, max_col=num_columns, min_row=row_index,
+                                                       max_row=row_index):
+                            for cell in col:
+                                cell.border = self.thick_border
+
+                    row_index += 1  # Avancer à la ligne suivante
 
             # Sauvegarder le fichier Excel
             wb.save(excel_file_path)
