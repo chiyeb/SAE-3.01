@@ -62,14 +62,25 @@ class recup_val:
         # Réinitialiser la table en supprimant toutes les lignes
         cursor.execute("DELETE FROM FichiersGenere")
 
+        # Créer un dictionnaire pour stocker les valeurs par professeur
+        valeurs_par_professeur = {}
+
+        # Regrouper les valeurs par professeur
         for valeurs_fichier in valeurs_recuperes:
             for fichier, onglet, _, valeurs_onglet in valeurs_fichier:
-                nom_fichier_sans_extension = os.path.splitext(fichier)[0]  # Récupérer le nom de fichier sans extension
                 for ligne in valeurs_onglet:
-                    # Insérer les données dans la base de données
-                    cursor.execute(
-                        "INSERT INTO FichiersGenere (Semestre, Ressources, Prof, H_CM, H_TD, H_TP) VALUES (?, ?, ?, ?, ?, ?)",
-                        (nom_fichier_sans_extension, onglet, ligne[0], ligne[1], ligne[2], ligne[3]))
+                    professeur = ligne[0]
+                    if professeur not in valeurs_par_professeur:
+                        valeurs_par_professeur[professeur] = []
+                    valeurs_par_professeur[professeur].append((fichier, onglet, ligne))
+
+        # Insérer les valeurs dans la base de données, triées par professeur
+        for professeur, valeurs in valeurs_par_professeur.items():
+            for fichier, onglet, ligne in valeurs:
+                nom_fichier_sans_extension = os.path.splitext(fichier)[0]
+                cursor.execute(
+                    "INSERT INTO FichiersGenere (Semestre, Prof, Ressources, H_CM, H_TD, H_TP) VALUES (?, ?, ?, ?, ?, ?)",
+                    (nom_fichier_sans_extension, professeur, onglet, ligne[1], ligne[2], ligne[3]))
 
         conn.commit()
         conn.close()
@@ -87,11 +98,13 @@ recup_val_instance.inserer_dans_bd(valeurs_recuperes)
 
 
 # Afficher les valeurs récupérées pour chaque fichier
+# Afficher les valeurs récupérées pour chaque fichier
 for valeurs_fichier in valeurs_recuperes:
+    print("Valeurs récupérées pour le fichier :", valeurs_fichier[0][0])
     for fichier, onglet, valeur_case, valeurs_onglet in valeurs_fichier:
-        print(f"Nom du fichier : {os.path.splitext(fichier)[0]}")
         print(f"Onglet : {onglet}")
         print("Valeur de la ligne 2, colonne 2 :", valeur_case)
         for ligne in valeurs_onglet:
             print("Valeurs de la ligne:", ligne)
         print()
+
