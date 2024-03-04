@@ -51,7 +51,6 @@ class VerifData:
         rslt_maquette = cursor_tmp.fetchall()
         cursor_tmp.execute("SELECT * FROM Planning WHERE Semestre = ?", (semestre,))
         rslt_planning = cursor_tmp.fetchall()
-        cpt = 0
         for maquette in rslt_maquette:
             for planning in rslt_planning:
                 rapport = ""
@@ -133,18 +132,26 @@ class VerifData:
                         ressource = maquette[3]
                         heure_planning = planning[4]
                         heure_maquette = maquette[6]
-                    if rapport:
+                    if rapport and not self.is_deleted((type_erreur + semestre + ressource + str(heure_planning) + str(heure_maquette))):
                         # incrémentation du nombre d'erreur
                         self.nb_erreur += 1
+                        if self.is_deleted((type_erreur + semestre + ressource + str(heure_planning) + str(heure_maquette))):
+                            print("RESSOURCE :       " + ressource)
+                            continue
                         self.insert_error(libelle, type_erreur, semestre, ressource, heure_planning, heure_maquette,
                                           commentaire)
                         # Écriture de l'erreur dans un fichier de rapport
                         with open(self.fichier_erreur, "a") as rapport_erreur:
                             rapport_erreur.write(rapport)
                             rapport_erreur.write("\n")
-                    if rapport_warning:
+                    if rapport_warning and not self.is_deleted((type_erreur + semestre + ressource + str(heure_planning) + str(heure_maquette))):
                         # incrémentation du nombre d'erreurs
                         self.nb_erreur_warning += 1
+                        if self.is_deleted((type_erreur + semestre + ressource + str(heure_planning) + str(heure_maquette))):
+                            print("RESSOURCE :       " + ressource)
+                            continue
+                        self.insert_error(libelle, type_erreur, semestre, ressource, heure_planning, heure_maquette,
+                                          commentaire)
                         # Écriture de l'erreur dans un fichier de rapport
                         with open(self.fichier_warning, "a") as rapport_warn:
                             rapport_warn.write(rapport_warning)
@@ -165,7 +172,6 @@ class VerifData:
         rslt_horaires = cursor_tmp.fetchall()
         cursor_tmp.execute("SELECT * FROM Planning WHERE Semestre = ?", (semestre,))
         rslt_planning = cursor_tmp.fetchall()
-        cpt = 0
         for planning in rslt_planning:
             libelle_bd = ""
             type_erreur_bd = ""
@@ -305,12 +311,13 @@ class VerifData:
                             if coms[0] is not None and coms[0] not in [None, "", "None", "None,", "(None,)"]:
                                 rapport_warning += f"-{coms[0]}\n"
                                 commentaire_str_bd += f"-{coms[0]}\n"
-                if rapport:
+                if rapport and not self.is_deleted((type_erreur_bd + semestre + ressource_bd + str(heure_ecrites_bd) + str(heure_poses_bd))):
                     print(commentaire_str_bd)
                     # incrémentation du nombre d'erreurs
                     self.nb_erreur += 1
                     libelle_bd = "Heure posé et écrites différentes dans le planning"
-                    self.insert_error(libelle_bd, type_erreur_bd, semestre, ressource_bd, heure_ecrites_bd, heure_poses_bd,
+                    self.insert_error(libelle_bd, type_erreur_bd, semestre, ressource_bd, heure_ecrites_bd,
+                                      heure_poses_bd,
                                       commentaire_str_bd)
                     # Écriture de l'erreur dans un fichier de rapport
                     with open(self.fichier_erreur, "a") as rapport_erreur:
@@ -320,9 +327,10 @@ class VerifData:
                                              f" -ressource: {ressource[0]}\n")
                         rapport_erreur.write(rapport)
                         rapport_erreur.write("\n")
-                if rapport_warning:
+                if rapport_warning and not self.is_deleted((type_erreur_bd + semestre + ressource_bd + str(heure_ecrites_bd) + str(heure_poses_bd))):
                     libelle = "Heure posé et écrites différentes dans le planning"
-                    self.insert_error(libelle_bd, type_erreur_bd, semestre, ressource_bd, heure_ecrites_bd, heure_poses_bd,
+                    self.insert_error(libelle_bd, type_erreur_bd, semestre, ressource_bd, heure_ecrites_bd,
+                                      heure_poses_bd,
                                       commentaire_str_bd)
                     # incrémentation du nombre d'erreurs
                     self.nb_erreur_warning += 1
@@ -374,6 +382,18 @@ class VerifData:
         os.rename(self.fichier_warning, nouveau_chemin_fichier_warning)
         self.fichier_warning = nouveau_chemin_fichier_warning
 
+    def is_deleted(self, id_erreur):
+        """
+        Fonction pour vérifier si l'erreur/le warning à été supprimé (ignoré)
+        :return: Booléen
+        """
+        self.cursor.execute("SELECT is_delete FROM Erreurs WHERE Id_Erreur = ?", (id_erreur,))
+        result = self.cursor.fetchone()
+        if result and result[0] == 1:
+            return True
+        else:
+            return False
+
     def insert_error(self, libelle, type_erreur, semestre, ressource, heure_ecrites, heure_poses, commentaires,
                      is_delete=0):
         """Méthode pour insérer ou mettre à jour une erreur dans la base de données en fonction de l'Id_Erreur."""
@@ -384,10 +404,10 @@ class VerifData:
 
         if exists:
             sql_update = '''UPDATE Erreurs SET Libelle=?, Type_Erreur=?, Semestre=?, Ressource=?, Heure_ecrites=?, 
-                            Heure_poses=?, Commentaires=?, is_delete=? WHERE Id_Erreur=?'''
+                            Heure_poses=?, Commentaires=? WHERE Id_Erreur=?'''
             try:
                 self.cursor.execute(sql_update, (libelle, type_erreur, semestre, ressource, heure_ecrites,
-                                                 heure_poses, commentaires, is_delete, id_erreur))
+                                                 heure_poses, commentaires, id_erreur))
                 self.conn.commit()
                 print("Erreur mise à jour avec succès dans la base de données.")
             except sqlite3.Error as e:
@@ -404,3 +424,6 @@ class VerifData:
                 print("Erreur lors de l'insertion de l'erreur dans la base de données.", e)
 
 
+if __name__ == "__main__":
+    VerifData().concordance("S2")
+    VerifData().concordancePlanning("S2")

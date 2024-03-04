@@ -130,6 +130,9 @@ def traitement_fichier_excel(chemin, dossier="fichiers genere mail"):
         wb = openpyxl.load_workbook(chemin_fichier)
         nom_fichier_base = os.path.splitext(os.path.basename(chemin_fichier))[0]
         print(f"Traitement du fichier {chemin_fichier}...")
+        if chemin_fichier.endswith('Professeurs_Horaires.xlsx'):
+            print(f"Le fichier {chemin_fichier} est déjà un fichier de professeurs, il ne sera pas traité.")
+            continue
         for nom_feuille in wb.sheetnames:
             feuille = wb[nom_feuille]
             nom_prof = feuille['G2'].value
@@ -142,7 +145,7 @@ def traitement_fichier_excel(chemin, dossier="fichiers genere mail"):
         new_wb.remove(new_wb.active)  # Supprime la feuille par défaut créée avec le nouveau classeur
         for wb, nom_feuille, nom_fichier_base in feuilles:
             original_sheet = wb[nom_feuille]
-            # Utilise le nom du fichier dans le titre de la nouvelle feuille
+            # On utilise le nom du fichier dans le titre de la nouvelle feuille
             titre_nouvelle_feuille = f"{nom_fichier_base}_{nom_feuille}"
             nouvelle_feuille = new_wb.create_sheet(title=titre_nouvelle_feuille)
             for row in original_sheet.iter_rows(values_only=True):
