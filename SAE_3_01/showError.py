@@ -70,7 +70,9 @@ class ShowError:
         # Récupération des noms des colonnes
         self.column_names = [description[0] for description in self.cursor.description]
 
+        # Création des tableaux et des boutons pour chaque ligne
         self.trees = []
+        # Création des numérotation au dessus de chaque tableau
         self.labels = []
         self.label_states = [False] * len(rows)
 
@@ -120,7 +122,6 @@ class ShowError:
                 # Ajout du bouton à la dernière ligne de chaque tableau positionné en bas à droite
                 button2.grid(row=(index // num_columns) * 2 + 1, column=index % num_columns, padx=7, pady=35,
                              sticky='se')
-
 
     def display_warnings(self, rows):
         # Nombre de colonnes par ligne
@@ -180,15 +181,15 @@ class ShowError:
         self.trees[index].destroy()
         # Supprimer le label correspondant de l'interface utilisateur
         self.labels[index].destroy()
-        # Supprimer la référence dans la liste
-        del self.trees[index]
-        del self.labels[index]
+
 
     def sort_data(self, rows):
         # Tri des données en fonction de la troisième colonne
         rows.sort(key=lambda x: x[2])
 
     def on_button_click(self, index):
+
+        num_columns = 4
         # Afficher la dernière ligne de chaque tableau
         tree = self.trees[index]
         last_row = tree.item(tree.get_children()[-1])['values']
@@ -201,7 +202,7 @@ class ShowError:
             label = tk.Label(self.frame_errors, text=f"Commentaire {index} : {last_row_str}", wraplength=150, border=2,
                              relief='solid', bg='white', fg='black', font='Helvetica 14 bold', padx=5, pady=5)
 
-            label.grid(row=(index // 6) * 2 + 2, column=index % 6, padx=5, pady=2, sticky='s')
+            label.grid(row=(index // num_columns) * 2 + 2, column=index % num_columns, padx=5, pady=2, sticky='s')
 
             # Mettre à jour l'état du label
             self.label_states[index] = True
@@ -213,7 +214,7 @@ class ShowError:
             label = tk.Label(self.frame_errors, text=f"Commentaire {index} est vide",wraplength=150, border=2,
                              relief='solid', bg='white', fg='black', font='Helvetica 14 bold', padx=5, pady=5)
 
-            label.grid(row=(index // 6) * 2 + 2, column=index % 6, padx=5, pady=2, sticky='s')
+            label.grid(row=(index // num_columns) * 2 + 2, column=index % num_columns, padx=5, pady=2, sticky='s')
 
             # Mettre à jour l'état du label
             self.label_states[index] = False
@@ -222,6 +223,7 @@ class ShowError:
             self.labels.append(label)
 
     def on_button_click2(self, index):
+        num_columns = 4
         # Afficher la dernière ligne de chaque tableau
         tree = self.trees[index]
         last_row = tree.item(tree.get_children()[-1])['values']
@@ -234,7 +236,7 @@ class ShowError:
             label = tk.Label(self.frame_warnings, text=f"Commentaire {index} : {last_row_str}", wraplength=150, border=2,
                              relief='solid', bg='white', fg='black', font='Helvetica 14 bold', padx=5, pady=5)
 
-            label.grid(row=(index // 6) * 2 + 2, column=index % 6, padx=5, pady=2, sticky='s')
+            label.grid(row=(index // num_columns) * 2 + 2, column=index % num_columns, padx=5, pady=2, sticky='s')
 
             # Mettre à jour l'état du label
             self.label_states[index] = True
@@ -245,7 +247,7 @@ class ShowError:
         else:
             label = tk.Label(self.frame_warnings, text=f"Commentaire {index} est vide", wraplength=200, border=2,
                              relief='solid', bg='white', fg='black', font='Helvetica 14 bold')
-            label.grid(row=(index // 6) * 2 + 2, column=index % 6, padx=7, pady=3, sticky='s')
+            label.grid(row=(index // num_columns) * 2 + 2, column=index % num_columns, padx=7, pady=3, sticky='s')
 
             # Mettre à jour l'état du label
             self.label_states[index] = False
