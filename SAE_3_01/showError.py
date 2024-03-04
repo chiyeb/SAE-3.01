@@ -58,6 +58,18 @@ class ShowError:
         self.canvas_errors.create_window((0, 0), window=self.frame_errors, anchor='nw')
         self.canvas_warnings.create_window((0, 0), window=self.frame_warnings, anchor='nw')
 
+        # Ajout d'un bouton Suppression globale en haut à droite
+        button = tk.Button(self.frame_errors, text="Suppression globale", border=0, fg='black', font='Helvetica 12 bold', command=lambda: self.confirm_delete())
+        button.grid(row=0, column=6, padx=40, pady=15, sticky='ne')
+
+        # Ajout d'un bouton Suppression globale en haut à droite
+        button2 = tk.Button(self.frame_warnings, text="Suppression globale", border=0, fg='black', font='Helvetica 12 bold', command=lambda: self.confirm_delete())
+        button2.grid(row=0, column=6, padx=40, pady=15, sticky='ne')
+
+        # Ajout d'un bouton Rafrachir en haut à gauche
+        button3 = tk.Button(self.frame_errors, text="Rafraichir", border=0, fg='black', font='Helvetica 12 bold', command=lambda: self.refresh())
+        button3.grid(row=1, column=6, padx=65, pady=10, sticky='ne')
+
         # Configuration du Canvas pour qu'il s'étende automatiquement
         self.canvas_errors.bind('<Configure>', lambda event, canvas=self.canvas_errors: self.on_frame_configure(canvas))
         self.canvas_warnings.bind('<Configure>', lambda event, canvas=self.canvas_warnings: self.on_frame_configure(canvas))
@@ -80,12 +92,15 @@ class ShowError:
         self.display_errors(rows)
         self.display_warnings(rows)
 
+
+
     def display_errors(self, rows):
         # Nombre de colonnes par ligne
         num_columns = 4
 
         for index, row in enumerate(rows):
             if row[2] == 'Erreur':
+
                 # Création du label pour numéroter le tableau
                 label = tk.Label(self.frame_errors, text=f"{index}", bg='black', fg='white', font='Helvetica 12 bold', padx=10, pady=5)
                 label.grid(row=(index // num_columns) * 2, column=index % num_columns, padx=7, pady=5, sticky='n')
@@ -116,7 +131,7 @@ class ShowError:
                 # Ajout du bouton à la dernière ligne de chaque tableau positionné en bas
                 button.grid(row=(index // num_columns) * 2 + 1, column=index % num_columns, padx=7, pady=35, sticky='sw')
 
-                # Ajout du bouton cacher à la dernière ligne de chaque tableau positionné en bas à droite
+                # Ajout du bouton supprimer à la dernière ligne de chaque tableau positionné en bas à droite
                 button2 = tk.Button(self.frame_errors, text="Supprimer", border=0, fg='black', font='Helvetica 12 bold',
                                     command=lambda index=index: self.delete_error(index))
                 # Ajout du bouton à la dernière ligne de chaque tableau positionné en bas à droite
@@ -163,6 +178,54 @@ class ShowError:
                 button2.grid(row=(index // num_columns) * 2 + 1, column=index % num_columns, padx=7, pady=35,
                             sticky='se')
 
+    def refresh(self):
+        # Ré ouverture de la fenêtre principale
+        self.root.destroy()
+        self.instance = None
+        self._setup()
+
+    def confirm_delete(self):
+        # Création d'une fenêtre de message pour confirmer la suppression
+        self.confirm_window = tk.Toplevel()
+        self.confirm_window.title("Suppression globale")
+        self.confirm_window.geometry("400x150")
+
+        # Création d'un label pour le message de confirmation
+        label = tk.Label(self.confirm_window, text="Voulez-vous vraiment supprimer toutes les erreurs ?", font='Helvetica 14 bold')
+        label.pack(pady=10)
+
+        # Création d'un bouton pour confirmer la suppression
+        button = tk.Button(self.confirm_window, text="Confirmer", font='Helvetica 12 bold', command=lambda: self.delete_all_errors())
+        button.pack(pady=20, padx=20, side='left')
+
+        # Création d'un bouton pour annuler la suppression
+        button2 = tk.Button(self.confirm_window, text="Annuler", font='Helvetica 12 bold', command=lambda: self.confirm_window.destroy())
+        button2.pack(pady=20, padx=20, side='right')
+
+
+    def annuler_error(self, index):
+        # Récupération de l'identifiant de l'erreur à supprimer dans la base de données
+        id_error = self.trees[index].item(self.trees[index].get_children()[0])['values'][0]
+        print(f"Annulation de l'erreur = {id_error}")
+
+        # Récupération de la valeur de la colonne is_delete
+        is_delete = self.cursor.execute('SELECT is_delete FROM Erreurs WHERE Id_Erreur = ?', (id_error,)).fetchone()[0]
+
+        # Mise à jour de la base de données pour marquer l'erreur comme supprimée avec la colonne is_delete = 1
+        new_is_delete = 0 if is_delete == 1 else 1
+        self.cursor.execute(f"UPDATE Erreurs SET is_delete = {new_is_delete} WHERE Id_Erreur = ?", (id_error,))
+        self.conn.commit()
+
+        # Remplacer le bouton annuler par un autre bouton pour supprimer
+        button2 = tk.Button(self.frame_errors, text="Supprimer", border=0, fg='black', font='Helvetica 12 bold',
+                           command=lambda index=index: self.delete_error(index))
+        button2.grid(row=(index // 4) * 2 + 1, column=index % 4, padx=7, pady=35, sticky='se')
+
+    def delete_all_errors(self):
+        #Suppresion de toutes les lignes de la base de données avec la colonne is_delete = 1
+        self.cursor.execute("DELETE FROM Erreurs WHERE is_delete = 1")
+        self.conn.commit()
+        self.confirm_window.destroy()
 
     def delete_error(self, index):
         # Récupération de l'identifiant de l'erreur à supprimer dans la base de données
@@ -177,11 +240,9 @@ class ShowError:
         self.cursor.execute(f"UPDATE Erreurs SET is_delete = {new_is_delete} WHERE Id_Erreur = ?", (id_error,))
         self.conn.commit()
 
-        # Supprimer le tableau correspondant de l'interface utilisateur
-        self.trees[index].destroy()
-        # Supprimer le label correspondant de l'interface utilisateur
-        self.labels[index].destroy()
-
+        # Remplacer le bouton supprimer par un autre bouton pour annuler la suppression
+        button = tk.Button(self.frame_errors, text="Annuler", border=0, fg='black', font='Helvetica 12 bold', command=lambda index=index: self.annuler_error(index))
+        button.grid(row=(index // 4) * 2 + 1, column=index % 4, padx=7, pady=35, sticky='se')
 
     def sort_data(self, rows):
         # Tri des données en fonction de la troisième colonne
