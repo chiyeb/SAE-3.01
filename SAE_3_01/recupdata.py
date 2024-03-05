@@ -354,10 +354,10 @@ class RecupData:
     def type_cours(self, type_cours_dict1, type_cours_dict2, col):
         """
         Fonction qui vérifie pour une case précise, quel type de cours c'est
-        :param type_cours_dict1:
-        :param type_cours_dict2:
-        :param col:
-        :return:
+        :param type_cours_dict1: Dictionnaire des types de cours
+        :param type_cours_dict2: Dictionnaire des types de cours
+        :param col: Colonne
+        :return: Type de cours
         """
         t_cours = None
         if type_cours_dict1["Cours"] <= col <= type_cours_dict1["TD"]:
