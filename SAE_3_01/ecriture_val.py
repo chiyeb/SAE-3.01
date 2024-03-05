@@ -66,6 +66,12 @@ class ecriture_val:
                         last_prof = prof
                         row_index += 2  # Avancer à la nouvelle ligne insérée
 
+
+                    # Écrire les données dans les cellules de la ligne 1 des colonnes A à G
+                    data_to_write = ["NOM DU PROF", "RESSOURCES", "NOMBRE D'HEURE DE CM", "NOMBRE D'HEURE DE TD", "NOMBRE D'HEURE DE TP", "NOMBRE D'HEURE DE TEST", "NOMBRE D'HEURE TOTAL"]
+                    for index, value in enumerate(data_to_write, start=1):
+                        cell = worksheet.cell(row=1, column=index, value=value).border = self.thin_border
+
                     # Écrire les données dans les colonnes correspondantes et appliquer les styles de bordure
                     cell_data = "" if prof is None else prof
                     cell = worksheet.cell(row=row_index, column=1, value=cell_data)
