@@ -6,12 +6,19 @@ class ShowError:
     instance = None
 
     def __new__(cls):
+        """
+        Fonction pour créer une seule instance de la classe
+        """
         if cls.instance is None:
             cls.instance = super(ShowError, cls).__new__(cls)
             cls.instance._setup()
         return cls.instance
 
     def _setup(self):
+        """
+        Fonction qui "setup" l'objet, il initialise la BD et la fenetre TKinter, les onglets, les canvas, les barres de défilement, les frames, les boutons et les tableaux
+        :return:
+        """
         # Connexion à la base de données
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
@@ -96,9 +103,12 @@ class ShowError:
         self.display_errors(rows)
         self.display_warnings(rows)
 
-
-
     def display_errors(self, rows):
+        """
+        Affiche les erreurs dans l'onglet "Erreurs" et les boutons pour chaque ligne pour afficher les commentaires et supprimer les erreurs.
+        :param rows:
+        :return:
+        """
         # Nombre de colonnes par ligne
         num_columns = 4
 
@@ -131,7 +141,7 @@ class ShowError:
                 self.trees.append(tree)
 
                 # Création du bouton
-                button = tk.Button(self.frame_errors, text="Détail", border=0 ,fg='black', font='Helvetica 12 bold', command=lambda index=index: self.on_button_click(index))
+                button = tk.Button(self.frame_errors, text="Détail", border=0 ,fg='black', font='Helvetica 12 bold', command=lambda index=index: self.on_button_click(index), width=6)
                 # Ajout du bouton à la dernière ligne de chaque tableau positionné en bas
                 button.grid(row=(index // num_columns) * 2 + 1, column=index % num_columns, padx=7, pady=35, sticky='sw')
 
@@ -143,6 +153,11 @@ class ShowError:
                              sticky='se')
 
     def display_warnings(self, rows):
+        """
+        Affiche les warnings dans l'onglet "Warnings" et les boutons pour chaque ligne pour afficher les commentaires et supprimer les warnings.
+        :param rows:
+        :return:
+        """
         # Nombre de colonnes par ligne
         num_columns = 4
 
@@ -182,13 +197,22 @@ class ShowError:
                 button2.grid(row=(index // num_columns) * 2 + 1, column=index % num_columns, padx=7, pady=35,
                             sticky='se')
 
+
     def refresh(self):
+        """
+        Rafraichir la fenêtre principale
+        :return:
+        """
         # Ré ouverture de la fenêtre principale
         self.root.destroy()
         self.instance = None
         self._setup()
 
     def confirm_delete(self):
+        """
+        Fonction pour confirmer la suppression globale de toutes les erreurs ayant la colonne is_delete = 1
+        :return: 
+        """
         # Création d'une fenêtre de message pour confirmer la suppression
         self.confirm_window = tk.Toplevel()
         self.confirm_window.title("Suppression globale")
@@ -207,7 +231,12 @@ class ShowError:
         button2.pack(pady=20, padx=20, side='right')
 
 
-    def annuler_error(self, index):
+    def cancel_error(self, index):
+        """
+        Fonction pour annuler la suppression d'une erreur en mettant à jour la colonne is_delete dans la base de données.
+        :param index: 
+        :return: 
+        """
         # Récupération de l'identifiant de l'erreur à supprimer dans la base de données
         id_error = self.trees[index].item(self.trees[index].get_children()[0])['values'][0]
         print(f"Annulation de l'erreur = {id_error}")
@@ -230,12 +259,21 @@ class ShowError:
         button3.grid(row=(index // 4) * 2 + 1, column=index % 4, padx=7, pady=35, sticky='se')
 
     def delete_all_errors(self):
+        """
+        Suppression globale de toutes les erreurs ayant la colonne is_delete = 1
+        :return: 
+        """
         #Suppresion de toutes les lignes de la base de données avec la colonne is_delete = 1
         self.cursor.execute("DELETE FROM Erreurs WHERE is_delete = 1")
         self.conn.commit()
         self.confirm_window.destroy()
 
     def delete_error(self, index):
+        """
+        Fonction pour supprimer une erreur en mettant à jour la colonne is_delete égale à 1 dans la base de données.
+        :param index: 
+        :return: 
+        """
         # Récupération de l'identifiant de l'erreur à supprimer dans la base de données
         id_error = self.trees[index].item(self.trees[index].get_children()[0])['values'][0]
         print(f"Suppression de l'erreur = {id_error}")
@@ -249,19 +287,29 @@ class ShowError:
         self.conn.commit()
 
         # Remplacer le bouton supprimer par un autre bouton pour annuler la suppression
-        button = tk.Button(self.frame_errors, text="Annuler", border=0, fg='black', font='Helvetica 12 bold', command=lambda index=index: self.annuler_error(index), width=8)
+        button = tk.Button(self.frame_errors, text="Annuler", border=0, fg='black', font='Helvetica 12 bold', command=lambda index=index: self.cancel_error(index), width=8)
         button.grid(row=(index // 4) * 2 + 1, column=index % 4, padx=8, pady=35, sticky='se')
 
         button = tk.Button(self.frame_warnings, text="Annuler", border=0, fg='black', font='Helvetica 12 bold',
-                           command=lambda index=index: self.annuler_error(index), width=8)
+                           command=lambda index=index: self.cancel_error(index), width=8)
         button.grid(row=(index // 4) * 2 + 1, column=index % 4, padx=8, pady=35, sticky='se')
 
     def sort_data(self, rows):
+        """
+        Tri des données en fonction de la troisième colonne afin d'afficher les erreurs dans l'onglet Erreurs et les warnings dans l'onglet Warnings.
+        :param rows: 
+        :return: 
+        """
         # Tri des données en fonction de la troisième colonne
         rows.sort(key=lambda x: x[2])
 
-    def on_button_click(self, index):
 
+    def on_button_click(self, index):
+        """
+        Fonction pour afficher la dernière ligne de chaque tableau dans une fenêtre de message.
+        :param index: 
+        :return: 
+        """
         num_columns = 4
         # Afficher la dernière ligne de chaque tableau
         tree = self.trees[index]
@@ -283,6 +331,7 @@ class ShowError:
             # Ajouter le label à la liste pour y accéder ultérieurement
             self.labels.append(label)
 
+
         else:
             label = tk.Label(self.frame_errors, text=f"Commentaire {index} est vide",wraplength=150, border=2,
                              relief='solid', bg='white', fg='black', font='Helvetica 14 bold', padx=5, pady=5)
@@ -296,6 +345,11 @@ class ShowError:
             self.labels.append(label)
 
     def on_button_click2(self, index):
+        """
+        Fonction pour afficher la dernière ligne de chaque tableau dans une fenêtre de message.
+        :param index: 
+        :return: 
+        """
         num_columns = 4
         # Afficher la dernière ligne de chaque tableau
         tree = self.trees[index]
@@ -317,6 +371,8 @@ class ShowError:
             # Ajouter le label à la liste pour y accéder ultérieurement
             self.labels.append(label)
 
+
+
         else:
             label = tk.Label(self.frame_warnings, text=f"Commentaire {index} est vide", wraplength=200, border=2,
                              relief='solid', bg='white', fg='black', font='Helvetica 14 bold')
@@ -329,10 +385,19 @@ class ShowError:
             self.labels.append(label)
 
     def on_frame_configure(self, canvas):
+        """
+        Fonction pour configurer la taille du Canvas en fonction de la taille du Frame
+        :param canvas: 
+        :return: 
+        """
         # Configurer la taille du Canvas en fonction de la taille du Frame
         canvas.configure(scrollregion=canvas.bbox('all'))
 
     def run(self):
+        """
+        Fonction pour lancer la fenêtre principale
+        :return: 
+        """
         self.root.mainloop()
 
 app = ShowError()
