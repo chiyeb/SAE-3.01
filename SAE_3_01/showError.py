@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, Scrollbar
 import sqlite3
-from PIL import Image, ImageTk
 
 class ShowError:
     instance = None
@@ -68,6 +67,11 @@ class ShowError:
 
         # Ajout d'un bouton Rafrachir en haut à gauche
         button3 = tk.Button(self.frame_errors, text="Rafraichir", border=0, fg='black', font='Helvetica 12 bold', command=lambda: self.refresh())
+        button3.grid(row=1, column=6, padx=65, pady=10, sticky='ne')
+
+        # Ajout d'un bouton Rafrachir en haut à gauche
+        button3 = tk.Button(self.frame_warnings, text="Rafraichir", border=0, fg='black', font='Helvetica 12 bold',
+                            command=lambda: self.refresh())
         button3.grid(row=1, column=6, padx=65, pady=10, sticky='ne')
 
         # Configuration du Canvas pour qu'il s'étende automatiquement
@@ -221,6 +225,10 @@ class ShowError:
                            command=lambda index=index: self.delete_error(index))
         button2.grid(row=(index // 4) * 2 + 1, column=index % 4, padx=7, pady=35, sticky='se')
 
+        button3 = tk.Button(self.frame_warnings, text="Supprimer", border=0, fg='black', font='Helvetica 12 bold',
+                            command=lambda index=index: self.delete_error(index))
+        button3.grid(row=(index // 4) * 2 + 1, column=index % 4, padx=7, pady=35, sticky='se')
+
     def delete_all_errors(self):
         #Suppresion de toutes les lignes de la base de données avec la colonne is_delete = 1
         self.cursor.execute("DELETE FROM Erreurs WHERE is_delete = 1")
@@ -241,8 +249,12 @@ class ShowError:
         self.conn.commit()
 
         # Remplacer le bouton supprimer par un autre bouton pour annuler la suppression
-        button = tk.Button(self.frame_errors, text="Annuler", border=0, fg='black', font='Helvetica 12 bold', command=lambda index=index: self.annuler_error(index))
-        button.grid(row=(index // 4) * 2 + 1, column=index % 4, padx=7, pady=35, sticky='se')
+        button = tk.Button(self.frame_errors, text="Annuler", border=0, fg='black', font='Helvetica 12 bold', command=lambda index=index: self.annuler_error(index), width=8)
+        button.grid(row=(index // 4) * 2 + 1, column=index % 4, padx=8, pady=35, sticky='se')
+
+        button = tk.Button(self.frame_warnings, text="Annuler", border=0, fg='black', font='Helvetica 12 bold',
+                           command=lambda index=index: self.annuler_error(index), width=8)
+        button.grid(row=(index // 4) * 2 + 1, column=index % 4, padx=8, pady=35, sticky='se')
 
     def sort_data(self, rows):
         # Tri des données en fonction de la troisième colonne
