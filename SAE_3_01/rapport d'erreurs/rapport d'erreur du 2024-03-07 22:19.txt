@@ -1,0 +1,74 @@
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S3AFA 
+  -ressource: R3.02
+Erreur CM: 
+   -ressource: R3.02,
+  -heures écrite: 3,
+   -heure posé: 4
+- Commentaire(s) : 
+-1.5 h
+	-Jean-Philippe Prost
+-1.5h
+	-Jean-Philippe Prost
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S3AFA 
+  -ressource: R3.08
+Erreur TD:
+   -ressource: R3.08
+  -heure écrites: 14
+  -heure posé: 18
+- Commentaire(s) : 
+-Groupe entier
+	-Morgan M
+-Groupe entier
+	-Morgan M
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S3AFA 
+  -ressource: R3.09
+Erreur CM: 
+   -ressource: R3.09,
+  -heures écrite: 6,
+   -heure posé: 8
+- Commentaire(s) : 
+-1h30
+	-Morgan M
+Erreur TD:
+   -ressource: R3.09
+  -heure écrites: 10
+  -heure posé: 14
+- Commentaire(s) : 
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S3AFA 
+  -ressource: R3.13
+Erreur TP
+   -ressource: R3.13 
+  -heures écrites: 7 
+   -heures posés: 8 
+- Commentaire(s) : 
+-3h
+	-Morgan M
+
+
+ 
+ Erreur: heure posé et écrites différentes dans le planning
+  -semestre: S3AFA 
+  -ressource: R3.14
+Erreur TD:
+   -ressource: R3.14
+  -heure écrites: 7
+  -heure posé: 8
+- Commentaire(s) : 
+-3h
+	-Morgan M
+

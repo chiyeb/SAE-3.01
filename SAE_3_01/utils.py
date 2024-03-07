@@ -1,5 +1,9 @@
 import shutil
 import webbrowser
+
+from SAE_3_01.BUT1 import BUT1
+from SAE_3_01.BUT2 import BUT2
+from SAE_3_01.BUT3 import BUT3
 from scribefileprof import *
 from mail import *
 from showdata import *
@@ -13,6 +17,9 @@ class Utils:
     root = None
     selectFileInstance = None
     showDataInstance = None
+    but1Instance = None
+    but2Instance = None
+    but3Instance = None
 
     def __new__(cls):
         if cls.instance is None:
@@ -29,39 +36,40 @@ class Utils:
         self.conn = sqlite3.connect('database/database.db')
         self.cursor = self.conn.cursor()
         self.selectFileInstance = SelectFile('utils')
+        self.but1Instance = BUT1('utils')
+        self.but2Instance = BUT2('utils')
+        self.but3Instance = BUT3('utils')
 
     def create_main_window(self):
-        """
-        Afficher la fenêtre graphique principal pour laisser l'utilisateur choisir une action.
-        :return:
-        """
         self.root = tk.Tk()
         self.root.title("Gestion du programme")
         self.root.geometry("600x600")
 
-        ttk.Label(self.root, text="Choisissez une action :").pack(pady=10)
+        # Créer un style
+        style = ttk.Style()
+        style.configure("TButton", font=('Helvetica', 12), borderwidth='4')
+        style.configure("TLabel", font=('Helvetica', 14), padding=10)
 
-        delete_bd_button = ttk.Button(self.root, text="Supprimer les données de la base de données",
-                                      command=self.clear_bd)
-        delete_bd_button.pack(pady=5)
+        # Utiliser un Frame pour organiser les widgets
+        main_frame = ttk.Frame(self.root)
+        main_frame.pack(padx=10, pady=10, fill="both", expand=True)
 
-        delete_files_button = ttk.Button(self.root, text="Supprimer les fichiers générés",
-                                         command=self.clearAllFiles)
-        delete_files_button.pack(pady=5)
-        chose_file_button = ttk.Button(self.root, text="Choisir les fichiers utile pour le programme",
-                                       command=self.selectFileInstance.open_select_file)
+        ttk.Label(main_frame, text="Choisissez une action :").pack()
 
-        chose_file_button.pack(pady=5)
-        generer_fichier_prof_button = ttk.Button(self.root, text="Générer le fichier d'heures par professeurs",
-                                                 command=self.generer_fichier_heure_prof)
-        generer_fichier_prof_button.pack(pady=5)
-        envoie_mail_prof_button = ttk.Button(self.root, text="Envoyer les fichiers par mail",
-                                             command=run)
-        envoie_mail_prof_button.pack(pady=5)
+        buttons = [
+            ("Supprimer les données de la base de données", self.clear_bd),
+            ("Lancer le programme seulement pour le BUT1", self.but1_run),
+            ("Lancer le programme seulement pour le BUT2", self.but2_run),
+            ("Lancer le programme seulement pour le BUT3", self.but3_run),
+            ("Supprimer les fichiers générés", self.clearAllFiles),
+            ("Choisir les fichiers utiles pour le programme", self.selectFileInstance.open_select_file),
+            ("Générer le fichier d'heures par professeurs", self.generer_fichier_heure_prof),
+            ("Envoyer les fichiers par mail", run),
+            ("Ouvrir le manuel d'utilisation", self.open_link)
+        ]
 
-        open_link_button = ttk.Button(self.root, text="Ouvrir le manuel d'utilisation",
-                                      command=self.open_link)
-        open_link_button.pack(pady=5)
+        for (text, command) in buttons:
+            ttk.Button(main_frame, text=text, command=command).pack(pady=5, fill="x")
 
         self.root.mainloop()
 
@@ -187,6 +195,28 @@ class Utils:
         """
         scribe_file_prof_instance = ScribeFileProf()
         scribe_file_prof_instance.run()
+
+    def but1_run(self):
+        """
+        Fonction pour lancer le programme pour le BUT1
+        :return:
+        """
+        but1_instance = BUT1()
+        but1_instance.run()
+
+    def but2_run(self):
+        """
+        Fonction pour lancer le programme pour le BUT2
+        """
+        self.but2Instance = BUT2()
+        self.but2Instance.run()
+
+    def but3_run(self):
+        """
+        Fonction pour lancer le programme pour le BUT3
+        """
+        self.but3Instance = BUT3()
+        self.but3Instance.run()
 
 
 i = Utils()

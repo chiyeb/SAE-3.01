@@ -19,14 +19,17 @@ class BUT2:
     BUT2_file = None
     files = None
 
-    def __new__(cls):
+    def __new__(cls, mode='defaut'):
         if cls.instance is None:
             cls.instance = super(BUT2, cls).__new__(cls)
-            cls.instance.setup()
+            cls.instance.setup(mode)
         return cls.instance
 
-    def setup(self):
-        self.files = SelectFile()
+    def setup(self, mode):
+        if mode == 'defaut':
+            self.files = SelectFile()
+        else:
+            self.files = SelectFile('utils')
         # On importe la bible BUT2
         self.BUT2_file = pd.ExcelFile(self.files.maquette_BUT2_file)
 
@@ -205,5 +208,7 @@ class BUT2:
         # Vérifie la concordance entre les heures écrite et les heures placés dans le fichier planning
         self.verifDataInstance.concordancePlanning("S4BFI")
 
-# i = BUT2()
-# i.run()
+
+if __name__ == "__main__":
+    but = BUT2()
+    but.run()

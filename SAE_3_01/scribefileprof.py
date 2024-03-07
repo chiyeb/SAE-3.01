@@ -205,7 +205,8 @@ class ScribeFileProf:
             for fichier, onglet, ligne in valeurs:
                 nom_fichier_sans_extension = os.path.splitext(fichier)[0]
                 cursor.execute(
-                    "INSERT INTO FichiersGenere (Semestre, Prof, Ressources, H_CM, H_TD, H_TP) VALUES (?, ?, ?, ?, ?, ?)",
+                    "INSERT INTO FichiersGenere (Semestre, Prof, Ressources, H_CM, H_TD, H_TP) "
+                    "VALUES (?, ?, ?, ?, ?, ?)",
                     (nom_fichier_sans_extension, professeur, onglet, ligne[1], ligne[2], ligne[3]))
 
         conn.commit()

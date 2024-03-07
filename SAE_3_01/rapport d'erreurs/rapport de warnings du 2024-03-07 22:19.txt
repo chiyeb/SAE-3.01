@@ -1,0 +1,100 @@
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S3AFA 
+  -ressource: R3.01
+Warning TP
+   -ressource: R3.01 
+  -heures écrites: 18 
+   -heures posés: 16 
+- Commentaire(s) : 
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S3AFA 
+  -ressource: R3.03
+Warning TD:
+   -ressource: R3.03
+  -heure écrites: 10
+  -heure posé: 8
+- Commentaire(s) : 
+-3h
+	-Morgan M
+-Salle avec un vidéo
+	-A C
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S3AFA 
+  -ressource: R3.04
+Warning TD:
+   -ressource: R3.04
+  -heure écrites: 13
+  -heure posé: 8
+- Commentaire(s) : 
+-TD4
+	-A C
+Seéance avec video proj + TBI
+	-A C
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S3AFA 
+  -ressource: R3.05
+Warning TD:
+   -ressource: R3.05
+  -heure écrites: 14
+  -heure posé: 12
+- Commentaire(s) : 
+-Salle avec un vidéo
+	-A C
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S3AFA 
+  -ressource: R3.06
+Warning TD:
+   -ressource: R3.06
+  -heure écrites: 5
+  -heure posé: 4
+- Commentaire(s) : 
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S3AFA 
+  -ressource: R3.07
+Warning TD:
+   -ressource: R3.07
+  -heure écrites: 14
+  -heure posé: 12
+- Commentaire(s) : 
+-Salle avec un vidéo
+	-A C
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S3AFA 
+  -ressource: R3.10
+Warning TD:
+   -ressource: R3.10
+  -heure écrites: 13
+  -heure posé: 12
+- Commentaire(s) : 
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S3AFA 
+  -ressource: R3.11
+Warning TD:
+   -ressource: R3.11
+  -heure écrites: 20
+  -heure posé: 18
+- Commentaire(s) : 
+

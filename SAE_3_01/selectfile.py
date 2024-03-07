@@ -28,7 +28,6 @@ class SelectFile:
         return cls.instance
 
     def _setup(self, mode):
-        print(mode)
         if mode == 'defaut':
             self.fichier_destination = "fichiers necessaires/file_destination.txt"
             # vérifie si le fichier existe
@@ -39,6 +38,13 @@ class SelectFile:
                     file.write("")
                     self.open_select_file()
         if mode == 'utils':
+            self.fichier_destination = "fichiers necessaires/file_destination.txt"
+            if os.path.exists("fichiers necessaires/file_destination.txt"):
+                self.recup_destination_file()
+            else:
+                with open(self.fichier_destination, "w") as file:
+                    file.write("")
+                    self.open_select_file()
             self.fichier_destination = "fichiers necessaires/file_destination.txt"
 
     def open_select_file(self):

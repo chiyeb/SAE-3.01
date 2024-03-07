@@ -1,0 +1,187 @@
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.03
+Warning TD:
+   -ressource: R1.03
+  -heure écrites: 8
+  -heure posé: 4
+- Commentaire(s) : 
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.05
+Warning TP
+   -ressource: R1.05 
+  -heures écrites: 20 
+   -heures posés: 16 
+- Commentaire(s) : 
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.07
+Warning TP
+   -ressource: R1.07 
+  -heures écrites: 9 
+   -heures posés: 6 
+- Commentaire(s) : 
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.08
+Warning TP
+   -ressource: R1.08 
+  -heures écrites: 3 
+   -heures posés: 2 
+- Commentaire(s) : 
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S1 
+  -ressource: R1.12
+Warning TP
+   -ressource: R1.12 
+  -heures écrites: 3 
+   -heures posés: 2 
+- Commentaire(s) : 
+
+Warning : Heures différentes entre le fichier planning et maquette
+  -Ressource: R1.11 Bases de la communication
+  -Heure planning: 0
+  -Heure maquette: 1
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.01
+Warning TD:
+   -ressource: R2.01
+  -heure écrites: 21
+  -heure posé: 20
+- Commentaire(s) : 
+-Salle avec un vidéo
+	-A C
+-3h
+	-Morgan M
+-Salle avec un vidéo
+	-A C
+Warning TP
+   -ressource: R2.01 
+  -heures écrites: 21 
+   -heures posés: 20 
+- Commentaire(s) : 
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.02
+Warning TD:
+   -ressource: R2.02
+  -heure écrites: 22
+  -heure posé: 20
+- Commentaire(s) : 
+Warning TP
+   -ressource: R2.02 
+  -heures écrites: 10 
+   -heures posés: 8 
+- Commentaire(s) : 
+-TP avant le test.
+	-Mickaël Martin-Nevot
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.03
+Warning TD:
+   -ressource: R2.03
+  -heure écrites: 5
+  -heure posé: 4
+- Commentaire(s) : 
+Warning TP
+   -ressource: R2.03 
+  -heures écrites: 13 
+   -heures posés: 12 
+- Commentaire(s) : 
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.06
+Warning CM: 
+   -ressource: R2.06 
+  -heures écrite: 7, 
+  -heure posé: 6
+- Commentaire(s) : 
+-CM avant TP
+-Séance 1h30
+	-A C
+Warning TP
+   -ressource: R2.06 
+  -heures écrites: 21 
+   -heures posés: 20 
+- Commentaire(s) : 
+-MMN indispo 22 et 23/02
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.07
+Warning TP
+   -ressource: R2.07 
+  -heures écrites: 6 
+   -heures posés: 4 
+- Commentaire(s) : 
+-3h
+-3h
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.09
+Warning TP
+   -ressource: R2.09 
+  -heures écrites: 6 
+   -heures posés: 4 
+- Commentaire(s) : 
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.10
+Warning TD:
+   -ressource: R2.10
+  -heure écrites: 13
+  -heure posé: 12
+- Commentaire(s) : 
+Warning TP
+   -ressource: R2.10 
+  -heures écrites: 11 
+   -heures posés: 8 
+- Commentaire(s) : 
+
+
+ 
+ Warning: heure posé et écrites différentes dans le planning
+  -semestre: S2 
+  -ressource: R2.14
+Warning TP
+   -ressource: R2.14 
+  -heures écrites: 3 
+   -heures posés: 2 
+- Commentaire(s) : 
+

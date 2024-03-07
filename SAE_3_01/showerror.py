@@ -85,6 +85,7 @@ class ShowError:
                             command=lambda: self.refresh())
         button3.grid(row=1, column=6, padx=65, pady=10, sticky='ne')
 
+
         # Configuration du Canvas pour qu'il s'étende automatiquement
         self.canvas_errors.bind('<Configure>', lambda event, canvas=self.canvas_errors: self.on_frame_configure(canvas))
         self.canvas_warnings.bind('<Configure>',
@@ -405,6 +406,7 @@ class ShowError:
         """
         # Configurer la taille du Canvas en fonction de la taille du Frame
         canvas.configure(scrollregion=canvas.bbox('all'))
+
 
     def run(self):
         """

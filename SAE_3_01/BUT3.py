@@ -16,14 +16,17 @@ class BUT3:
     BUT3_file = None
     files = None
 
-    def __new__(cls):
+    def __new__(cls, mode='defaut'):
         if cls.instance is None:
             cls.instance = super(BUT3, cls).__new__(cls)
-            cls.instance.setup()
+            cls.instance.setup(mode)
         return cls.instance
 
-    def setup(self):
-        self.files = SelectFile()
+    def setup(self, mode):
+        if mode == 'defaut':
+            self.files = SelectFile()
+        else:
+            self.files = SelectFile('utils')
         # On importe la maquette du BUT3
         self.BUT3_file = pd.ExcelFile(self.files.maquette_BUT3_file)
 
@@ -203,5 +206,7 @@ class BUT3:
         self.verif_data_instance.concordancePlanning("S6BFI")
         print(self.verif_data_instance.get_nb_erreur())
 
-# i = BUT3()
-# i.run()
+
+if __name__ == "__main__":
+    but = BUT3()
+    but.run()

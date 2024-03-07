@@ -19,18 +19,21 @@ class BUT1:
     BUT1_1file = None
     files = None
 
-    def __new__(cls):
+    def __new__(cls, mode='defaut'):
         if cls.instance is None:
             cls.instance = super(BUT1, cls).__new__(cls)
-            cls.instance.setup()
+            cls.instance.setup(mode)
         return cls.instance
 
-    def setup(self):
+    def setup(self, mode):
         """
         "Setup" l'objet : créer les instances, initialise les fichiers...
         :return:
         """
-        self.files = SelectFile()
+        if mode == 'defaut':
+            self.files = SelectFile()
+        else:
+            self.files = SelectFile('utils')
         # lire le fichier maquette
         self.BUT1file = pd.ExcelFile(self.files.maquette_BUT1_file)
         # récupérer l'onglet BUT 1
@@ -87,5 +90,7 @@ class BUT1:
         self.verifDataInstance.concordancePlanning("S2")
 
 
-#i = BUT1()
-#i.run()
+if __name__ == "__main__":
+    but = BUT1()
+    but.run()
+
