@@ -73,11 +73,11 @@ class ShowError:
         button2.grid(row=0, column=6, padx=40, pady=15, sticky='ne')
 
         # Ajout d'un bouton Rafrachir en haut à gauche
-        button3 = tk.Button(self.frame_errors, text="Rafraichir", border=0, fg='black', font='Helvetica 12 bold', command=lambda: self.refresh())
+        button3 = tk.Button(self.frame_errors, text="Rafraîchir", border=0, fg='blue', font='Helvetica 12 bold', command=lambda: self.refresh())
         button3.grid(row=1, column=6, padx=65, pady=10, sticky='ne')
 
         # Ajout d'un bouton Rafrachir en haut à gauche
-        button3 = tk.Button(self.frame_warnings, text="Rafraichir", border=0, fg='black', font='Helvetica 12 bold',
+        button3 = tk.Button(self.frame_warnings, text="Rafraîchir", border=0, fg='blue', font='Helvetica 12 bold',
                             command=lambda: self.refresh())
         button3.grid(row=1, column=6, padx=65, pady=10, sticky='ne')
 
@@ -129,9 +129,6 @@ class ShowError:
 
                 # Positionnement du tableau pour qu'il y ait 6 colonnes par ligne maximum
                 tree.grid(row=(index // num_columns) * 2 + 1, column=index % num_columns, padx=7, pady=30)
-
-                # Ajout d'une bordure blanche dans le tableau
-                tree.tag_configure('odd', foreground='black')
 
                 # Ajout des valeurs de la ligne au tableau
                 for column_name, value in zip(self.column_names, row):
@@ -192,7 +189,7 @@ class ShowError:
 
                 # Ajout du bouton cacher à la dernière ligne de chaque tableau positionné en bas à droite
                 button2 = tk.Button(self.frame_warnings, text="Supprimer", border=0, fg='black', font='Helvetica 12 bold',
-                                      command=lambda index=index: self.delete_error(index))
+                                      command=lambda index=index: self.delete_error_warning(index))
                 # Ajout du bouton à la dernière ligne de chaque tableau positionné en bas à droite
                 button2.grid(row=(index // num_columns) * 2 + 1, column=index % num_columns, padx=7, pady=35,
                             sticky='se')
@@ -223,11 +220,11 @@ class ShowError:
         label.pack(pady=10)
 
         # Création d'un bouton pour confirmer la suppression
-        button = tk.Button(self.confirm_window, text="Confirmer", font='Helvetica 12 bold', command=lambda: self.delete_all_errors())
+        button = tk.Button(self.confirm_window, text="Confirmer",fg='green', font='Helvetica 12 bold', command=lambda: self.delete_all_errors())
         button.pack(pady=20, padx=20, side='left')
 
         # Création d'un bouton pour annuler la suppression
-        button2 = tk.Button(self.confirm_window, text="Annuler", font='Helvetica 12 bold', command=lambda: self.confirm_window.destroy())
+        button2 = tk.Button(self.confirm_window, text="Annuler", fg='red', font='Helvetica 12 bold', command=lambda: self.confirm_window.destroy())
         button2.pack(pady=20, padx=20, side='right')
 
 
@@ -254,8 +251,26 @@ class ShowError:
                            command=lambda index=index: self.delete_error(index))
         button2.grid(row=(index // 4) * 2 + 1, column=index % 4, padx=7, pady=35, sticky='se')
 
+    def cancel_warning(self, index):
+        """
+        Fonction pour annuler la suppression d'une erreur en mettant à jour la colonne is_delete dans la base de données.
+        :param index:
+        :return:
+        """
+        # Récupération de l'identifiant de l'erreur à supprimer dans la base de données
+        id_error = self.trees[index].item(self.trees[index].get_children()[0])['values'][0]
+        print(f"Annulation de l'erreur = {id_error}")
+
+        # Récupération de la valeur de la colonne is_delete
+        is_delete = self.cursor.execute('SELECT is_delete FROM Erreurs WHERE Id_Erreur = ?', (id_error,)).fetchone()[0]
+
+        # Mise à jour de la base de données pour marquer l'erreur comme supprimée avec la colonne is_delete = 1
+        new_is_delete = 0 if is_delete == 1 else 1
+        self.cursor.execute(f"UPDATE Erreurs SET is_delete = {new_is_delete} WHERE Id_Erreur = ?", (id_error,))
+        self.conn.commit()
+
         button3 = tk.Button(self.frame_warnings, text="Supprimer", border=0, fg='black', font='Helvetica 12 bold',
-                            command=lambda index=index: self.delete_error(index))
+                            command=lambda index=index: self.delete_error_warning(index))
         button3.grid(row=(index // 4) * 2 + 1, column=index % 4, padx=7, pady=35, sticky='se')
 
     def delete_all_errors(self):
@@ -287,12 +302,37 @@ class ShowError:
         self.conn.commit()
 
         # Remplacer le bouton supprimer par un autre bouton pour annuler la suppression
-        button = tk.Button(self.frame_errors, text="Annuler", border=0, fg='black', font='Helvetica 12 bold', command=lambda index=index: self.cancel_error(index), width=8)
+        button = tk.Button(self.frame_errors, text="Annuler", border=0, fg='red', font='Helvetica 12 bold', command=lambda index=index: self.cancel_error(index), width=8)
         button.grid(row=(index // 4) * 2 + 1, column=index % 4, padx=8, pady=35, sticky='se')
 
-        button = tk.Button(self.frame_warnings, text="Annuler", border=0, fg='black', font='Helvetica 12 bold',
-                           command=lambda index=index: self.cancel_error(index), width=8)
+
+
+
+
+    def delete_error_warning(self, index):
+        """
+        Fonction pour supprimer une erreur en mettant à jour la colonne is_delete égale à 1 dans la base de données.
+        :param index:
+        :return:
+        """
+        # Récupération de l'identifiant de l'erreur à supprimer dans la base de données
+        id_error = self.trees[index].item(self.trees[index].get_children()[0])['values'][0]
+        print(f"Suppression de l'erreur = {id_error}")
+
+        # Récupération de la valeur de la colonne is_delete
+        is_delete = self.cursor.execute('SELECT is_delete FROM Erreurs WHERE Id_Erreur = ?', (id_error,)).fetchone()[0]
+
+        # Mise à jour de la base de données pour marquer l'erreur comme supprimée avec la colonne is_delete = 1
+        new_is_delete = 0 if is_delete == 1 else 1
+        self.cursor.execute(f"UPDATE Erreurs SET is_delete = {new_is_delete} WHERE Id_Erreur = ?", (id_error,))
+        self.conn.commit()
+
+        button = tk.Button(self.frame_warnings, text="Annuler", border=0, fg='red', font='Helvetica 12 bold',
+                           command=lambda index=index: self.cancel_warning(index), width=8)
         button.grid(row=(index // 4) * 2 + 1, column=index % 4, padx=8, pady=35, sticky='se')
+
+        # Avoir une bordure rouge du tableau pour marquer la suppression
+        self.trees[index].tag_configure('odd', foreground='red')
 
     def sort_data(self, rows):
         """
