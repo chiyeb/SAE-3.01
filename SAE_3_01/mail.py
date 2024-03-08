@@ -11,6 +11,9 @@ from email import encoders
 import smtplib
 from collections import defaultdict
 
+from SAE_3_01.recupdata import RecupData
+from SAE_3_01.selectfile import SelectFile
+
 print("Début du programme\nVeuillez patienter...")
 
 # Connexion à la base de données
@@ -27,6 +30,13 @@ chemin_bd = 'database/database.db'
 
 
 def run():
+    """
+    Fonction qui lance le programme
+    """
+    print("Récupération des noms des professeurs...")
+    files = SelectFile()
+    recup = RecupData()
+    recup.recup_nom_prof()
     print("Recherche des fichiers Excel...")
     fichier_excel = trouver_fichier_excel('fichiers genere')
     print("Fichiers trouvés\nTraitement des fichiers Excel...")
@@ -87,7 +97,7 @@ def envoie_mail(server, receiver_email, file_path):
             part.set_payload(file.read())
         encoders.encode_base64(part)
         part.add_header('Content-Disposition', f'attachment; filename="{os.path.basename(file_path)}"')
-        msg.attach(part)  # Attachez le fichier
+        msg.attach(part)
 
         server.send_message(msg)
         print(f"Email envoyé à {receiver_email}")

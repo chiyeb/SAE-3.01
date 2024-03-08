@@ -8,7 +8,7 @@ LL=Lotfi LAKHAL=example@gmail.com
 ChM=Christine MAKSSOUD=example@gmail.com
 MMN=Mickaël MARTIN NEVOT
 MMD=Marlène MONNET DUPUY
-MoM=Morgan MORANCEY
+MoM=Morgan MORANCEY=morgan.morancey@univ-amu.fr
 JPP=Jean-Philippe PROST
 VR=Vincent RISCH
 AS=Alexandra SALOU
