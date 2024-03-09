@@ -141,7 +141,7 @@ def traitement_fichier_excel(chemin, dossier="fichiers genere mail"):
         nom_fichier_base = os.path.splitext(os.path.basename(chemin_fichier))[0]
         print(f"Traitement du fichier {chemin_fichier}...")
         if chemin_fichier.endswith('Professeurs_Horaires.xlsx'):
-            print(f"Le fichier {chemin_fichier} est déjà un fichier de professeurs, il ne sera pas traité.")
+            print(f"Le fichier {chemin_fichier} est déjà un fichier de professeurs")
             continue
         for nom_feuille in wb.sheetnames:
             feuille = wb[nom_feuille]
@@ -152,7 +152,7 @@ def traitement_fichier_excel(chemin, dossier="fichiers genere mail"):
     for nom_prof, feuilles in feuille_prof.items():
         print(f"Traitement des feuilles pour {nom_prof}...")
         new_wb = Workbook()
-        new_wb.remove(new_wb.active)  # Supprime la feuille par défaut créée avec le nouveau classeur
+        new_wb.remove(new_wb.active)
         for wb, nom_feuille, nom_fichier_base in feuilles:
             original_sheet = wb[nom_feuille]
             # On utilise le nom du fichier dans le titre de la nouvelle feuille
